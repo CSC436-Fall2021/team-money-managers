@@ -2,6 +2,8 @@ package csc.arizona.moneymanager;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -17,6 +19,7 @@ public class LoginUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         BorderPane pane = new BorderPane();
+        pane.setLeft(createAddUserButton());
         pane.setCenter(createLogin());
         Scene scene = new Scene(pane, 600, 500);
         primaryStage.setTitle("Money Manager");
@@ -36,8 +39,49 @@ public class LoginUI extends Application {
         Text password = new Text("Password");
         TextField passwordField = new TextField();
         passwordField.setMaxWidth(150);
+        Button loginButton = new Button("Login"); //TODO make login button functional
         loginTextFields.getChildren().addAll(new Text("Welcome"), login, loginField, password,
-                passwordField);
+                passwordField, loginButton);
         return loginTextFields;
+    }
+
+    /**
+     * creates a new stage that will ask for the new users' username, password, and a retyping of
+     * the password
+     */
+    private static void newUser() {
+        Stage stage = new Stage();
+        stage.setTitle("Add user");
+        BorderPane pane = new BorderPane();
+        Scene newScene = new Scene(pane, 300, 160);
+        VBox box = new VBox();
+        Button ok = new Button("Ok");
+        ok.setMinWidth(40);
+        Label username = new Label("Username");
+        username.setMinWidth(200);
+        Label password = new Label("Password");
+        password.setMinWidth(200);
+        Label passwordCheck = new Label("Re-enter Password");
+        passwordCheck.setMinWidth(200);
+        TextField userField = new TextField();
+        TextField passField = new TextField();
+        TextField rePassField = new TextField();
+        userField.setMinWidth(200);
+        passField.setMinWidth(200);
+        rePassField.setMinWidth(200);
+        box.getChildren().addAll(username, userField, password, passField,
+                passwordCheck, rePassField, ok);
+        pane.getChildren().add(box);
+        stage.setScene(newScene);
+        stage.show();
+    }
+
+    /**
+     * @return button that will open a new window to add in a new user
+     */
+    private static Button createAddUserButton() {
+        Button addUser = new Button("add user");
+        addUser.setOnMouseClicked(event -> newUser());
+        return addUser;
     }
 }
