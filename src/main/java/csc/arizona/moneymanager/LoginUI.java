@@ -34,6 +34,7 @@ public class LoginUI extends Application {
      */
     private static VBox createLogin() {
         VBox loginTextFields = new VBox();
+        Text loginStatus = new Text();
         Text login = new Text("Username");
         TextField loginField = new TextField();
         loginField.setMaxWidth(150);
@@ -41,8 +42,8 @@ public class LoginUI extends Application {
         TextField passwordField = new TextField();
         passwordField.setMaxWidth(150);
         Button loginButton = new Button("Login"); //TODO make login button functional
-        loginTextFields.getChildren().addAll(new Text("Welcome"), login, loginField, password,
-                passwordField, loginButton);
+        loginTextFields.getChildren().addAll(loginStatus, new Text("Welcome"), login, loginField,
+                password, passwordField, loginButton);
         return loginTextFields;
     }
 
