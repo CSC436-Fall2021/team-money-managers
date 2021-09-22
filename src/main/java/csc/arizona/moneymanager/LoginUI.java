@@ -57,8 +57,6 @@ public class LoginUI extends Application {
         BorderPane pane = new BorderPane();
         Scene newScene = new Scene(pane, 300, 160);
         VBox box = new VBox();
-        Button ok = new Button("Ok");
-        ok.setMinWidth(40);
         Label username = new Label("Username");
         username.setMinWidth(200);
         Label password = new Label("Password");
@@ -71,13 +69,34 @@ public class LoginUI extends Application {
         userField.setMinWidth(200);
         passField.setMinWidth(200);
         rePassField.setMinWidth(200);
-        ok.setOnMouseClicked(event -> {
+        Button addUser = createAddUserButton(userField, passField, rePassField, stage);
+        box.getChildren().addAll(username, userField, password, passField,
+                passwordCheck, rePassField, addUser);
+        pane.getChildren().add(box);
+        stage.setScene(newScene);
+        stage.show();
+    }
+
+    /**
+     * creates the button that will tell the user whether the credentials given are valid
+     * for the new account
+     * @param userField the username the user decided they wanted
+     * @param passField the password the user wants to use to login in with
+     * @param rePassField the password again in case the user made a spelling error the first time
+     * @param stage the stage to close when the users type in a valid account
+     * @return a button that will allow the users credentials to make a new account
+     */
+    private static Button createAddUserButton(TextField userField, TextField passField,
+                                              TextField rePassField, Stage stage) {
+        Button addUser = new Button("Add User");
+        addUser.setMinWidth(40);
+        addUser.setOnMouseClicked(event -> {
             if (userField.getText().isBlank())
-                failureAlert(username.getText());
+                failureAlert("username");
             else if (passField.getText().isBlank())
-                failureAlert(passwordCheck.getText());
-            else if (password.getText().isBlank())
-                failureAlert(password.getText());
+                failureAlert("password");
+            else if (rePassField.getText().isBlank())
+                failureAlert("re-enter password");
             else if (!passField.getText().equals(rePassField.getText()))
                 passwordsNotSame();
             else {
@@ -85,11 +104,7 @@ public class LoginUI extends Application {
                 stage.close();
             }
         });
-        box.getChildren().addAll(username, userField, password, passField,
-                passwordCheck, rePassField, ok);
-        pane.getChildren().add(box);
-        stage.setScene(newScene);
-        stage.show();
+        return addUser;
     }
 
     /**
