@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 
 public class LoginUI extends Application {
 
+    private static final AccountList accounts = new AccountList();
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -41,7 +43,18 @@ public class LoginUI extends Application {
         Text password = new Text("Password");
         TextField passwordField = new TextField();
         passwordField.setMaxWidth(150);
-        Button loginButton = new Button("Login"); //TODO make login button functional
+        Button loginButton = new Button("Login");
+        loginButton.setOnMouseClicked(event -> {
+            Account user = accounts.getAccount(loginField.getText());
+            if (user == null) {
+                loginStatus.setText("Invalid username");
+            } else if (!user.isCorrectPassword(passwordField.getText())) {
+                loginStatus.setText("Invalid password");
+            } else {
+                loginStatus.setText("");
+                System.out.println("you have made it to the account");
+            }
+        });
         loginTextFields.getChildren().addAll(loginStatus, new Text("Welcome"), login, loginField,
                 password, passwordField, loginButton);
         return loginTextFields;
@@ -80,10 +93,11 @@ public class LoginUI extends Application {
     /**
      * creates the button that will tell the user whether the credentials given are valid
      * for the new account
-     * @param userField the username the user decided they wanted
-     * @param passField the password the user wants to use to login in with
+     *
+     * @param userField   the username the user decided they wanted
+     * @param passField   the password the user wants to use to login in with
      * @param rePassField the password again in case the user made a spelling error the first time
-     * @param stage the stage to close when the users type in a valid account
+     * @param stage       the stage to close when the users type in a valid account
      * @return a button that will allow the users credentials to make a new account
      */
     private static Button createAddUserButton(TextField userField, TextField passField,
@@ -100,7 +114,7 @@ public class LoginUI extends Application {
             else if (!passField.getText().equals(rePassField.getText()))
                 passwordsNotSame();
             else {
-                //TODO add users information to the account class when that is created
+                accounts.addAccount(new Account(userField.getText(), passField.getText()));
                 stage.close();
             }
         });
