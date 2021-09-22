@@ -2,6 +2,7 @@ package csc.arizona.moneymanager;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -69,6 +70,20 @@ public class LoginUI extends Application {
         userField.setMinWidth(200);
         passField.setMinWidth(200);
         rePassField.setMinWidth(200);
+        ok.setOnMouseClicked(event -> {
+            if (userField.getText().isBlank())
+                failureAlert(username.getText());
+            else if (passField.getText().isBlank())
+                failureAlert(passwordCheck.getText());
+            else if (password.getText().isBlank())
+                failureAlert(password.getText());
+            else if (!passField.getText().equals(rePassField.getText()))
+                passwordsNotSame();
+            else {
+                //TODO add users information to the account class when that is created
+                stage.close();
+            }
+        });
         box.getChildren().addAll(username, userField, password, passField,
                 passwordCheck, rePassField, ok);
         pane.getChildren().add(box);
@@ -83,5 +98,29 @@ public class LoginUI extends Application {
         Button addUser = new Button("add user");
         addUser.setOnMouseClicked(event -> newUser());
         return addUser;
+    }
+
+    /**
+     * creates an alert and tells the user the specific error
+     *
+     * @param issue the specific issie the user caused
+     */
+    private static void failureAlert(String issue) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Alert");
+        alert.setContentText("please enter a valid " + issue);
+        alert.setHeaderText(issue + " not valid");
+        alert.showAndWait();
+    }
+
+    /**
+     * sends an alert if the two passwords were not the same
+     */
+    private static void passwordsNotSame() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Alert");
+        alert.setContentText("please enter passwords again");
+        alert.setHeaderText("passwords are not the same");
+        alert.showAndWait();
     }
 }
