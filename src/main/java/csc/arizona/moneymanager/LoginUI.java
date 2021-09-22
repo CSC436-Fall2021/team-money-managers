@@ -103,7 +103,7 @@ public class LoginUI extends Application {
     private static Button createAddUserButton(TextField userField, TextField passField,
                                               TextField rePassField, Stage stage) {
         Button addUser = new Button("Add User");
-        addUser.setMinWidth(40);
+        addUser.setMinWidth(100);
         addUser.setOnMouseClicked(event -> {
             if (userField.getText().isBlank())
                 failureAlert("username");
