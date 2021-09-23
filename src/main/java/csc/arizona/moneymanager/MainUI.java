@@ -1,18 +1,28 @@
 package csc.arizona.moneymanager;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /**
  * This class represents the main UI of the Money Management Application.
  *
- * The actions for MenuItems are separated from the MenuBar initialization and setup
- * into individual methods for ease of action implementation and system integration.
+ * The main UI consists of scene with a menu bar and 3 main sections of content:
+ *     1. Transaction Pane
+ *     2. Services Pane
+ *     3. Options Pane
+ * The content of these sections can be set via an individual method. These methods
+ * accept any subclass of the javafx Pane class (GridPane, BorderPane, HBox, etc.)
+ * as the container of content to display. It was set up this way in the interest
+ * of modularity.
+ *
+ * The menu bar is represented by an instance of the separate MainMenuBar class.
+ * This was done to separate menu OnActionEvents from the core UI code. The code in this
+ * class need not be changed in the event menu options are added or updated due to
+ * external code revision.
+ *
+ * Dependencies: MainMenuBar
  *
  * @author Kris Rangel
  */
@@ -21,9 +31,10 @@ public class MainUI {
     final private int WIDTH = 700;
     final private int HEIGHT = 500;
     private Scene scene;
+    private BorderPane mainPane;
     private BorderPane transactionPane;
     private BorderPane servicesPane;
-    private HBox optionsPane;
+    private BorderPane optionsPane;
 
     /**
      * Default Constructor.
@@ -57,20 +68,24 @@ public class MainUI {
         initServicesPane();
         initOptionsPane();
 
-        // Adding Test Elements
-        BorderPane testTransactionPane = new BorderPane();
-        testTransactionPane.setCenter(new Label("Test Transaction Pane"));
-        setTransactionPane(testTransactionPane);
-        BorderPane testServicesPane = new BorderPane();
-        testServicesPane.setCenter(new Label("Test Services Pane"));
-        setServicesPane(testServicesPane);
+        // Adding Default (empty indicating) Elements
+        BorderPane emptyTransactionPane = new BorderPane();
+        emptyTransactionPane.setCenter(new Label("Empty Transaction Pane"));
+        setTransactionPane(emptyTransactionPane);
+        BorderPane emptyServicesPane = new BorderPane();
+        emptyServicesPane.setCenter(new Label("Empty Services Pane"));
+        setServicesPane(emptyServicesPane);
+        BorderPane emptyOptionsPane = new BorderPane();
+        emptyOptionsPane.setCenter(new Label("Empty Options Pane"));
+        setOptionsPane(emptyOptionsPane);
 
         // Setting up main pane
-        BorderPane mainPane = new BorderPane();
-        BorderPane centerPane = new BorderPane();
-        mainPane.setTop(menuBar);
+        mainPane = new BorderPane();
+        BorderPane centerPane = new BorderPane(); // sub-container for transaction and services pane
         centerPane.setTop(transactionPane);
         centerPane.setCenter(servicesPane);
+        // Main pane elements
+        mainPane.setTop(menuBar);
         mainPane.setCenter(centerPane);
         mainPane.setBottom(optionsPane);
 
@@ -86,33 +101,45 @@ public class MainUI {
         transactionPane.setStyle("-fx-border-color: black");
     }
 
-    public void setTransactionPane(Pane pane){
-        transactionPane.setCenter(pane);
+    /**
+     * Sets the transaction pane content.
+     * @param transaction the content to show in the transaction pane.
+     */
+    public void setTransactionPane(Pane transaction){
+        transactionPane.setCenter(transaction);
     }
 
+    /**
+     * Initializes the services pane.
+     */
     private void initServicesPane(){
         servicesPane = new BorderPane();
         servicesPane.setStyle("-fx-border-color: black");
     }
 
-    public void setServicesPane(Pane pane){
-        servicesPane.setCenter(pane);
+    /**
+     * Sets the services pane content.
+     * @param services the content to show in the services pane.
+     */
+    public void setServicesPane(Pane services){
+        servicesPane.setCenter(services);
     }
 
     /**
-     * Sets up the Options pane.
+     * Initializes the Options pane.
      */
     private void initOptionsPane(){
-        Label testLabel = new Label("Options Pane");
-        HBox.setMargin(testLabel, new Insets(20));
-        Button testButton = new Button("Test Button");
-        testButton.setOnAction(e-> System.out.println("test button pressed") );
-
-        optionsPane = new HBox();
-        optionsPane.getChildren().addAll(testLabel, testButton);
-        optionsPane.setAlignment(Pos.CENTER);
-        optionsPane.setPadding(new Insets(20));
+        optionsPane = new BorderPane();
         optionsPane.setStyle("-fx-border-color: black");
+
+    }
+
+    /**
+     * Sets the options pane content.
+     * @param options the content to show in the options pane.
+     */
+    public void setOptionsPane(Pane options){
+        optionsPane.setCenter(options);
     }
 
     /**
