@@ -1,7 +1,25 @@
+/* mainUIStyle.css
+ *
+ * This is the style sheet for the scene in the MainUI class.
+ *
+ * Color setting for the overall main pane is changed by changing
+ * the value of -fx-background. Individual elements are colored by
+ * separate values that will overwrite the -fx-background setting.
+ *
+ * Main content panes are identified as follows:
+ *      1. Transaction Pane : #transaction-pane
+ *      2. Services Pane    : #services-pane
+ *      3. Options Pane     : #options-pane
+ *
+ * @author Kris Rangel
+ */
+
 /* Overall MainUI styling */
 .root{
-    -fx-background: LightCyan;
     -fx-font-size: 12pt;
+
+    /* Overall main pane background color */
+    -fx-background: LightCyan;
 
     /* Menu bar colors (use to edit overall menu bar colors) */
     -fx-menu-color:             SlateGrey;
