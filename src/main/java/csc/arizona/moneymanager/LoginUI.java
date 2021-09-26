@@ -55,6 +55,7 @@ public class LoginUI extends Application {
                 loginStatus.setText("Invalid password");
             } else {
                 loginStatus.setText("");
+                //TODO move view into the main UI with this accounts specific data
                 System.out.println("you have made it to the account");
             }
         });
