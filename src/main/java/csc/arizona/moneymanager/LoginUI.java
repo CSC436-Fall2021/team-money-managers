@@ -1,6 +1,7 @@
 package csc.arizona.moneymanager;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -36,6 +37,8 @@ public class LoginUI extends Application {
      */
     private static VBox createLogin() {
         VBox loginTextFields = new VBox();
+        loginTextFields.setAlignment(Pos.CENTER);
+        loginTextFields.setSpacing(10);
         Text loginStatus = new Text();
         Text login = new Text("Username");
         TextField loginField = new TextField();
@@ -55,7 +58,7 @@ public class LoginUI extends Application {
                 System.out.println("you have made it to the account");
             }
         });
-        loginTextFields.getChildren().addAll(loginStatus, new Text("Welcome"), login, loginField,
+        loginTextFields.getChildren().addAll(loginStatus, new Text("Welcome!"), login, loginField,
                 password, passwordField, loginButton);
         return loginTextFields;
     }
