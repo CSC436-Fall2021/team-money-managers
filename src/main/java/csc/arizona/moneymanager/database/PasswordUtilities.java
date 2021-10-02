@@ -1,4 +1,4 @@
-package csc.arizona.moneymanager;
+package csc.arizona.moneymanager.database;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

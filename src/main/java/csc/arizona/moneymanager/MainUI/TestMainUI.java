@@ -1,5 +1,6 @@
-package csc.arizona.moneymanager;
+package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.MainUI.MainUI;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

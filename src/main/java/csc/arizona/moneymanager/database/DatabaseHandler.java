@@ -16,11 +16,13 @@ public class DatabaseHandler {
 
     protected MongoClient mongoClient;
     private String URI;
+    private PasswordUtilities pu;
 
 
 
     public DatabaseHandler(){
         URI = "mongodb+srv://root:root@moneymanagerdata.v0ezf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+        pu = new PasswordUtilities();
     }
 
     public boolean connectToDatabase(){
@@ -34,11 +36,12 @@ public class DatabaseHandler {
     }
 
     public boolean validateUser(String username, String password){
-        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("user_data");
+        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("credentials");
         List<Document> usersList = users.find().into(new ArrayList<>());
         for (Document doc: usersList){
             if(doc.get("username").equals(username)){
-                if(doc.get("password").equals(password)){
+                if(pu.verifyUserPassword(password, doc.get("secure_password").toString(), doc.get("salt").toString())){
+                    doc.put("logged_in", "true");
                     return true;
                 }
             }
@@ -47,7 +50,7 @@ public class DatabaseHandler {
     }
 
     public boolean userExists(String username){
-        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("user_data");
+        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("credentials");
         List<Document> usersList = users.find().into(new ArrayList<>());
         for(Document doc: usersList){
             if(doc.get("username").equals(username)){
@@ -58,11 +61,11 @@ public class DatabaseHandler {
     }
 
     public boolean deleteUser(String username, String password){
-        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("user_data");
+        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("credentials");
         List<Document> usersList = users.find().into(new ArrayList<>());
         for (Document doc: usersList){
             if(doc.get("username").equals(username)){
-                if(doc.get("password").equals(password)){
+                if(pu.verifyUserPassword(password, doc.get("secure_password").toString(), doc.get("salt").toString())){
                     users.deleteOne(doc);
                     return true;
                 }
@@ -100,9 +103,12 @@ public class DatabaseHandler {
 
 
     public boolean addUser(String username, String password){
-        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("user_data");
+        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("credentials");
         Document doc = new Document("username", username);
-        doc.append("password", password);
+        String salt = pu.getSalt(44);
+        doc.append("salt", salt);
+        doc.append("secure_password", pu.generateSecurePassword(password, salt));
+        doc.append("logged_in", "false");
         try {
             users.insertOne(doc);
         } catch (Exception e){

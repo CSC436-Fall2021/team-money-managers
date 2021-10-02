@@ -1,4 +1,4 @@
-package csc.arizona.moneymanager.database.tests;
+package csc.arizona.moneymanager.database.test;
 
 import csc.arizona.moneymanager.database.DatabaseHandler;
 

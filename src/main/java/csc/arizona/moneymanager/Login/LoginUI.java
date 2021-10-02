@@ -1,4 +1,4 @@
-package csc.arizona.moneymanager;
+package csc.arizona.moneymanager.Login;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;

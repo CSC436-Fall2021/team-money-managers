@@ -1,4 +1,4 @@
-package csc.arizona.moneymanager;
+package csc.arizona.moneymanager.Login;
 
 import java.util.HashSet;
 

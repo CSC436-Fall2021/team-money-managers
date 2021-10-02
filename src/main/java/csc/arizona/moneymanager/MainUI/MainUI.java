@@ -1,4 +1,4 @@
-package csc.arizona.moneymanager;
+package csc.arizona.moneymanager.MainUI;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
