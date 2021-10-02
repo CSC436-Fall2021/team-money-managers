@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.Login;
 
+import csc.arizona.moneymanager.database.DatabaseHandler;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,7 +15,7 @@ import javafx.stage.Stage;
 
 public class LoginUI extends Application {
 
-    private static final AccountList accounts = new AccountList();
+    private static final DatabaseHandler database = new DatabaseHandler();
 
     public static void main(String[] args) {
         launch(args);
@@ -48,15 +49,13 @@ public class LoginUI extends Application {
         passwordField.setMaxWidth(150);
         Button loginButton = new Button("Login");
         loginButton.setOnMouseClicked(event -> {
-            Account user = accounts.getAccount(loginField.getText());
-            if (user == null) {
-                loginStatus.setText("Invalid username");
-            } else if (!user.isCorrectPassword(passwordField.getText())) {
-                loginStatus.setText("Invalid password");
+            if (database.userExists(loginField.getText())) {
+                loginStatus.setText("username does not exist");
+            } else if (!database.validateUser(loginField.getText(), passwordField.getText())) {
+                loginStatus.setText("invalid password");
             } else {
                 loginStatus.setText("");
                 //TODO move view into the main UI with this accounts specific data
-                System.out.println("you have made it to the account");
             }
         });
         loginTextFields.getChildren().addAll(loginStatus, new Text("Welcome!"), login, loginField,
@@ -118,7 +117,7 @@ public class LoginUI extends Application {
             else if (!passField.getText().equals(rePassField.getText()))
                 passwordsNotSame();
             else {
-                accounts.addAccount(new Account(userField.getText(), passField.getText()));
+                database.addUser(userField.getText(), passField.getText());
                 stage.close();
             }
         });
