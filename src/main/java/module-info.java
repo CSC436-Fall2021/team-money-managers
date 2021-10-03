@@ -5,7 +5,7 @@ module csc.arizona.moneymanager {
     requires org.mongodb.driver.sync.client;
     requires junit;
     requires org.mongodb.bson;
-    //requires com.google.gson;
+//    requires com.google.gson;
     requires jdk.jsobject;
 
     opens csc.arizona.moneymanager.database;
@@ -25,6 +25,5 @@ module csc.arizona.moneymanager {
     opens csc.arizona.moneymanager.Login to javafx.fxml;
     exports csc.arizona.moneymanager.MainUI;
     opens csc.arizona.moneymanager.MainUI to javafx.fxml;
- */
 
 }
