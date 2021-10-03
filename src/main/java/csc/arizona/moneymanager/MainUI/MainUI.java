@@ -97,7 +97,7 @@ public class MainUI {
         // Creating scene
         this.scene = new Scene(mainPane, width, height);
         // Adding .css stylesheet
-        this.scene.getStylesheets().add("file:src/main/java/csc/arizona/moneymanager/mainUIStyle.css");
+        this.scene.getStylesheets().add("file:src/main/java/csc/arizona/moneymanager/MainUI/mainUIStyle.css");
     }
 
     /**

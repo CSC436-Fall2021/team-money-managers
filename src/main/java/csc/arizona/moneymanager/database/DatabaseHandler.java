@@ -1,12 +1,12 @@
 package csc.arizona.moneymanager.database;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+//import com.google.gson.Gson;
+//import com.google.gson.GsonBuilder;
+//import com.google.gson.JsonObject;
 import com.mongodb.client.*;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.ConnectionString;
-import com.mongodb.ServerAddress;
-import com.mongodb.MongoCredential;
+//import com.mongodb.MongoClientSettings;
+//import com.mongodb.ConnectionString;
+//import com.mongodb.ServerAddress;
+//import com.mongodb.MongoCredential;
 import org.bson.Document;
 
 import java.util.ArrayList;

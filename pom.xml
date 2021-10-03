@@ -78,7 +78,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>csc.arizona.moneymanager/csc.arizona.moneymanager.MainUI.TestMainUI</mainClass>
+                            <mainClass>csc.arizona.moneymanager/csc.arizona.moneymanager.Login.LoginUI</mainClass>
                         </configuration>
                     </execution>
                 </executions>
