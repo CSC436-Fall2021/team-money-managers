@@ -3,6 +3,7 @@ package csc.arizona.moneymanager.TransactionUI;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -42,19 +43,24 @@ public class TransactionUI extends BorderPane {
         HBox transactionInput = new HBox();
 
         days = new Integer[31];
-        for (int i = 1; i <= 31; i++) {
-            days[i] = i;
+        for (int i = 0; i < 31; i++) {
+            days[i] = i+1;
         }
 
         // date input
         monthDropDown = new ComboBox<>(FXCollections.observableArrayList(Month.values()));
         dayDropDown = new ComboBox<>(FXCollections.observableArrayList(days));
-        yearInput = new TextField("Year");
+        yearInput = new TextField();
 
         // transaction amount and category input
         categoryDropDown = new ComboBox(FXCollections.observableArrayList(Category.values()));
-        amountInput = new TextField("Enter amount");
+        amountInput = new TextField();
         Button enterButton = new Button("Enter");
+
+        yearInput.setPromptText("Year");
+        amountInput.setPromptText("Amount");
+
+        //categoryDropDown.setValue(Category.UNDEFINED);
 
         // disable custom input in dropboxes
         monthDropDown.setEditable(false);
@@ -72,7 +78,8 @@ public class TransactionUI extends BorderPane {
         transactionInput.getChildren().add(amountInput);
         transactionInput.getChildren().add(enterButton);
 
-
+        //transactionInput.setPadding(new Insets(20));
+        transactionInput.setSpacing(5);
         setCenter(transactionInput);
 
 
