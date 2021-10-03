@@ -12,6 +12,21 @@ import javafx.scene.layout.HBox;
 import java.time.LocalDate;
 import java.time.Month;
 
+/**
+ * Provides input functionality for creating transactions.
+ *
+ * Input for date of a transaction includes dropdown boxes for the month, day,
+ * and an input text field for the year.
+ *
+ *
+ * Input for amount of transaction is a text field, with a dropbox to specify its category.
+ *
+ * This is displayed as a single row of graphical elements.
+ *
+ * A new transaction will be created if the user clicks on the enter button or
+ * presses enter after inserting an amount.
+ *
+ */
 public class TransactionUI extends BorderPane {
 
     ComboBox<Month> monthDropDown;
@@ -22,6 +37,7 @@ public class TransactionUI extends BorderPane {
     ComboBox<Category> categoryDropDown;
     TextField amountInput;
 
+
     public TransactionUI() {
         HBox transactionInput = new HBox();
 
@@ -30,19 +46,25 @@ public class TransactionUI extends BorderPane {
             days[i] = i;
         }
 
+        // date input
         monthDropDown = new ComboBox<>(FXCollections.observableArrayList(Month.values()));
         dayDropDown = new ComboBox<>(FXCollections.observableArrayList(days));
         yearInput = new TextField("Year");
 
+        // transaction amount and category input
         categoryDropDown = new ComboBox(FXCollections.observableArrayList(Category.values()));
         amountInput = new TextField("Enter amount");
-
         Button enterButton = new Button("Enter");
+
+        // disable custom input in dropboxes
+        monthDropDown.setEditable(false);
+        dayDropDown.setEditable(false);
+        categoryDropDown.setEditable(false);
 
         amountInput.setOnAction(new EnterTransactionHandler());
         enterButton.setOnAction(new EnterTransactionHandler());
 
-        //date
+        // add all elements to HBox row
         transactionInput.getChildren().add(monthDropDown);
         transactionInput.getChildren().add(dayDropDown);
         transactionInput.getChildren().add(yearInput);
@@ -58,6 +80,9 @@ public class TransactionUI extends BorderPane {
 
     }
 
+    /**
+     * Creates a Transaction object using the information given by the user.
+     */
     private class EnterTransactionHandler implements EventHandler<ActionEvent> {
 
         @Override

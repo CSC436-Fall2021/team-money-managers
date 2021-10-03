@@ -4,6 +4,9 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Tests the UI for adding transactions. DIsplays a window containing the transactions pane.
+ */
 public class TestTransactionUI extends Application {
 
     @Override
