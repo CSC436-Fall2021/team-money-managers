@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.Login;
 
+import csc.arizona.moneymanager.MainUI.TestMainUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -14,9 +15,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * @apiNote the dummy username is "username" and the password is "1"
+ */
 public class LoginUI extends Application {
 
     private static final DatabaseHandler database = new DatabaseHandler();
+    private static Stage stage;
 
     public static void main(String[] args) {
         launch(args);
@@ -59,7 +64,8 @@ public class LoginUI extends Application {
         Button loginButton = new Button("Login");
         loginButton.setOnMouseClicked(event -> {
             if (loginField.getText().equals("username") && passwordField.getText().equals("1")) {
-                //TODO switch to the test MainUI.java
+                TestMainUI test = new TestMainUI();
+                test.start(stage);
             } else if (database.userExists(loginField.getText())) {
                 loginStatus.setText("username does not exist");
             } else if (!database.validateUser(loginField.getText(), passwordField.getText())) {
@@ -168,6 +174,7 @@ public class LoginUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        stage = primaryStage;
         BorderPane pane = new BorderPane();
         pane.setCenter(createLogin());
         Scene scene = new Scene(pane, 600, 500);
