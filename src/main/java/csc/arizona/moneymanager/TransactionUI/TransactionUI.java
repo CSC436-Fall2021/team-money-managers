@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -16,8 +17,7 @@ import java.time.Month;
 /**
  * Provides input functionality for creating transactions.
  *
- * Input for date of a transaction includes dropdown boxes for the month, day,
- * and an input text field for the year.
+ * Input for date of a transaction includes UI to pick a date.
  *
  *
  * Input for amount of transaction is a text field, with a dropbox to specify its category.
@@ -25,15 +25,12 @@ import java.time.Month;
  * This is displayed as a single row of graphical elements.
  *
  * A new transaction will be created if the user clicks on the enter button or
- * presses enter after inserting an amount.
+ * presses enter after inserting an amount. The amount field is cleared after entering.
  *
  */
 public class TransactionUI extends BorderPane {
 
-    ComboBox<Month> monthDropDown;
-    ComboBox<Integer> dayDropDown;
-    TextField yearInput;
-    Integer days[];
+    DatePicker dateInput;
 
     ComboBox<Category> categoryDropDown;
     TextField amountInput;
@@ -42,38 +39,25 @@ public class TransactionUI extends BorderPane {
     public TransactionUI() {
         HBox transactionInput = new HBox();
 
-        days = new Integer[31];
-        for (int i = 0; i < 31; i++) {
-            days[i] = i+1;
-        }
-
         // date input
-        monthDropDown = new ComboBox<>(FXCollections.observableArrayList(Month.values()));
-        dayDropDown = new ComboBox<>(FXCollections.observableArrayList(days));
-        yearInput = new TextField();
+        dateInput = new DatePicker();
+        dateInput.setEditable(false); // must pick date from UI.
 
         // transaction amount and category input
         categoryDropDown = new ComboBox(FXCollections.observableArrayList(Category.values()));
         amountInput = new TextField();
         Button enterButton = new Button("Enter");
 
-        yearInput.setPromptText("Year");
         amountInput.setPromptText("Amount");
 
-        //categoryDropDown.setValue(Category.UNDEFINED);
-
         // disable custom input in dropboxes
-        monthDropDown.setEditable(false);
-        dayDropDown.setEditable(false);
         categoryDropDown.setEditable(false);
 
         amountInput.setOnAction(new EnterTransactionHandler());
         enterButton.setOnAction(new EnterTransactionHandler());
 
         // add all elements to HBox row
-        transactionInput.getChildren().add(monthDropDown);
-        transactionInput.getChildren().add(dayDropDown);
-        transactionInput.getChildren().add(yearInput);
+        transactionInput.getChildren().add(dateInput);
         transactionInput.getChildren().add(categoryDropDown);
         transactionInput.getChildren().add(amountInput);
         transactionInput.getChildren().add(enterButton);
@@ -95,14 +79,27 @@ public class TransactionUI extends BorderPane {
         @Override
         public void handle(ActionEvent actionEvent) {
 
-            Month month = monthDropDown.getValue();
-            int day = dayDropDown.getValue();
-            int year = Integer.parseInt(yearInput.getText());
-
-            LocalDate date = LocalDate.of(year, month, day);
-
-
+            LocalDate date = dateInput.getValue();
             Category category = categoryDropDown.getValue();
+
+            /*
+                Error handling for missing information
+             */
+            if (date == null) {
+                System.out.println("Enter a date.");
+                return;
+            }
+
+            if (category == null) {
+                System.out.println("Pick a category.");
+                return;
+            }
+
+            if (amountInput.getText().isEmpty()){
+                System.out.println("Enter an amount.");
+                return;
+            }
+
             double amount = Double.parseDouble(amountInput.getText());
 
             Transaction toAdd = new Transaction(date, category, amount);
@@ -111,6 +108,7 @@ public class TransactionUI extends BorderPane {
             System.out.println(toAdd.getCategory());
             System.out.println(toAdd.getAmount());
 
+            // reset input field for amount, but leave date and category as is.
             amountInput.clear();
 
         }
