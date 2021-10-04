@@ -1,13 +1,14 @@
 package csc.arizona.moneymanager.database;
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
-//import com.google.gson.JsonObject;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
 import com.mongodb.client.*;
-//import com.mongodb.MongoClientSettings;
-//import com.mongodb.ConnectionString;
-//import com.mongodb.ServerAddress;
-//import com.mongodb.MongoCredential;
 import org.bson.Document;
+import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +116,12 @@ public class DatabaseHandler {
             return false;
         }
         return true;
+    }
+
+    public static void turnLoggerOff(){
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
+        rootLogger.setLevel(Level.OFF);
     }
 
 

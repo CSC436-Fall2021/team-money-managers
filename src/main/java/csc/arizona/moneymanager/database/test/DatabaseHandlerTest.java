@@ -1,10 +1,13 @@
 package csc.arizona.moneymanager.database.test;
 
+
 import csc.arizona.moneymanager.database.DatabaseHandler;
+
 
 public class DatabaseHandlerTest {
 
     public static void main(String[] args){
+        DatabaseHandler.turnLoggerOff();
         DatabaseHandler handler = new DatabaseHandler();
         runTests(handler);
     }
