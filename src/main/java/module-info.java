@@ -25,5 +25,6 @@ module csc.arizona.moneymanager {
     opens csc.arizona.moneymanager.Login to javafx.fxml;
     exports csc.arizona.moneymanager.MainUI;
     opens csc.arizona.moneymanager.MainUI to javafx.fxml;
+    */
 
 }
