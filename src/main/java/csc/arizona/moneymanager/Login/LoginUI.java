@@ -5,10 +5,7 @@ import csc.arizona.moneymanager.database.DatabaseHandler;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -40,7 +37,7 @@ public class LoginUI extends Application {
         TextField loginField = new TextField();
         loginField.setMaxWidth(150);
         Text password = new Text("Password");
-        TextField passwordField = new TextField();
+        PasswordField passwordField = new PasswordField();
         passwordField.setMaxWidth(150);
         HBox hBox = new HBox(createLoginButton(loginField, passwordField, loginStatus),
                 createAddUserButton());
@@ -59,7 +56,7 @@ public class LoginUI extends Application {
      * @param loginStatus   the message board that will tell the user any issues with the login
      * @return the login button
      */
-    private static Button createLoginButton(TextField loginField, TextField passwordField,
+    private static Button createLoginButton(TextField loginField, PasswordField passwordField,
                                             Text loginStatus) {
         Button loginButton = new Button("Login");
         loginButton.setOnMouseClicked(event -> {
