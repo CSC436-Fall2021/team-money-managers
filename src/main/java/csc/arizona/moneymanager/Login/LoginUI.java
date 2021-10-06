@@ -62,8 +62,8 @@ public class LoginUI extends Application {
         loginButton.setOnMouseClicked(event -> {
             if (loginField.getText().equals("username") && passwordField.getText().equals("1")) {
                 TestMainUI test = new TestMainUI();
-                test.start(stage);
-            } else if (database.userExists(loginField.getText())) {
+                test.start(stage); // remove if statement once view can be changed to the MainUI
+            } else if (!database.userExists(loginField.getText())) {
                 loginStatus.setText("username does not exist");
             } else if (!database.validateUser(loginField.getText(), passwordField.getText())) {
                 loginStatus.setText("invalid password");
@@ -128,6 +128,8 @@ public class LoginUI extends Application {
                 failureAlert("re-enter password");
             else if (!passField.getText().equals(rePassField.getText()))
                 passwordsNotSame();
+            else if (database.userExists(userField.getText()))
+                existingUsername();
             else {
                 database.addUser(userField.getText(), passField.getText());
                 stage.close();
@@ -169,8 +171,21 @@ public class LoginUI extends Application {
         alert.showAndWait();
     }
 
+    /**
+     * sends an alert if the username already exists in the database
+     */
+    private static void existingUsername() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Alert");
+        alert.setContentText("please pick a different username");
+        alert.setHeaderText("username already exists");
+        alert.showAndWait();
+    }
+
     @Override
     public void start(Stage primaryStage) {
+        database.connectToDatabase();
+        DatabaseHandler.turnLoggerOff();
         stage = primaryStage;
         BorderPane pane = new BorderPane();
         pane.setCenter(createLogin());
