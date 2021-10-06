@@ -1,3 +1,13 @@
 # Default ignored files
+
 /shelf/
 /workspace.xml
+/libraries/
+/Maven__org_openjfx_javafx_base_win_16.xml
+/Maven__org_openjfx_javafx_base_mac_16.xml
+/Maven__org_openjfx_javafx_controls_win_16.xml
+/Maven__org_openjfx_javafx_controls_mac_16.xml
+/Maven__org_openjfx_javafx_fxml_win_16.xml
+/Maven__org_openjfx_javafx_fxml_mac_16.xml
+/Maven__org_openjfx_javafx_graphics_win_16.xml
+/Maven__org_openjfx_javafx_graphics_mac_16.xml
