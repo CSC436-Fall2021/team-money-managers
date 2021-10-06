@@ -2,8 +2,11 @@ package csc.arizona.moneymanager.MainUI;
 
 import csc.arizona.moneymanager.TransactionUI.*;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,8 +14,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
@@ -43,14 +44,6 @@ public class TestMainUI extends Application {
 
     public void testPanes(){
         // Test transaction pane
-        /*
-        HBox transactionPane = new HBox();
-        transactionPane.setAlignment(Pos.CENTER);
-        transactionPane.setPadding(new Insets(20));
-        Label transactionLabel = new Label("Transaction");
-        HBox.setMargin(transactionLabel, new Insets(20));
-        transactionPane.getChildren().addAll(transactionLabel, new TextField("Amount"));
-        */
         TransactionUI transactionPane = new TransactionUI();
         // Adding test transaction pane to mainUI
         mainUI.setTransactionPane(transactionPane);
@@ -66,15 +59,29 @@ public class TestMainUI extends Application {
                 new Label("List item 4")
         );
         FlowPane centerService = new FlowPane();
+
+
+        ObservableList<PieChart.Data> data =
+                FXCollections.observableArrayList(
+                        new PieChart.Data("Food", 20),
+                        new PieChart.Data("Other", 10));
+        PieChart pieChart = new PieChart(data);
+        pieChart.setScaleX(0.5);
+        pieChart.setScaleY(0.5);
+        centerService.getChildren().add(pieChart);
+
+        /*
         Rectangle rect = new Rectangle();
         rect.setWidth(100);
         rect.setHeight(100);
         rect.setStrokeWidth(10);
         rect.setStroke(Color.BLACK);
         rect.setFill(Color.AQUAMARINE);
-        VBox leftList = new VBox(new Label("Left side services"), new TextField());
-        BorderPane.setMargin(leftList, new Insets(20));
         centerService.getChildren().add(rect);
+        */
+
+        VBox leftList = new VBox(new Label("Left side services"), new TextField());
+        //BorderPane.setMargin(leftList, new Insets(20));
         servicesPane.setCenter(centerService);
         servicesPane.setRight(testList);
         servicesPane.setLeft(leftList);

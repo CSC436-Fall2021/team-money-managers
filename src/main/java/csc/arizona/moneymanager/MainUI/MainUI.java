@@ -1,6 +1,7 @@
 package csc.arizona.moneymanager.MainUI;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -29,8 +30,8 @@ import javafx.scene.layout.Pane;
  */
 public class MainUI {
 
-    final private int WIDTH = 700;
-    final private int HEIGHT = 500;
+    final private int WIDTH = 850;
+    final private int HEIGHT = 725;
     private Scene scene;
     private BorderPane mainPane;
     private BorderPane transactionPane;
@@ -107,7 +108,9 @@ public class MainUI {
     private void initTransactionPane(){
         transactionPane = new BorderPane();
         transactionPane.setPadding(new Insets(20));
+        BorderPane.setAlignment(transactionPane, Pos.CENTER);
         transactionPane.setStyle("-fx-border-color: black");
+
     }
 
     /**
