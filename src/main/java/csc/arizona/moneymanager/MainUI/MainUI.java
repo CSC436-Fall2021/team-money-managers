@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -105,6 +106,7 @@ public class MainUI {
      */
     private void initTransactionPane(){
         transactionPane = new BorderPane();
+        transactionPane.setPadding(new Insets(20));
         transactionPane.setStyle("-fx-border-color: black");
     }
 

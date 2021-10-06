@@ -1,6 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
-import csc.arizona.moneymanager.MainUI.MainUI;
+import csc.arizona.moneymanager.TransactionUI.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,12 +43,15 @@ public class TestMainUI extends Application {
 
     public void testPanes(){
         // Test transaction pane
+        /*
         HBox transactionPane = new HBox();
         transactionPane.setAlignment(Pos.CENTER);
         transactionPane.setPadding(new Insets(20));
         Label transactionLabel = new Label("Transaction");
         HBox.setMargin(transactionLabel, new Insets(20));
         transactionPane.getChildren().addAll(transactionLabel, new TextField("Amount"));
+        */
+        TransactionUI transactionPane = new TransactionUI();
         // Adding test transaction pane to mainUI
         mainUI.setTransactionPane(transactionPane);
 
