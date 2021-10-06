@@ -4,11 +4,9 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 import java.time.LocalDate;
@@ -28,7 +26,7 @@ import java.time.Month;
  * presses enter after inserting an amount. The amount field is cleared after entering.
  *
  */
-public class TransactionUI extends BorderPane {
+public class TransactionUI extends GridPane {
 
     DatePicker dateInput;
 
@@ -37,7 +35,8 @@ public class TransactionUI extends BorderPane {
 
 
     public TransactionUI() {
-        HBox transactionInput = new HBox();
+        //HBox inputLabels = new HBox(); // could just make the entire UI a griddpane instead. we'll see.
+        //HBox transactionInput = new HBox();
 
         // date input
         dateInput = new DatePicker();
@@ -57,14 +56,34 @@ public class TransactionUI extends BorderPane {
         enterButton.setOnAction(new EnterTransactionHandler());
 
         // add all elements to HBox row
+        /*inputLabels.getChildren().add(new Label("Date"));
+        inputLabels.getChildren().add(new Label("Category"));
+        inputLabels.getChildren().add(new Label("Amount"));
+
         transactionInput.getChildren().add(dateInput);
         transactionInput.getChildren().add(categoryDropDown);
         transactionInput.getChildren().add(amountInput);
-        transactionInput.getChildren().add(enterButton);
+        transactionInput.getChildren().add(enterButton);*/
 
         //transactionInput.setPadding(new Insets(20));
-        transactionInput.setSpacing(5);
-        setCenter(transactionInput);
+        //transactionInput.setSpacing(5);
+
+        //setTop(inputLabels);
+        //setCenter(transactionInput);
+        add(new Label("Transactions"), 1, 0);
+
+        add(new Label("Date"), 0, 1);
+        add(new Label("Category"), 1, 1);
+        add(new Label("Amount"), 2, 1);
+
+        add(dateInput, 0, 2);
+        add(categoryDropDown, 1, 2);
+        add(amountInput, 2, 2);
+        add(enterButton, 3, 2);
+
+        //setPadding(new Insets(20));
+        setHgap(5);
+        setVgap(5);
 
 
 
