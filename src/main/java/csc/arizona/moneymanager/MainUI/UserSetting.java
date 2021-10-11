@@ -24,7 +24,7 @@ public class UserSetting {
      * have to fill out the desired amount
      */
     public UserSetting() {
-
+        customCategory = new ArrayList<>();
     }
 
     /**
@@ -33,7 +33,7 @@ public class UserSetting {
      * @param category the custom category list
      */
     public UserSetting(ArrayList<String> category) {
-
+        customCategory = new ArrayList<>();
     }
 
     /**
@@ -84,21 +84,22 @@ public class UserSetting {
     /**
      * if the user created a category name and wants to rename it
      */
-    public void editCategoryName() {
-
+    public void editCategoryName(String oldCategory, String newCategory) {
+        //TODO take the value of the old category and move it to the new category and then create
+        // new category
     }
 
     /**
      * removes a custom category from the category list
      */
-    public void removeCategoryName() {
-
+    public void removeCategoryName(String category) {
+        customCategory.remove(category);
     }
 
     /**
      * adds the custom category to the category list
      */
-    public void addCategoryName() {
-
+    public void addCategoryName(String category) {
+        customCategory.add(category);
     }
 }
