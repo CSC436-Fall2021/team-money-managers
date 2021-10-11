@@ -118,16 +118,19 @@ public class MainMenuBar extends MenuBar {
 
     /**
      * Contains the actions performed when the Menu option "Help" is selected.
+     *
+     * @author Kris Rangel
      */
     private void showHelpMenuAction(){
-        System.out.println("Show Help selected"); //TODO remove when action implemented
-        mainUI.showHelp();
+        mainUI.showInfo(new UserHelp());
     }
 
     /**
      * Contains the actions performed when the Menu option "About" is selected.
+     *
+     * @author Kris Rangel
      */
     private void aboutMenuAction(){
-        System.out.println("About selected"); //TODO remove when action implemented
+        mainUI.showInfo(new AboutInfo());
     }
 }

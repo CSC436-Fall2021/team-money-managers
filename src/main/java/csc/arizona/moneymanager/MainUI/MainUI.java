@@ -166,25 +166,37 @@ public class MainUI {
     }
 
     /**
-     * Displays user help in the services pane and
-     * an "Exit Help" button in the options pane.
+     * Updates the Services pane to the given InfoView content and
+     * updates the Options pane with a return button to return to previously
+     * displayed content.
+     * @param infoView the InfoView object to display.
      */
-    public void showHelp(){
-        // Setting services pane to UserHelp
-        servicesPane.setCenter(new UserHelp());
+    public void showInfo(InfoView infoView){
+        // Setting services pane to About info
+        servicesPane.setCenter(infoView);
+        // Getting options pane
+        HBox aboutInfoOptions = createExitInfoButtonOptions(infoView.getButtonText());
+        // Setting options pane
+        optionsPane.setCenter(aboutInfoOptions);
+    }
 
+    /**
+     * Creates a simple, one-button-return options pane for to return to previous content display.
+     * @param buttonText the text to display on the return button.
+     * @return the HBox object for display in the options pane.
+     */
+    private HBox createExitInfoButtonOptions(String buttonText){
         // Initializing options
-        HBox helpOptions = new HBox();
-        Button exitHelp = new Button("Exit Help");
-        exitHelp.setOnAction(e -> showCurrentContent()); // Restores current content when user chooses to exit help
-       //exitHelp.setPadding(PADDING);
-        helpOptions.setAlignment(Pos.CENTER);
-        helpOptions.setPadding(PADDING);
+        HBox infoOptions = new HBox();
+        Button exitInfo = new Button(buttonText);
+        exitInfo.setOnAction(e -> showCurrentContent()); // Restores current content when user chooses to exit help
 
-        // Setting options pane to help options
-        helpOptions.getChildren().add(exitHelp);
-        optionsPane.setCenter(helpOptions);
+        infoOptions.setAlignment(Pos.CENTER);
+        infoOptions.setPadding(PADDING);
+        // Adding button to options pane
+        infoOptions.getChildren().add(exitInfo);
 
+        return infoOptions;
     }
 
     /**
