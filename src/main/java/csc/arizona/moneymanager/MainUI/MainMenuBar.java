@@ -32,6 +32,12 @@ public class MainMenuBar extends MenuBar {
         // File menu setup
         Menu file = new Menu("_File");
         SeparatorMenuItem fileMenuSeparator = new SeparatorMenuItem();
+        // --> Set Budget option
+        MenuItem setBudget = new MenuItem("Set _Budget");
+        setBudget.setOnAction( e-> budgetMenuAction() );
+        // --> Add Custom Categories option
+        MenuItem addCategories = new MenuItem("Add Custom _Categories");
+        addCategories.setOnAction( e -> addCategoriesAction() );
         // --> Save Data option
         MenuItem saveData = new MenuItem("_Save Data");
         saveData.setOnAction(e-> saveDataMenuAction() );
@@ -42,7 +48,7 @@ public class MainMenuBar extends MenuBar {
         MenuItem exit = new MenuItem("E_xit");
         exit.setOnAction(e-> exitMenuAction() );
         // Adding items to File menu
-        file.getItems().addAll(saveData, fileMenuSeparator, logout, exit);
+        file.getItems().addAll(setBudget, addCategories, saveData, fileMenuSeparator, logout, exit);
 
         // Report menu setup
         Menu reports = new Menu("_Reports");
@@ -77,6 +83,20 @@ public class MainMenuBar extends MenuBar {
     /* **********************************
      * Event Action Methods
      ************************************/
+
+    /**
+     * Contains the actions performed when the Menu option "Add Custom Categories" is selected.
+     */
+    private void addCategoriesAction(){
+        mainUI.addCustomCategories();
+    }
+
+    /**
+     * Contains the actions performed when the Menu option "Set Budget" is selected.
+     */
+    private void budgetMenuAction(){
+       mainUI.setBudget();
+    }
 
     /**
      * Contains the actions performed when the Menu option "Save Data" is selected.

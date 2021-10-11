@@ -166,6 +166,37 @@ public class MainUI {
     }
 
     /**
+     * Displays the set bugdet UI and updates the user-entered budget amount in the
+     * account settings class.
+     */
+    public void setBudget(){
+        System.out.println("Set Budget Selected"); //TODO remove when action implemented
+        //TODO 1. create budget entry pane
+        //TODO 2. show budget entry pane in services pane
+        /// servicesPane.setCenter( budgetUI )
+        //TODO 2.5 allow OK and Cancel selections
+        //TODO 3. get user input
+        //TODO 4. save budget in account settings class (if not cancelled by user)
+
+        // Restoring content to previous content
+        showCurrentContent();
+    }
+
+    /**
+     * Displays an add custom categories UI and updates the account settings custom category list.
+     */
+    public void addCustomCategories(){
+        System.out.println("Add Custom Categories Selected"); //TODO remove when action implemented
+        //TODO 1. display the custom category UI in services pane
+        /// servicesPane.setCenter( customCategoryUI )
+        //TODO 2. get user input
+        //TODO 3. update categories, if necessary (save in account settings class)
+
+        // Restoring content to previous content
+        showCurrentContent();
+    }
+
+    /**
      * Updates the Services pane to the given InfoView content and
      * updates the Options pane with a return button to return to previously
      * displayed content.
