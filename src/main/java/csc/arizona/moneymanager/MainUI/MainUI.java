@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /**
@@ -32,11 +33,14 @@ public class MainUI {
 
     final private int WIDTH = 850;
     final private int HEIGHT = 725;
+    public static final Insets PADDING = new Insets(20);
     private Scene scene;
     private BorderPane mainPane;
     private BorderPane transactionPane;
     private BorderPane servicesPane;
+    private Pane currentServicesPane;
     private BorderPane optionsPane;
+    private Pane currentOptionsPane;
 
     /**
      * Default Constructor.
@@ -65,7 +69,7 @@ public class MainUI {
     private void initializeScene(int width, int height){
 
         // Initializing elements
-        MainMenuBar menuBar = new MainMenuBar();
+        MainMenuBar menuBar = new MainMenuBar(this);
         initTransactionPane();
         initServicesPane();
         initOptionsPane();
@@ -107,7 +111,8 @@ public class MainUI {
      */
     private void initTransactionPane(){
         transactionPane = new BorderPane();
-        transactionPane.setPadding(new Insets(20));
+        transactionPane.setPadding(PADDING);
+        transactionPane.setPrefWidth(WIDTH);
         BorderPane.setAlignment(transactionPane, Pos.CENTER);
         transactionPane.setStyle("-fx-border-color: black");
 
@@ -134,7 +139,10 @@ public class MainUI {
      * @param services the content to show in the services pane.
      */
     public void setServicesPane(Pane services){
-        servicesPane.setCenter(services);
+        // Saving current service pane content
+        currentServicesPane = services;
+        // Setting content
+        servicesPane.setCenter(currentServicesPane);
     }
 
     /**
@@ -151,7 +159,88 @@ public class MainUI {
      * @param options the content to show in the options pane.
      */
     public void setOptionsPane(Pane options){
-        optionsPane.setCenter(options);
+        // Saving current options pane content
+        currentOptionsPane = options;
+        // Setting content
+        optionsPane.setCenter(currentOptionsPane);
+    }
+
+    /**
+     * Displays the set bugdet UI and updates the user-entered budget amount in the
+     * account settings class.
+     */
+    public void setBudget(){
+        System.out.println("Set Budget Selected"); //TODO remove when action implemented
+        //TODO 1. create budget entry pane
+        //TODO 2. show budget entry pane in services pane
+        /// servicesPane.setCenter( budgetUI )
+        //TODO 2.5 allow OK and Cancel selections
+        //TODO 3. get user input
+        //TODO 4. save budget in account settings class (if not cancelled by user)
+
+        // Restoring content to previous content
+        showCurrentContent();
+    }
+
+    /**
+     * Displays an add custom categories UI and updates the account settings custom category list.
+     */
+    public void addCustomCategories(){
+        System.out.println("Add Custom Categories Selected"); //TODO remove when action implemented
+        //TODO 1. display the custom category UI in services pane
+        /// servicesPane.setCenter( customCategoryUI )
+        //TODO 2. get user input
+        //TODO 3. update categories, if necessary (save in account settings class)
+
+        // Restoring content to previous content
+        showCurrentContent();
+    }
+
+    /**
+     * Updates the Services pane to the given InfoView content and
+     * updates the Options pane with a return button to return to previously
+     * displayed content.
+     * @param infoView the InfoView object to display.
+     */
+    public void showInfo(InfoView infoView){
+        // Setting services pane to About info
+        servicesPane.setCenter(infoView);
+        // Getting options pane
+        HBox aboutInfoOptions = createExitInfoButtonOptions(infoView.getButtonText());
+        // Setting options pane
+        optionsPane.setCenter(aboutInfoOptions);
+    }
+
+    /**
+     * Creates a simple, one-button-return options pane for to return to previous content display.
+     * @param buttonText the text to display on the return button.
+     * @return the HBox object for display in the options pane.
+     */
+    private HBox createExitInfoButtonOptions(String buttonText){
+        // Initializing options
+        HBox infoOptions = new HBox();
+        Button exitInfo = new Button(buttonText);
+        exitInfo.setOnAction(e -> showCurrentContent()); // Restores current content when user chooses to exit help
+
+        infoOptions.setAlignment(Pos.CENTER);
+        infoOptions.setPadding(PADDING);
+        // Adding button to options pane
+        infoOptions.getChildren().add(exitInfo);
+
+        return infoOptions;
+    }
+
+    /**
+     * Sets Services Pane and Options Pane to current content.
+     *
+     * Used to restore previous content when temporarily showing
+     * different in the services and/or options pane.
+     */
+    private void showCurrentContent(){
+        // Setting services pane to previous view
+        servicesPane.setCenter(currentServicesPane);
+        // Setting options pane to previous view
+        optionsPane.setCenter(currentOptionsPane);
     }
 
     /**

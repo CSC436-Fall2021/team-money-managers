@@ -17,19 +17,27 @@ import javafx.scene.control.SeparatorMenuItem;
  */
 public class MainMenuBar extends MenuBar {
 
+    private MainUI mainUI;
+
     /**
      * Constructor. Sets up the menu items and associated
      * OnAction events to call related methods.
      *
      * @author Kris Rangel
      */
-    public MainMenuBar(){
+    public MainMenuBar(MainUI mainUI){
         // Do not change OnActions in this function.
         super();
 
         // File menu setup
         Menu file = new Menu("_File");
         SeparatorMenuItem fileMenuSeparator = new SeparatorMenuItem();
+        // --> Set Budget option
+        MenuItem setBudget = new MenuItem("Set _Budget");
+        setBudget.setOnAction( e-> budgetMenuAction() );
+        // --> Add Custom Categories option
+        MenuItem addCategories = new MenuItem("Add Custom _Categories");
+        addCategories.setOnAction( e -> addCategoriesAction() );
         // --> Save Data option
         MenuItem saveData = new MenuItem("_Save Data");
         saveData.setOnAction(e-> saveDataMenuAction() );
@@ -40,7 +48,7 @@ public class MainMenuBar extends MenuBar {
         MenuItem exit = new MenuItem("E_xit");
         exit.setOnAction(e-> exitMenuAction() );
         // Adding items to File menu
-        file.getItems().addAll(saveData, fileMenuSeparator, logout, exit);
+        file.getItems().addAll(setBudget, addCategories, saveData, fileMenuSeparator, logout, exit);
 
         // Report menu setup
         Menu reports = new Menu("_Reports");
@@ -68,11 +76,27 @@ public class MainMenuBar extends MenuBar {
         // Adding menus to menu bar
         this.getMenus().addAll(file, reports, help);
 
+        // Saving reference to MainUI
+        this.mainUI = mainUI;
     }
 
     /* **********************************
      * Event Action Methods
      ************************************/
+
+    /**
+     * Contains the actions performed when the Menu option "Add Custom Categories" is selected.
+     */
+    private void addCategoriesAction(){
+        mainUI.addCustomCategories();
+    }
+
+    /**
+     * Contains the actions performed when the Menu option "Set Budget" is selected.
+     */
+    private void budgetMenuAction(){
+       mainUI.setBudget();
+    }
 
     /**
      * Contains the actions performed when the Menu option "Save Data" is selected.
@@ -114,15 +138,19 @@ public class MainMenuBar extends MenuBar {
 
     /**
      * Contains the actions performed when the Menu option "Help" is selected.
+     *
+     * @author Kris Rangel
      */
     private void showHelpMenuAction(){
-        System.out.println("Show Help selected"); //TODO remove when action implemented
+        mainUI.showInfo(new UserHelp());
     }
 
     /**
      * Contains the actions performed when the Menu option "About" is selected.
+     *
+     * @author Kris Rangel
      */
     private void aboutMenuAction(){
-        System.out.println("About selected"); //TODO remove when action implemented
+        mainUI.showInfo(new AboutInfo());
     }
 }
