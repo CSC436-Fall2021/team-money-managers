@@ -19,6 +19,9 @@ module csc.arizona.moneymanager {
     opens csc.arizona.moneymanager.TransactionUI;
     exports csc.arizona.moneymanager.TransactionUI;
 
+    opens csc.arizona.moneymanager;
+    exports csc.arizona.moneymanager;
+
     /*
     opens csc.arizona.moneymanager to javafx.fxml;
     exports csc.arizona.moneymanager.database;

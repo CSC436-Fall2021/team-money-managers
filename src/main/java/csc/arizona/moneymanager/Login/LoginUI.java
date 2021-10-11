@@ -1,8 +1,6 @@
 package csc.arizona.moneymanager.Login;
 
-import csc.arizona.moneymanager.MainUI.TestMainUI;
-import csc.arizona.moneymanager.database.DatabaseHandler;
-import javafx.application.Application;
+import csc.arizona.moneymanager.Controller;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,14 +13,7 @@ import javafx.stage.Stage;
 /**
  * @apiNote the dummy username is "username" and the password is "1"
  */
-public class LoginUI extends Application {
-
-    private static final DatabaseHandler database = new DatabaseHandler();
-    private static Stage stage;
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class LoginUI {
 
     /**
      * @return the text and text fields necessary for the user to login in to the money management
@@ -60,17 +51,12 @@ public class LoginUI extends Application {
                                             Text loginStatus) {
         Button loginButton = new Button("Login");
         loginButton.setOnMouseClicked(event -> {
-            if (loginField.getText().equals("username") && passwordField.getText().equals("1")) {
-                TestMainUI test = new TestMainUI();
-                test.start(stage); // remove if statement once view can be changed to the MainUI
-            } else if (!database.userExists(loginField.getText())) {
+            if (!Controller.userExists(loginField.getText()))
                 loginStatus.setText("username does not exist");
-            } else if (!database.validateUser(loginField.getText(), passwordField.getText())) {
+            else if (!Controller.correctCredentials(loginField.getText(), passwordField.getText()))
                 loginStatus.setText("invalid password");
-            } else {
-                loginStatus.setText("");
-                //TODO move view into the main UI with this accounts specific data
-            }
+            else
+                Controller.loginToMainUI();
         });
         return loginButton;
     }
@@ -128,10 +114,10 @@ public class LoginUI extends Application {
                 failureAlert("re-enter password");
             else if (!passField.getText().equals(rePassField.getText()))
                 passwordsNotSame();
-            else if (database.userExists(userField.getText()))
+            else if (Controller.userExists(userField.getText()))
                 existingUsername();
             else {
-                database.addUser(userField.getText(), passField.getText());
+                Controller.addUser(userField.getText(), passField.getText());
                 stage.close();
             }
         });
@@ -182,16 +168,9 @@ public class LoginUI extends Application {
         alert.showAndWait();
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        database.connectToDatabase();
-        DatabaseHandler.turnLoggerOff();
-        stage = primaryStage;
+    public static Scene createScene() {
         BorderPane pane = new BorderPane();
         pane.setCenter(createLogin());
-        Scene scene = new Scene(pane, 600, 500);
-        primaryStage.setTitle("Money Manager");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        return new Scene(pane, 600, 500);
     }
 }
