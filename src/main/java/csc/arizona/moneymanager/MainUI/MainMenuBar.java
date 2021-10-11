@@ -17,13 +17,15 @@ import javafx.scene.control.SeparatorMenuItem;
  */
 public class MainMenuBar extends MenuBar {
 
+    private MainUI mainUI;
+
     /**
      * Constructor. Sets up the menu items and associated
      * OnAction events to call related methods.
      *
      * @author Kris Rangel
      */
-    public MainMenuBar(){
+    public MainMenuBar(MainUI mainUI){
         // Do not change OnActions in this function.
         super();
 
@@ -68,6 +70,8 @@ public class MainMenuBar extends MenuBar {
         // Adding menus to menu bar
         this.getMenus().addAll(file, reports, help);
 
+        // Saving reference to MainUI
+        this.mainUI = mainUI;
     }
 
     /* **********************************
@@ -117,6 +121,7 @@ public class MainMenuBar extends MenuBar {
      */
     private void showHelpMenuAction(){
         System.out.println("Show Help selected"); //TODO remove when action implemented
+        mainUI.showHelp();
     }
 
     /**

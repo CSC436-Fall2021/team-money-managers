@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /**
@@ -32,11 +33,14 @@ public class MainUI {
 
     final private int WIDTH = 850;
     final private int HEIGHT = 725;
+    public static final Insets PADDING = new Insets(20);
     private Scene scene;
     private BorderPane mainPane;
     private BorderPane transactionPane;
     private BorderPane servicesPane;
+    private Pane currentServicesPane;
     private BorderPane optionsPane;
+    private Pane currentOptionsPane;
 
     /**
      * Default Constructor.
@@ -65,7 +69,7 @@ public class MainUI {
     private void initializeScene(int width, int height){
 
         // Initializing elements
-        MainMenuBar menuBar = new MainMenuBar();
+        MainMenuBar menuBar = new MainMenuBar(this);
         initTransactionPane();
         initServicesPane();
         initOptionsPane();
@@ -107,7 +111,8 @@ public class MainUI {
      */
     private void initTransactionPane(){
         transactionPane = new BorderPane();
-        transactionPane.setPadding(new Insets(20));
+        transactionPane.setPadding(PADDING);
+        transactionPane.setPrefWidth(WIDTH);
         BorderPane.setAlignment(transactionPane, Pos.CENTER);
         transactionPane.setStyle("-fx-border-color: black");
 
@@ -134,7 +139,10 @@ public class MainUI {
      * @param services the content to show in the services pane.
      */
     public void setServicesPane(Pane services){
-        servicesPane.setCenter(services);
+        // Saving current service pane content
+        currentServicesPane = services;
+        // Setting content
+        servicesPane.setCenter(currentServicesPane);
     }
 
     /**
@@ -151,7 +159,45 @@ public class MainUI {
      * @param options the content to show in the options pane.
      */
     public void setOptionsPane(Pane options){
-        optionsPane.setCenter(options);
+        // Saving current options pane content
+        currentOptionsPane = options;
+        // Setting content
+        optionsPane.setCenter(currentOptionsPane);
+    }
+
+    /**
+     * Displays user help in the services pane and
+     * an "Exit Help" button in the options pane.
+     */
+    public void showHelp(){
+        // Setting services pane to UserHelp
+        servicesPane.setCenter(new UserHelp());
+
+        // Initializing options
+        HBox helpOptions = new HBox();
+        Button exitHelp = new Button("Exit Help");
+        exitHelp.setOnAction(e -> showCurrentContent()); // Restores current content when user chooses to exit help
+       //exitHelp.setPadding(PADDING);
+        helpOptions.setAlignment(Pos.CENTER);
+        helpOptions.setPadding(PADDING);
+
+        // Setting options pane to help options
+        helpOptions.getChildren().add(exitHelp);
+        optionsPane.setCenter(helpOptions);
+
+    }
+
+    /**
+     * Sets Services Pane and Options Pane to current content.
+     *
+     * Used to restore previous content when temporarily showing
+     * different in the services and/or options pane.
+     */
+    private void showCurrentContent(){
+        // Setting services pane to previous view
+        servicesPane.setCenter(currentServicesPane);
+        // Setting options pane to previous view
+        optionsPane.setCenter(currentOptionsPane);
     }
 
     /**

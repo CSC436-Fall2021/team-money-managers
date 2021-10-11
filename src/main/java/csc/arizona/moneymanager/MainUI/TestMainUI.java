@@ -4,7 +4,6 @@ import csc.arizona.moneymanager.TransactionUI.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
@@ -50,7 +49,7 @@ public class TestMainUI extends Application {
 
         // test Services pane
         BorderPane servicesPane = new BorderPane();
-        servicesPane.setPadding(new Insets(20));
+        servicesPane.setPadding(MainUI.PADDING);
         VBox testList = new VBox();
         testList.getChildren().addAll(
                 new Label("List item 1"),
@@ -70,18 +69,8 @@ public class TestMainUI extends Application {
         pieChart.setScaleY(0.5);
         centerService.getChildren().add(pieChart);
 
-        /*
-        Rectangle rect = new Rectangle();
-        rect.setWidth(100);
-        rect.setHeight(100);
-        rect.setStrokeWidth(10);
-        rect.setStroke(Color.BLACK);
-        rect.setFill(Color.AQUAMARINE);
-        centerService.getChildren().add(rect);
-        */
-
         VBox leftList = new VBox(new Label("Left side services"), new TextField());
-        //BorderPane.setMargin(leftList, new Insets(20));
+        //BorderPane.setMargin(leftList, MainUI.PADDING);
         servicesPane.setCenter(centerService);
         servicesPane.setRight(testList);
         servicesPane.setLeft(leftList);
@@ -91,13 +80,13 @@ public class TestMainUI extends Application {
         // Test options pane
         HBox optionsPane = new HBox();
         Label testLabel = new Label("Options Pane");
-        HBox.setMargin(testLabel, new Insets(20));
+        HBox.setMargin(testLabel, MainUI.PADDING);
         Button testButton = new Button("Test Button");
         testButton.setOnAction(e-> System.out.println("test button pressed") );
 
         optionsPane.getChildren().addAll(testLabel, testButton);
         optionsPane.setAlignment(Pos.CENTER);
-        optionsPane.setPadding(new Insets(20));
+        optionsPane.setPadding(MainUI.PADDING);
 
         mainUI.setOptionsPane(optionsPane);
     }
