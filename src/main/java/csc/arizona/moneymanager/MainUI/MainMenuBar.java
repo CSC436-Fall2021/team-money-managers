@@ -95,7 +95,7 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Set Budget" is selected.
      */
     private void budgetMenuAction(){
-       mainUI.setBudget();
+       mainUI.displayBudgetUI();
     }
 
     /**

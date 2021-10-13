@@ -42,6 +42,7 @@ public class MainUI {
     private BorderPane optionsPane;
     private Pane currentOptionsPane;
 
+    private double tempBudget = 3.14; //TODO remove this and all reference to it once account settings is imlpemented
     /**
      * Default Constructor.
      *
@@ -169,14 +170,50 @@ public class MainUI {
      * Displays the set bugdet UI and updates the user-entered budget amount in the
      * account settings class.
      */
-    public void setBudget(){
+    public void displayBudgetUI(){
         System.out.println("Set Budget Selected"); //TODO remove when action implemented
-        //TODO 1. create budget entry pane
-        //TODO 2. show budget entry pane in services pane
-        /// servicesPane.setCenter( budgetUI )
-        //TODO 2.5 allow OK and Cancel selections
-        //TODO 3. get user input
-        //TODO 4. save budget in account settings class (if not cancelled by user)
+
+        double currentBudget = getBudgetFromAccountSettings();
+
+        // Service pane Elements
+        BudgetUI budgetUI = new BudgetUI(currentBudget);
+
+        // Options pane elements
+        HBox budgetOptions = createExitContentButtonOptionBox(budgetUI.getButtonText());
+        Button okay = new Button("Set Budget");
+        okay.setOnAction(e-> saveBudget(budgetUI.getBudget())); // if budget changed, saving new budget
+        budgetOptions.getChildren().add(0, okay); // Adding confirmation button to leftmost position
+
+        // Displaying budget UI in services pane
+        servicesPane.setCenter( budgetUI );
+        // Displaying option buttons in options pane
+        optionsPane.setCenter(budgetOptions);
+
+    }
+
+    /**
+     * Gets the current budget amount from Account Settings.
+     * @return the budget saved in account settings.
+     */
+    private double getBudgetFromAccountSettings(){
+        double budget = 0.0;
+
+        //TODO Get previous budget from account settings
+        budget = tempBudget; // remove this when loading from account settings
+
+        return budget;
+    }
+
+    /**
+     * Saves the given budget in Account Settings.
+     * @param budget the budget amount to save in account settings.
+     */
+    private void saveBudget(double budget){
+
+        //TODO save budget to account settings
+        tempBudget = budget; // remove this when implementing acount settings save
+
+        //TODO show alert for budget change confirmation
 
         // Restoring content to previous content
         showCurrentContent();
