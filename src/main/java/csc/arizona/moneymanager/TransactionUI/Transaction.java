@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.TransactionUI;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -8,7 +9,8 @@ import java.time.LocalDate;
  * Stores the amount (positive or negative) of a transaction,
  * as well as a category describing it and the date of the transaction.
  */
-public class Transaction {
+public class Transaction implements Serializable {
+
 
     private LocalDate date;
     private double amount;
