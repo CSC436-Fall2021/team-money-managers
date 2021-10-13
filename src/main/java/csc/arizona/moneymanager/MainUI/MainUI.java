@@ -200,13 +200,13 @@ public class MainUI {
      * Updates the Services pane to the given InfoView content and
      * updates the Options pane with a return button to return to previously
      * displayed content.
-     * @param infoView the InfoView object to display.
+     * @param servicesView the InfoView object to display.
      */
-    public void showInfo(InfoView infoView){
+    public void showInfo(ServicesView servicesView){
         // Setting services pane to About info
-        servicesPane.setCenter(infoView);
+        servicesPane.setCenter(servicesView);
         // Getting options pane
-        HBox aboutInfoOptions = createExitInfoButtonOptions(infoView.getButtonText());
+        HBox aboutInfoOptions = createExitContentButtonOptionBox(servicesView.getButtonText());
         // Setting options pane
         optionsPane.setCenter(aboutInfoOptions);
     }
@@ -216,12 +216,13 @@ public class MainUI {
      * @param buttonText the text to display on the return button.
      * @return the HBox object for display in the options pane.
      */
-    private HBox createExitInfoButtonOptions(String buttonText){
+    private HBox createExitContentButtonOptionBox(String buttonText){
         // Initializing options
         HBox infoOptions = new HBox();
         Button exitInfo = new Button(buttonText);
         exitInfo.setOnAction(e -> showCurrentContent()); // Restores current content when user chooses to exit help
 
+        HBox.setMargin(exitInfo, PADDING);
         infoOptions.setAlignment(Pos.CENTER);
         infoOptions.setPadding(PADDING);
         // Adding button to options pane
@@ -249,5 +250,7 @@ public class MainUI {
     public Scene getScene(){
         return this.scene;
     }
+
+
 
 }

@@ -1,14 +1,13 @@
 package csc.arizona.moneymanager.MainUI;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
 
 /**
  * This class represents user help displayed.
  *
  * @author Kris Rangel
  */
-public class UserHelp extends InfoView {
+public class UserHelp extends ServicesView {
 
     /**
      * Constructor.

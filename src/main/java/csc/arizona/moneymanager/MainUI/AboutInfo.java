@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
  *
  * @author Kris Rangel
  */
-public class AboutInfo extends InfoView{
+public class AboutInfo extends ServicesView {
 
     /**
      * Constructor.

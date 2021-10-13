@@ -6,13 +6,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 
 /**
- * This abstract class represents an information display within a BorderPane.
+ * This abstract class represents content within a BorderPane with the intent
+ * to display the content in the servicesPane of the MainUI class.
  * The content is titled with a given string during construction. This class
- * can be extended to display information in a uniform manner.
+ * can be extended to display content in a uniform manner within the MainUI.
  *
  * @author Kris Rangel
  */
-abstract public class InfoView extends BorderPane {
+abstract public class ServicesView extends BorderPane {
 
     private final double titleScale = 1.5;
     protected GridPane content;
@@ -22,7 +23,7 @@ abstract public class InfoView extends BorderPane {
      * Constructor.
      * @param title the title to set in the info content pane.
      */
-    public InfoView(String title, String buttonText){
+    public ServicesView(String title, String buttonText){
         this.buttonText = buttonText;
         setPadding(MainUI.PADDING);
 
