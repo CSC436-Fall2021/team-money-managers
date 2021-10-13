@@ -94,7 +94,8 @@ public class Controller extends Application {
     @Override
     public void start(Stage primaryStage) {
         test = new MainUI(); // because currently the MainUI is not static in any way, an instance
-        // of it must be created, this will probably have to change
+        // of it must be created, this will probably have to change //pass it through with the
+        // user settings as the parameter
         connectToDatabase();
         stage = primaryStage;
         primaryStage.setScene(LoginUI.createScene());
