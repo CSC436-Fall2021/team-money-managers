@@ -47,6 +47,7 @@ public class TransactionUI extends GridPane {
         CategoryList categories = new CategoryList("default_categories.txt");
 
         // load in additional categories from categories stored for user
+        // from userSettings
         // ~categories.addCategories(database);
 
         categoryDropDown = new ComboBox(FXCollections.observableArrayList(categories.getCategories()));

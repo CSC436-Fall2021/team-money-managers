@@ -26,9 +26,9 @@ public class CategoryList {
         }
     }
 
-    // add from database not sure exactly how we are doing this.
-    public void addCategories(String filename) {
-
+    // add from database. probably from userSettings class.
+    public void addCategories(List<String> other) {
+        categories.addAll(other);
     }
 
     public List<String> getCategories() {
