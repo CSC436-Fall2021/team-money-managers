@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.Controller;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -44,12 +45,15 @@ public class MainMenuBar extends MenuBar {
         // --> Logout option
         MenuItem logout = new MenuItem("_Logout");
         logout.setOnAction(e-> logoutMenuAction() );
+        // --> remove account
+        MenuItem removeAccount = new MenuItem("Delete account");
+        removeAccount.setOnAction(e -> removeAccountAction());
         // --> Exit option
         MenuItem exit = new MenuItem("E_xit");
         exit.setOnAction(e-> exitMenuAction() );
         // Adding items to File menu
-        file.getItems().addAll(setBudget, addCategories, saveData, fileMenuSeparator, logout, exit);
-
+        file.getItems().addAll(setBudget, addCategories, saveData, fileMenuSeparator, logout,
+         removeAccount, exit);
         // Report menu setup
         Menu reports = new Menu("_Reports");
         // --> Show Report option //TODO maybe make showReport a submenu with types of reports as menu items
@@ -109,7 +113,14 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Logout" is selected.
      */
     private void logoutMenuAction(){
-        System.out.println("Logout Selected"); //TODO remove when action implemented
+        Controller.mainUIToLogin();
+    }
+
+    /**
+     * removes the account from the database as well as logs the user out
+     */
+    private void removeAccountAction() {
+        Controller.removeAccount();
     }
 
     /**
