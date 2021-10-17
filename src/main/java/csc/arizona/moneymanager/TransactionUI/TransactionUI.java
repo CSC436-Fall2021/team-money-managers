@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides input functionality for creating transactions.
@@ -29,8 +31,7 @@ import java.time.Month;
 public class TransactionUI extends GridPane {
 
     DatePicker dateInput;
-
-    ComboBox<Category> categoryDropDown;
+    ComboBox<String> categoryDropDown;
     TextField amountInput;
 
 
@@ -43,7 +44,12 @@ public class TransactionUI extends GridPane {
         dateInput.setEditable(false); // must pick date from UI.
 
         // transaction amount and category input
-        categoryDropDown = new ComboBox(FXCollections.observableArrayList(Category.values()));
+        CategoryList categories = new CategoryList("default_categories.txt");
+
+        // load in additional categories from categories stored for user
+        // ~categories.addCategories(database);
+
+        categoryDropDown = new ComboBox(FXCollections.observableArrayList(categories.getCategories()));
         amountInput = new TextField();
         Button enterButton = new Button("Enter");
 
@@ -99,7 +105,7 @@ public class TransactionUI extends GridPane {
         public void handle(ActionEvent actionEvent) {
 
             LocalDate date = dateInput.getValue();
-            Category category = categoryDropDown.getValue();
+            String category = categoryDropDown.getValue();
 
             /*
                 Error handling for missing information
