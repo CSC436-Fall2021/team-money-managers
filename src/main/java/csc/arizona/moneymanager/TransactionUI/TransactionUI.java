@@ -38,15 +38,13 @@ public class TransactionUI extends GridPane {
 
     // Initialize TransactionUI with customCategories passed in from a userSettings class.
     public TransactionUI(List<String> customCategories) {
-        //HBox inputLabels = new HBox(); // could just make the entire UI a griddpane instead. we'll see.
-        //HBox transactionInput = new HBox();
 
         // date input
         dateInput = new DatePicker();
         dateInput.setEditable(false); // must pick date from UI.
 
         // transaction amount and category input
-        // load in categories list
+        // load in default categories list
         categories = new CategoryList("default_categories.txt");
 
         // load in additional categories from categories stored for user
@@ -65,21 +63,7 @@ public class TransactionUI extends GridPane {
         amountInput.setOnAction(new EnterTransactionHandler());
         enterButton.setOnAction(new EnterTransactionHandler());
 
-        // add all elements to HBox row
-        /*inputLabels.getChildren().add(new Label("Date"));
-        inputLabels.getChildren().add(new Label("Category"));
-        inputLabels.getChildren().add(new Label("Amount"));
 
-        transactionInput.getChildren().add(dateInput);
-        transactionInput.getChildren().add(categoryDropDown);
-        transactionInput.getChildren().add(amountInput);
-        transactionInput.getChildren().add(enterButton);*/
-
-        //transactionInput.setPadding(new Insets(20));
-        //transactionInput.setSpacing(5);
-
-        //setTop(inputLabels);
-        //setCenter(transactionInput);
         add(new Label("Transactions"), 1, 0);
 
         add(new Label("Date"), 0, 1);
@@ -91,7 +75,6 @@ public class TransactionUI extends GridPane {
         add(amountInput, 2, 2);
         add(enterButton, 3, 2);
 
-        //setPadding(new Insets(20));
         setHgap(5);
         setVgap(5);
 
