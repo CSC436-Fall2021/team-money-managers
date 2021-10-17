@@ -31,9 +31,14 @@ public class CategoryList {
         categories.addAll(other);
     }
 
+    public void addCategory(String category) {
+        categories.add(category);
+    }
+
     public List<String> getCategories() {
         return categories;
     }
+
 
 
 }

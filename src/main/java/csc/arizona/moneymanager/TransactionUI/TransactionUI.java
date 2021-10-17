@@ -31,11 +31,13 @@ import java.util.List;
 public class TransactionUI extends GridPane {
 
     DatePicker dateInput;
+    CategoryList categories;
     ComboBox<String> categoryDropDown;
     TextField amountInput;
 
 
-    public TransactionUI() {
+    // Initialize TransactionUI with customCategories passed in from a userSettings class.
+    public TransactionUI(List<String> customCategories) {
         //HBox inputLabels = new HBox(); // could just make the entire UI a griddpane instead. we'll see.
         //HBox transactionInput = new HBox();
 
@@ -44,11 +46,12 @@ public class TransactionUI extends GridPane {
         dateInput.setEditable(false); // must pick date from UI.
 
         // transaction amount and category input
-        CategoryList categories = new CategoryList("default_categories.txt");
+        // load in categories list
+        categories = new CategoryList("default_categories.txt");
 
         // load in additional categories from categories stored for user
-        // from userSettings
-        // ~categories.addCategories(database);
+        // from a userSettings.
+        categories.addCategories(customCategories);
 
         categoryDropDown = new ComboBox(FXCollections.observableArrayList(categories.getCategories()));
         amountInput = new TextField();
@@ -95,6 +98,11 @@ public class TransactionUI extends GridPane {
 
 
 
+    }
+
+    // Call this from mainUI when user adds a new custom category to their account.
+    public void addNewCategory(String category) {
+        categories.addCategory(category);
     }
 
     /**
