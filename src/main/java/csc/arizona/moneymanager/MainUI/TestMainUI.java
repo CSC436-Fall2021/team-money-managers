@@ -15,6 +15,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 /**
  * This class serves as the entry point to test run the
  * MainUI class.
@@ -43,7 +45,7 @@ public class TestMainUI extends Application {
 
     public void testPanes(){
         // Test transaction pane
-        TransactionUI transactionPane = new TransactionUI(null);
+        TransactionUI transactionPane = new TransactionUI(new ArrayList<>());
         // Adding test transaction pane to mainUI
         mainUI.setTransactionPane(transactionPane);
 
@@ -58,7 +60,8 @@ public class TestMainUI extends Application {
                 new Label("List item 4")
         );
         FlowPane centerService = new FlowPane();
-
+        Label budget = new Label("budget: " + mainUI.getBudgetFromAccountSettings());
+        budget.setTranslateX(180);
 
         ObservableList<PieChart.Data> data =
                 FXCollections.observableArrayList(
@@ -67,7 +70,7 @@ public class TestMainUI extends Application {
         PieChart pieChart = new PieChart(data);
         pieChart.setScaleX(0.5);
         pieChart.setScaleY(0.5);
-        centerService.getChildren().add(pieChart);
+        centerService.getChildren().addAll(pieChart, budget);
 
         VBox leftList = new VBox(new Label("Left side services"), new TextField());
         //BorderPane.setMargin(leftList, MainUI.PADDING);

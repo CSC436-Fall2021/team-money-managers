@@ -200,7 +200,7 @@ public class MainUI {
      * Gets the current budget amount from Account Settings.
      * @return the budget saved in account settings.
      */
-    private double getBudgetFromAccountSettings(){
+    public double getBudgetFromAccountSettings(){
         double budget = 0.0;
 
         //TODO Get previous budget from account settings
