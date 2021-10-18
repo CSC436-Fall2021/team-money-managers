@@ -4,6 +4,7 @@ import csc.arizona.moneymanager.Login.LoginUI;
 import csc.arizona.moneymanager.MainUI.*;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
+import csc.arizona.moneymanager.database.User;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,7 +29,7 @@ public class Controller extends Application {
     private static final DatabaseHandler database = new DatabaseHandler();
     private static Stage stage;
     private static MainUI test;
-    private static String currentUser;
+    private static User currentUser;
 
     public static void connectToDatabase() {
         database.connectToDatabase();
@@ -41,7 +42,11 @@ public class Controller extends Application {
      * @param user the user that is logged in
      */
     public static void logInUser(String user) {
-        currentUser = user;
+        try {
+            currentUser = database.getUserData(user, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
