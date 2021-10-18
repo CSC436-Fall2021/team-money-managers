@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+
+import java.util.List;
 
 /**
  * This class represents the main UI of the Money Management Application.
@@ -41,6 +44,8 @@ public class MainUI {
     private Pane currentServicesPane;
     private BorderPane optionsPane;
     private Pane currentOptionsPane;
+
+    private UserSetting userSettings;
 
     private double tempBudget = 3.14; //TODO remove this and all reference to it once account settings is imlpemented
     /**
@@ -223,14 +228,43 @@ public class MainUI {
      * Displays an add custom categories UI and updates the account settings custom category list.
      */
     public void addCustomCategories(){
-        System.out.println("Add Custom Categories Selected"); //TODO remove when action implemented
-        //TODO 1. display the custom category UI in services pane
-        /// servicesPane.setCenter( customCategoryUI )
-        //TODO 2. get user input
-        //TODO 3. update categories, if necessary (save in account settings class)
+        HBox layout = new HBox();
 
-        // Restoring content to previous content
-        showCurrentContent();
+        TextField userInput = new TextField();
+        Button exitButton = new Button("Exit");
+
+        userInput.setPromptText("Enter new category");
+        userInput.setOnAction(e -> {
+            String newCategory = userInput.getText();
+
+            // if there is something to add.
+            if (!newCategory.isEmpty()) {
+                TransactionUI target = (TransactionUI)transactionPane.getCenter();
+
+                List<String> userCategories = userSettings.getCustomCategory();
+                List<String> defaultCategories = target.getDefaultCategories();
+
+                // add only if the category does not already exist in the user's custom categories
+                // or in the default categories
+                if (!defaultCategories.contains(newCategory) && !userCategories.contains(newCategory)) {
+                    userSettings.addCategoryName(newCategory); // add to userCategories in settings
+                    target.addCategory(newCategory);  // add to dropdown in transactions pane
+                }
+            }
+
+
+            showCurrentContent();
+        });
+
+        // reset to original display
+        exitButton.setOnAction(e -> {
+            showCurrentContent();
+        });
+
+        layout.getChildren().add(userInput);
+        layout.getChildren().add(exitButton);
+        servicesPane.setCenter(layout);
+
     }
 
     /**
