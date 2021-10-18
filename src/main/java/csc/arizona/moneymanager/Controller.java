@@ -116,6 +116,30 @@ public class Controller extends Application {
         userField.setMinWidth(200);
         passField.setMinWidth(200);
         rePassField.setMinWidth(200);
+        Button deleteUser = deleteButton(userField, passField, rePassField, removeAccount);
+        Button cancel = new Button("Cancel");
+        cancel.setMinWidth(100);
+        HBox buttons = new HBox(deleteUser, cancel);
+        cancel.setOnMouseClicked(event -> removeAccount.close());
+        VBox box = new VBox();
+        box.setSpacing(10);
+        box.getChildren().addAll(confirm, username, userField, password, passField, passwordCheck,
+                rePassField, buttons);
+        pane.getChildren().add(box);
+        removeAccount.setScene(newScene);
+        removeAccount.show();
+    }
+
+    /**
+     * button that will verify that the user wants to delete his account
+     *
+     * @param userField     the input of the username
+     * @param passField     the input of the password
+     * @param rePassField   the re-entered password
+     * @param removeAccount the stage that will close if the user successfully deletes the account
+     * @return a button that can delete the account
+     */
+    private static Button deleteButton(TextField userField, TextField passField, TextField rePassField, Stage removeAccount) {
         Button deleteUser = new Button("Delete account");
         deleteUser.setMinWidth(100);
         deleteUser.setOnMouseClicked(event -> {
@@ -131,17 +155,7 @@ public class Controller extends Application {
                 removeAccount.close();
             }
         });
-        Button cancel = new Button("Cancel");
-        cancel.setMinWidth(100);
-        HBox buttons = new HBox(deleteUser, cancel);
-        cancel.setOnMouseClicked(event -> removeAccount.close());
-        VBox box = new VBox();
-        box.setSpacing(10);
-        box.getChildren().addAll(confirm, username, userField, password, passField, passwordCheck
-                , rePassField, buttons);
-        pane.getChildren().add(box);
-        removeAccount.setScene(newScene);
-        removeAccount.show();
+        return deleteUser;
     }
 
     /**
