@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.TransactionUI;
 
+import csc.arizona.moneymanager.Controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -129,6 +130,8 @@ public class TransactionUI extends GridPane {
             double amount = Double.parseDouble(amountInput.getText());
 
             Transaction toAdd = new Transaction(date, category, amount);
+
+            Controller.addTransaction(toAdd);
 
             System.out.println(toAdd.getDate());
             System.out.println(toAdd.getCategory());

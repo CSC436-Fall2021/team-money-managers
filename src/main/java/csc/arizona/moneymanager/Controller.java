@@ -2,6 +2,7 @@ package csc.arizona.moneymanager;
 
 import csc.arizona.moneymanager.Login.LoginUI;
 import csc.arizona.moneymanager.MainUI.*;
+import csc.arizona.moneymanager.TransactionUI.Transaction;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
 import csc.arizona.moneymanager.database.User;
@@ -157,7 +158,7 @@ public class Controller extends Application {
         Button deleteUser = new Button("Delete account");
         deleteUser.setMinWidth(100);
         deleteUser.setOnMouseClicked(event -> {
-            if (!userField.getText().equals(currentUser))
+            if (!userField.getText().equals(currentUser.getUsername()))
                 failureAlert("username");
             else if (!correctCredentials(userField.getText(), passField.getText()))
                 failureAlert("password");
@@ -194,6 +195,15 @@ public class Controller extends Application {
         alert.setContentText("please enter passwords again");
         alert.setHeaderText("passwords are not the same");
         alert.showAndWait();
+    }
+
+    /**
+     * adds a transaction from the transaction.java to be added to the current user
+     * @param transaction the transaction being added to the user
+     */
+    public static void addTransaction(Transaction transaction) {
+        currentUser.addTransactions(transaction);
+        database.updateUserData(currentUser, false);
     }
 
     /**
