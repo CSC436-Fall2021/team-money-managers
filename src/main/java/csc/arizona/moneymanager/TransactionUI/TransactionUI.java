@@ -92,6 +92,10 @@ public class TransactionUI extends GridPane {
         categories.addCategory(category);
     }
 
+    public void addCategory(String newCategory) {
+        categories.addCategory(newCategory);
+    }
+
     /**
      * Creates a Transaction object using the information given by the user.
      */
