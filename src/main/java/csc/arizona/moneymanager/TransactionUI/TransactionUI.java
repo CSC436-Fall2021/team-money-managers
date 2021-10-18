@@ -45,7 +45,7 @@ public class TransactionUI extends GridPane {
 
         // transaction amount and category input
         // load in default categories list
-        categories = new CategoryList("default_categories.txt");
+        categories = new CategoryList("src/main/java/csc/arizona/moneymanager/TransactionUI/default_categories.txt");
 
         // load in additional categories from categories stored for user
         // from a userSettings.
