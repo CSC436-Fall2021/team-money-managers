@@ -103,7 +103,7 @@ public class DatabaseHandler {
             } else {
                 users.replaceOne(Filters.eq("username", user.getUsername()), user);
             }
-
+            return true;
         }
 
         return false;
