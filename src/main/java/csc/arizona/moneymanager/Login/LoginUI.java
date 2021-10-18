@@ -55,8 +55,10 @@ public class LoginUI {
                 loginStatus.setText("username does not exist");
             else if (!Controller.correctCredentials(loginField.getText(), passwordField.getText()))
                 loginStatus.setText("invalid password");
-            else
+            else {
+                Controller.logInUser(loginField.getText());
                 Controller.loginToMainUI();
+            }
         });
         return loginButton;
     }
@@ -107,13 +109,13 @@ public class LoginUI {
         addUser.setMinWidth(100);
         addUser.setOnMouseClicked(event -> {
             if (userField.getText().isBlank())
-                failureAlert("username");
+                Controller.failureAlert("username");
             else if (passField.getText().isBlank())
-                failureAlert("password");
+                Controller.failureAlert("password");
             else if (rePassField.getText().isBlank())
-                failureAlert("re-enter password");
+                Controller.failureAlert("re-enter password");
             else if (!passField.getText().equals(rePassField.getText()))
-                passwordsNotSame();
+                Controller.passwordsNotSame();
             else if (Controller.userExists(userField.getText()))
                 existingUsername();
             else {
@@ -131,30 +133,6 @@ public class LoginUI {
         Button addUser = new Button("new user");
         addUser.setOnMouseClicked(event -> newUser());
         return addUser;
-    }
-
-    /**
-     * creates an alert and tells the user the specific error
-     *
-     * @param issue the specific issie the user caused
-     */
-    private static void failureAlert(String issue) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Alert");
-        alert.setContentText("please enter a valid " + issue);
-        alert.setHeaderText(issue + " not valid");
-        alert.showAndWait();
-    }
-
-    /**
-     * sends an alert if the two passwords were not the same
-     */
-    private static void passwordsNotSame() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Alert");
-        alert.setContentText("please enter passwords again");
-        alert.setHeaderText("passwords are not the same");
-        alert.showAndWait();
     }
 
     /**
