@@ -1,7 +1,8 @@
 package csc.arizona.moneymanager;
 
 import csc.arizona.moneymanager.Login.LoginUI;
-import csc.arizona.moneymanager.MainUI.MainUI;
+import csc.arizona.moneymanager.MainUI.*;
+import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -31,7 +32,7 @@ public class Controller extends Application {
 
     public static void connectToDatabase() {
         database.connectToDatabase();
-        DatabaseHandler.turnLoggerOff();
+//        DatabaseHandler.turnLoggerOff();
     }
 
     /**
@@ -81,6 +82,14 @@ public class Controller extends Application {
     public static void loginToMainUI() {
         //TODO this method will also have to include the data that the main UI will need from the
         // database
+
+        UserSetting userSettings = new UserSetting();
+        // read from database: budget, category.
+
+        test.setUserSettings(userSettings);
+        test.setTransactionPane(new TransactionUI(userSettings.getCustomCategory()));
+        //test.setServicesPane(new AboutInfo());
+
         stage.setScene(test.getScene());
     }
 

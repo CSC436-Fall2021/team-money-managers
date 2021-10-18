@@ -7,8 +7,8 @@ module csc.arizona.moneymanager {
     requires org.mongodb.bson;
 //    requires com.google.gson;
     requires jdk.jsobject;
-    requires logback.classic;
-    requires slf4j.api;
+//    requires logback.classic;
+//    requires slf4j.api;
 
     opens csc.arizona.moneymanager.database;
     exports csc.arizona.moneymanager.database;

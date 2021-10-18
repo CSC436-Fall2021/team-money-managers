@@ -1,13 +1,20 @@
 package csc.arizona.moneymanager.database.test;
 
 
+import csc.arizona.moneymanager.TransactionUI.Transaction;
 import csc.arizona.moneymanager.database.DatabaseHandler;
+import csc.arizona.moneymanager.database.User;
+import javafx.scene.control.PasswordField;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DatabaseHandlerTest {
 
     public static void main(String[] args){
-        DatabaseHandler.turnLoggerOff();
+//        DatabaseHandler.turnLoggerOff();
         DatabaseHandler handler = new DatabaseHandler();
         runTests(handler);
     }
@@ -33,6 +40,19 @@ public class DatabaseHandlerTest {
             } else{
                 System.err.println("validateUser(): failed");
             }
+            List<Transaction> transactionList = new ArrayList<>();
+            for (int i = 0; i < 5; i++){
+                Transaction temp = new Transaction(LocalDate.now().plusDays(i), "food", i);
+                transactionList.add(temp);
+            }
+            User test = new User("mason");
+            test.setTransactions(transactionList);
+            if (handler.updateUserData(test,true)){
+                System.out.println("addTransactions(): passed");
+            } else {
+                System.out.println("addTransactions(): failed");
+            }
+
         } else{
             System.err.println("addUser(): failed");
         }
