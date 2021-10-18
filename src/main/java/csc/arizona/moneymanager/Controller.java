@@ -33,6 +33,10 @@ public class Controller extends Application {
         DatabaseHandler.turnLoggerOff();
     }
 
+    /**
+     * tells the program who is currently logged in
+     * @param user the user that is logged in
+     */
     public static void logInUser(String user) {
         currentUser = user;
     }
@@ -83,6 +87,7 @@ public class Controller extends Application {
      * to the login view to be ready for the next login
      */
     public static void mainUIToLogin() {
+        currentUser = null;
         stage.setScene(LoginUI.createScene());
     }
 
@@ -112,12 +117,10 @@ public class Controller extends Application {
         Button deleteUser = new Button("Delete account");
         deleteUser.setMinWidth(100);
         deleteUser.setOnMouseClicked(event -> {
-            if (userField.getText().isBlank())
+            if (!userField.getText().equals(currentUser))
                 failureAlert("username");
-            else if (passField.getText().isBlank())
+            else if (!correctCredentials(userField.getText(), passField.getText()))
                 failureAlert("password");
-            else if (rePassField.getText().isBlank())
-                failureAlert("re-enter password");
             else if (!passField.getText().equals(rePassField.getText()))
                 passwordsNotSame();
             else {

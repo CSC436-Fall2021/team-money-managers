@@ -55,8 +55,10 @@ public class LoginUI {
                 loginStatus.setText("username does not exist");
             else if (!Controller.correctCredentials(loginField.getText(), passwordField.getText()))
                 loginStatus.setText("invalid password");
-            else
+            else {
+                Controller.logInUser(loginField.getText());
                 Controller.loginToMainUI();
+            }
         });
         return loginButton;
     }
