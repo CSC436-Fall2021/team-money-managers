@@ -31,7 +31,7 @@ import java.util.List;
 public class TransactionUI extends GridPane {
 
     DatePicker dateInput;
-    CategoryList categories;
+    CategoryList categories; // combination: default + user
     ComboBox<String> categoryDropDown;
     TextField amountInput;
 
@@ -81,6 +81,10 @@ public class TransactionUI extends GridPane {
 
 
 
+    }
+
+    public List<String> getDefaultCategories() {
+        return categories.getDefaultCategories();
     }
 
     // Call this from mainUI when user adds a new custom category to their account.

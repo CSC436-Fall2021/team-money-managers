@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CategoryList {
-    List<String> categories;
+
+    private List<String> defaultCategories;
+    private List<String> categories;
 
     public CategoryList(String filename) {
         // load in default files
+        defaultCategories = new ArrayList<String>();
         categories = new ArrayList<String>();
         Scanner scanner = null;
 
@@ -22,6 +25,7 @@ public class CategoryList {
 
         while(scanner.hasNextLine()) {
             String category = scanner.nextLine();
+            defaultCategories.add(category);
             categories.add(category);
         }
     }
@@ -35,6 +39,7 @@ public class CategoryList {
         categories.add(category);
     }
 
+    public List<String> getDefaultCategories() { return defaultCategories; }
     public List<String> getCategories() {
         return categories;
     }
