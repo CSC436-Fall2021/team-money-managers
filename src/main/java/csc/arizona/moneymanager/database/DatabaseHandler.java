@@ -2,6 +2,7 @@ package csc.arizona.moneymanager.database;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.mongodb.*;
+import com.mongodb.client.model.Filters;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -15,12 +16,17 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
-import java.util.ArrayList;
+
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
 import java.util.List;
+import java.util.ArrayList;
 
 public class DatabaseHandler {
 
     protected MongoClient mongoClient;
+    private CodecRegistry pojoCodecRegistry;
     private String URI;
     private PasswordUtilities pu;
     private boolean logged_in = false;
@@ -30,17 +36,17 @@ public class DatabaseHandler {
     public DatabaseHandler(){
         URI = "mongodb+srv://root:root@moneymanagerdata.v0ezf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
         pu = new PasswordUtilities();
+        pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
     }
 
     public boolean connectToDatabase(){
         try {
             ConnectionString connectionString = new ConnectionString(URI);
-            CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
-            CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
             MongoClientSettings clientSettings = MongoClientSettings.builder()
-                    .applyConnectionString(connectionString)
-                    .codecRegistry(codecRegistry)
-                    .build();
+                                                                    .applyConnectionString(connectionString)
+                                                                    .codecRegistry(pojoCodecRegistry)
+                                                                    .build();
             mongoClient = MongoClients.create(URI);
         } catch (Exception e){
             System.out.println(e.getMessage());
@@ -89,37 +95,42 @@ public class DatabaseHandler {
         return false;
     }
 
-    public boolean addTransactions(String username, List<Transaction> transactions, boolean testing){
-        if (logged_in(username) && logged_in || testing) {
-            MongoDatabase userDb = mongoClient.getDatabase("users");
+    public boolean updateUserData(User user, boolean testing){
+        if (logged_in(user.getUsername()) && logged_in || testing) {
+            MongoDatabase userDb = mongoClient.getDatabase("users").withCodecRegistry(pojoCodecRegistry);
             MongoCollection<User> users = userDb.getCollection("user_data", User.class);
+            List<User> usersList = users.find().into(new ArrayList<>());
+            User found = null;
+            for(User curr : usersList){
+                if (curr.getUsername().equals(user.getUsername())){
+                    found = curr;
+                }
+            }
+            if (found == null){
+                users.insertOne(user);
+            } else {
+                users.replaceOne(Filters.eq("username", user.getUsername()), user);
+            }
 
-//
-//            List<Document> usersList = user_data.find().into(new ArrayList<>());
-//            MongoCollection<Transaction> curr = null;
-//            BasicDBObject transactionObject = null;
-//            for(Document doc: usersList){
-//                if(doc.get("username").equals(username)){
-//                    curr = doc.get("data");
-//                    transactionObject = (BasicDBObject) doc.get("transactions");
-//
-//                }
-//            }
-//            if (curr == null) {
-//                curr = new Document("username", username);
-//                transactionObject = new BasicDBObject();
-//                transactionObject.append("data", new ArrayList<Transaction>());
-//            }
-//            List<Transaction> current = (List<Transaction>) transactionObject.get("data");
-//            current.addAll(transactions);
-//            transactionObject.put("data", current);
-//            curr.put("transactions", transactions);
-//            user_data.insertOne(curr);
-//            return true;
         }
 
-
         return false;
+    }
+
+    public User getUserData(String username, boolean testing) throws Exception {
+        if (logged_in(username) && logged_in || testing) {
+            MongoDatabase userDb = mongoClient.getDatabase("users").withCodecRegistry(pojoCodecRegistry);
+            MongoCollection<User> users = userDb.getCollection("user_data", User.class);
+            List<User> usersList = users.find().into(new ArrayList<>());
+            User found = null;
+            for(User curr : usersList){
+                if (curr.getUsername().equals(username)){
+                    found = curr;
+                }
+            }
+            return found;
+        }
+        throw new Exception("Tried to access user data without being logged in.");
     }
 
     public boolean logged_in(String username){

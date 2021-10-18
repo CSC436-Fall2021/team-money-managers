@@ -4,6 +4,7 @@ package csc.arizona.moneymanager.database.test;
 import csc.arizona.moneymanager.TransactionUI.Category;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import csc.arizona.moneymanager.database.DatabaseHandler;
+import csc.arizona.moneymanager.database.User;
 import javafx.scene.control.PasswordField;
 
 import java.time.LocalDate;
@@ -45,7 +46,9 @@ public class DatabaseHandlerTest {
                 Transaction temp = new Transaction(LocalDate.now().plusDays(i), Category.OTHER, i);
                 transactionList.add(temp);
             }
-            if (handler.addTransactions("test", transactionList, true)){
+            User test = new User("mason");
+            test.setTransactions(transactionList);
+            if (handler.updateUserData(test,true)){
                 System.out.println("addTransactions(): passed");
             } else {
                 System.out.println("addTransactions(): failed");
