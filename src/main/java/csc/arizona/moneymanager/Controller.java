@@ -163,7 +163,7 @@ public class Controller extends Application {
      *
      * @param issue the specific issie the user caused
      */
-    private static void failureAlert(String issue) {
+    public static void failureAlert(String issue) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Alert");
         alert.setContentText("please enter a valid " + issue);
@@ -174,7 +174,7 @@ public class Controller extends Application {
     /**
      * sends an alert if the two passwords were not the same
      */
-    private static void passwordsNotSame() {
+    public static void passwordsNotSame() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Alert");
         alert.setContentText("please enter passwords again");
