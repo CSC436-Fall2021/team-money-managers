@@ -228,14 +228,16 @@ public class MainUI {
      * Displays an add custom categories UI and updates the account settings custom category list.
      */
     public void addCustomCategories(){
-        HBox layout = new HBox();
 
-        TextField userInput = new TextField();
-        Button exitButton = new Button("Exit");
+        CustomCategoryUI categoryUI = new CustomCategoryUI();
 
-        userInput.setPromptText("Enter new category");
-        userInput.setOnAction(e -> {
-            String newCategory = userInput.getText();
+        Button addButton = new Button("Add");
+
+
+        //userInput.setOnAction(e -> {});
+
+        addButton.setOnAction(e -> {
+            String newCategory = categoryUI.getInput();
 
             // if there is something to add.
             if (!newCategory.isEmpty()) {
@@ -252,18 +254,14 @@ public class MainUI {
                 }
             }
 
-
             showCurrentContent();
         });
 
-        // reset to original display
-        exitButton.setOnAction(e -> {
-            showCurrentContent();
-        });
+        HBox optionsActions = createExitContentButtonOptionBox("Cancel");
+        optionsActions.getChildren().add(0, addButton);
 
-        layout.getChildren().add(userInput);
-        layout.getChildren().add(exitButton);
-        servicesPane.setCenter(layout);
+        servicesPane.setCenter(categoryUI);
+        optionsPane.setCenter(optionsActions);
 
     }
 
