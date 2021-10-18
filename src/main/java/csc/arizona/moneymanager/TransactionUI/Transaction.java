@@ -12,9 +12,9 @@ public class Transaction {
 
     private LocalDate date;
     private double amount;
-    private Category category;
+    private String category;
 
-    public Transaction(LocalDate date, Category category, double amount) {
+    public Transaction(LocalDate date, String category, double amount) {
         this.date = date;
         this.category = category;
         this.amount = amount;
@@ -24,7 +24,7 @@ public class Transaction {
         return date;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 

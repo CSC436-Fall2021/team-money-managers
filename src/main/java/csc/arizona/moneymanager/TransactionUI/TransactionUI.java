@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides input functionality for creating transactions.
@@ -29,21 +31,27 @@ import java.time.Month;
 public class TransactionUI extends GridPane {
 
     DatePicker dateInput;
-
-    ComboBox<Category> categoryDropDown;
+    CategoryList categories; // combination: default + user
+    ComboBox<String> categoryDropDown;
     TextField amountInput;
 
 
-    public TransactionUI() {
-        //HBox inputLabels = new HBox(); // could just make the entire UI a griddpane instead. we'll see.
-        //HBox transactionInput = new HBox();
+    // Initialize TransactionUI with customCategories passed in from a userSettings class.
+    public TransactionUI(List<String> customCategories) {
 
         // date input
         dateInput = new DatePicker();
         dateInput.setEditable(false); // must pick date from UI.
 
         // transaction amount and category input
-        categoryDropDown = new ComboBox(FXCollections.observableArrayList(Category.values()));
+        // load in default categories list
+        categories = new CategoryList("default_categories.txt");
+
+        // load in additional categories from categories stored for user
+        // from a userSettings.
+        categories.addCategories(customCategories);
+
+        categoryDropDown = new ComboBox(FXCollections.observableArrayList(categories.getCategories()));
         amountInput = new TextField();
         Button enterButton = new Button("Enter");
 
@@ -55,21 +63,7 @@ public class TransactionUI extends GridPane {
         amountInput.setOnAction(new EnterTransactionHandler());
         enterButton.setOnAction(new EnterTransactionHandler());
 
-        // add all elements to HBox row
-        /*inputLabels.getChildren().add(new Label("Date"));
-        inputLabels.getChildren().add(new Label("Category"));
-        inputLabels.getChildren().add(new Label("Amount"));
 
-        transactionInput.getChildren().add(dateInput);
-        transactionInput.getChildren().add(categoryDropDown);
-        transactionInput.getChildren().add(amountInput);
-        transactionInput.getChildren().add(enterButton);*/
-
-        //transactionInput.setPadding(new Insets(20));
-        //transactionInput.setSpacing(5);
-
-        //setTop(inputLabels);
-        //setCenter(transactionInput);
         add(new Label("Transactions"), 1, 0);
 
         add(new Label("Date"), 0, 1);
@@ -81,13 +75,21 @@ public class TransactionUI extends GridPane {
         add(amountInput, 2, 2);
         add(enterButton, 3, 2);
 
-        //setPadding(new Insets(20));
         setHgap(5);
         setVgap(5);
 
 
 
 
+    }
+
+    public List<String> getDefaultCategories() {
+        return categories.getDefaultCategories();
+    }
+
+    // Call this from mainUI when user adds a new custom category to their account.
+    public void addNewCategory(String category) {
+        categories.addCategory(category);
     }
 
     /**
@@ -99,7 +101,7 @@ public class TransactionUI extends GridPane {
         public void handle(ActionEvent actionEvent) {
 
             LocalDate date = dateInput.getValue();
-            Category category = categoryDropDown.getValue();
+            String category = categoryDropDown.getValue();
 
             /*
                 Error handling for missing information

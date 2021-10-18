@@ -1,0 +1,5 @@
+food
+gas
+stock
+rent
+other
