@@ -16,6 +16,22 @@ public class Transaction implements Serializable {
     private double amount;
     private String category;
 
+    public Transaction(){
+
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public Transaction(LocalDate date, String category, double amount) {
         this.date = date;
         this.category = category;

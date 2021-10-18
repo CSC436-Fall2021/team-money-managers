@@ -1,19 +1,11 @@
 package csc.arizona.moneymanager.database;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
 import com.mongodb.*;
 import com.mongodb.client.model.Filters;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
 import com.mongodb.client.*;
 import org.bson.Document;
-import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Logger;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 
@@ -175,11 +167,11 @@ public class DatabaseHandler {
         return true;
     }
 
-    public static void turnLoggerOff(){
-        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
-        rootLogger.setLevel(Level.OFF);
-    }
+//    public static void turnLoggerOff(){
+//        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+//        Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
+//        rootLogger.setLevel(Level.OFF);
+//    }
 
 
 }

@@ -1,7 +1,6 @@
 package csc.arizona.moneymanager.database.test;
 
 
-import csc.arizona.moneymanager.TransactionUI.Category;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import csc.arizona.moneymanager.database.DatabaseHandler;
 import csc.arizona.moneymanager.database.User;
@@ -15,7 +14,7 @@ import java.util.List;
 public class DatabaseHandlerTest {
 
     public static void main(String[] args){
-        DatabaseHandler.turnLoggerOff();
+//        DatabaseHandler.turnLoggerOff();
         DatabaseHandler handler = new DatabaseHandler();
         runTests(handler);
     }

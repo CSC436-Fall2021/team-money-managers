@@ -32,7 +32,7 @@ public class Controller extends Application {
 
     public static void connectToDatabase() {
         database.connectToDatabase();
-        DatabaseHandler.turnLoggerOff();
+//        DatabaseHandler.turnLoggerOff();
     }
 
     /**
