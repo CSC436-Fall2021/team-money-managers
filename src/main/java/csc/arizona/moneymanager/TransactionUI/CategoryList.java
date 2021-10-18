@@ -2,11 +2,12 @@ package csc.arizona.moneymanager.TransactionUI;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class CategoryList {
+public class CategoryList implements Serializable {
 
     private List<String> defaultCategories;
     private List<String> categories;
