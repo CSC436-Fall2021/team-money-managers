@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class UserSetting {
 
-    private int budget;
+    private double budget;
     private ArrayList<String> customCategory;
     private String budgetDuration;
 
@@ -40,7 +40,7 @@ public class UserSetting {
     /**
      * @return the budget
      */
-    public int getBudget() {
+    public double getBudget() {
         return budget;
     }
 
@@ -49,7 +49,7 @@ public class UserSetting {
      *
      * @param budget the desired amount
      */
-    public void setBudget(int budget) {
+    public void setBudget(double budget) {
         this.budget = budget;
     }
 

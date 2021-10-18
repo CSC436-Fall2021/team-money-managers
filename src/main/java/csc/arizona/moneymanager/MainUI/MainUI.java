@@ -47,13 +47,14 @@ public class MainUI {
 
     private UserSetting userSettings;
 
-    private double tempBudget = 3.14; //TODO remove this and all reference to it once account settings is imlpemented
     /**
      * Default Constructor.
      *
      * Sets width and height of the scene to default values.
+     * And initializes UserSettings object.
      */
     public MainUI() {
+        this.userSettings = new UserSetting();
         initializeScene(WIDTH, HEIGHT);
     }
 
@@ -63,7 +64,33 @@ public class MainUI {
      * @param width the scene width.
      * @param height the scene height.
      */
-    public MainUI(int width, int height){
+    public MainUI(int width, int height){ // TODO remove method once UserSettings implemented within Controller
+        this.userSettings = new UserSetting(); // initializing UserSetting object
+        initializeScene(width, height);
+    }
+
+    /**
+     * Constructor. Accepts the UserSetting object for the
+     * currently logged in user.
+     * @param userSettings the UserSetting object that contains
+     *                     the currently logged-in user's settings.
+     */
+    public MainUI(UserSetting userSettings){
+        this.userSettings = userSettings;
+        initializeScene(WIDTH, HEIGHT);
+    }
+
+    /**
+     * Constructor. Allows the scene to initialize to
+     * specified width and height values and accepts
+     * the UserSetting object for the currently logged in user.
+     * @param width the scene width.
+     * @param height the scene height.
+     * @param userSettings the UserSetting object that contains
+     *                     the currently logged-in user's settings.
+     */
+    public MainUI(int width, int height, UserSetting userSettings){
+        this.userSettings = userSettings;
         initializeScene(width, height);
     }
 
@@ -176,17 +203,17 @@ public class MainUI {
      * account settings class.
      */
     public void displayBudgetUI(){
-        System.out.println("Set Budget Selected"); //TODO remove when action implemented
 
-        double currentBudget = getBudgetFromAccountSettings();
+        double currentBudget = userSettings.getBudget();
+        String currentBudgetDuration = userSettings.getBudgetDuration();
 
         // Service pane Elements
-        BudgetUI budgetUI = new BudgetUI(currentBudget);
+        BudgetUI budgetUI = new BudgetUI(currentBudget, currentBudgetDuration);
 
         // Options pane elements
         HBox budgetOptions = createExitContentButtonOptionBox(budgetUI.getButtonText());
         Button okay = new Button("Set Budget");
-        okay.setOnAction(e-> saveBudget(budgetUI.getBudget())); // if budget changed, saving new budget
+        okay.setOnAction(e-> saveBudget(budgetUI.getBudget(), budgetUI.getDuration())); // if budget changed, saving new budget
         budgetOptions.getChildren().add(0, okay); // Adding confirmation button to leftmost position
 
         // Displaying budget UI in services pane
@@ -197,28 +224,20 @@ public class MainUI {
     }
 
     /**
-     * Gets the current budget amount from Account Settings.
-     * @return the budget saved in account settings.
-     */
-    private double getBudgetFromAccountSettings(){
-        double budget = 0.0;
-
-        //TODO Get previous budget from account settings
-        budget = tempBudget; // remove this when loading from account settings
-
-        return budget;
-    }
-
-    /**
      * Saves the given budget in Account Settings.
      * @param budget the budget amount to save in account settings.
      */
-    private void saveBudget(double budget){
+    private void saveBudget(double budget, String duration){
 
-        //TODO save budget to account settings
-        tempBudget = budget; // remove this when implementing acount settings save
+        // Saving budget into user settings
+        userSettings.setBudget(budget);
+        userSettings.setBudgetDuration(duration);
 
-        //TODO show alert for budget change confirmation
+        // Showing alert for budget change confirmation
+        duration = duration.toLowerCase();
+        String message = "You have set the new " + duration + " budget of $" + BudgetUI.budgetToString(budget) + ".";
+        Alert budgetSetConfimation = new Alert(Alert.AlertType.INFORMATION, message);
+        budgetSetConfimation.showAndWait().filter(response -> response == ButtonType.OK);
 
         // Restoring content to previous content
         showCurrentContent();
@@ -322,6 +341,9 @@ public class MainUI {
         return this.scene;
     }
 
-
+    /**
+     * @return the UserSetting object associated with the currently logged-in user.
+     */
+    public UserSetting getUserSettings(){ return this.userSettings; }
 
 }
