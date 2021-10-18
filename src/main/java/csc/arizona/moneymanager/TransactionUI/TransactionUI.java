@@ -94,6 +94,7 @@ public class TransactionUI extends GridPane {
 
     public void addCategory(String newCategory) {
         categories.addCategory(newCategory);
+        categoryDropDown.setItems(FXCollections.observableArrayList(categories.getCategories()));
     }
 
     /**
