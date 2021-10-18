@@ -322,6 +322,8 @@ public class MainUI {
         return this.scene;
     }
 
-
-
+    // gives userSetting information to MainUI
+    public void setUserSettings(UserSetting userSettings) {
+        this.userSettings = userSettings;
+    }
 }

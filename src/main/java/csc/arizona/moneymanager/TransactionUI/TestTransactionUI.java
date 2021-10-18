@@ -12,7 +12,7 @@ public class TestTransactionUI extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        TransactionUI test = new TransactionUI();
+        TransactionUI test = new TransactionUI(null);
 
 
         stage.setTitle("Test transaction pane");

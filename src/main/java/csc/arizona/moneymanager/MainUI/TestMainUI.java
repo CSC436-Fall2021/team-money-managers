@@ -43,7 +43,7 @@ public class TestMainUI extends Application {
 
     public void testPanes(){
         // Test transaction pane
-        TransactionUI transactionPane = new TransactionUI();
+        TransactionUI transactionPane = new TransactionUI(null);
         // Adding test transaction pane to mainUI
         mainUI.setTransactionPane(transactionPane);
 

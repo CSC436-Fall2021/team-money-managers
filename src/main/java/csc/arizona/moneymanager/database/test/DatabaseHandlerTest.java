@@ -43,7 +43,7 @@ public class DatabaseHandlerTest {
             }
             List<Transaction> transactionList = new ArrayList<>();
             for (int i = 0; i < 5; i++){
-                Transaction temp = new Transaction(LocalDate.now().plusDays(i), Category.OTHER, i);
+                Transaction temp = new Transaction(LocalDate.now().plusDays(i), "food", i);
                 transactionList.add(temp);
             }
             User test = new User("mason");
