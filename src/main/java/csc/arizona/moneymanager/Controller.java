@@ -20,6 +20,7 @@ import javafx.stage.Stage;
  * <p>
  * The Controller is the link between both the login and the Main UI's to the databse as well as
  * a way for the Scenes to switch between the two.
+ * </p>
  */
 public class Controller extends Application {
 
@@ -35,6 +36,7 @@ public class Controller extends Application {
 
     /**
      * tells the program who is currently logged in
+     *
      * @param user the user that is logged in
      */
     public static void logInUser(String user) {
