@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -238,14 +239,16 @@ public class MainUI {
 
             // if there is something to add.
             if (!newCategory.isEmpty()) {
+                TransactionUI target = (TransactionUI)transactionPane.getCenter();
+
                 List<String> userCategories = userSettings.getCustomCategory();
-                List<String> defaultCategories = transactionPane.getDefaultCategories();
+                List<String> defaultCategories = target.getDefaultCategories();
 
                 // add only if the category does not already exist in the user's custom categories
                 // or in the default categories
                 if (!defaultCategories.contains(newCategory) && !userCategories.contains(newCategory)) {
                     userSettings.addCategoryName(newCategory); // add to userCategories in settings
-                    transactionPane.addCategory(newCategory);  // add to dropdown in transactions pane
+                    target.addCategory(newCategory);  // add to dropdown in transactions pane
                 }
             }
 
