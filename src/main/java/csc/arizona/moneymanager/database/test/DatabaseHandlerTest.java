@@ -1,6 +1,7 @@
 package csc.arizona.moneymanager.database.test;
 
 
+import csc.arizona.moneymanager.MainUI.UserSetting;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import csc.arizona.moneymanager.database.DatabaseHandler;
 import csc.arizona.moneymanager.database.User;
@@ -47,6 +48,11 @@ public class DatabaseHandlerTest {
             }
             User test = new User("mason");
             test.setTransactions(transactionList);
+            UserSetting settings = new UserSetting();
+            settings.setBudget(429);
+            settings.setBudgetDuration("Monthly");
+            settings.addCategoryName("testCat");
+            test.setSettings(settings);
             if (handler.updateUserData(test,true)){
                 System.out.println("addTransactions(): passed");
             } else {
