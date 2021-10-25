@@ -2,8 +2,10 @@ package csc.arizona.moneymanager;
 
 import csc.arizona.moneymanager.Login.LoginUI;
 import csc.arizona.moneymanager.MainUI.*;
+import csc.arizona.moneymanager.TransactionUI.Transaction;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
+import csc.arizona.moneymanager.database.User;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,7 +30,7 @@ public class Controller extends Application {
     private static final DatabaseHandler database = new DatabaseHandler();
     private static Stage stage;
     private static MainUI test;
-    private static String currentUser;
+    private static User currentUser;
 
     public static void connectToDatabase() {
         database.connectToDatabase();
@@ -41,7 +43,11 @@ public class Controller extends Application {
      * @param user the user that is logged in
      */
     public static void logInUser(String user) {
-        currentUser = user;
+        try {
+            currentUser = database.getUserData(user, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -152,7 +158,7 @@ public class Controller extends Application {
         Button deleteUser = new Button("Delete account");
         deleteUser.setMinWidth(100);
         deleteUser.setOnMouseClicked(event -> {
-            if (!userField.getText().equals(currentUser))
+            if (!userField.getText().equals(currentUser.getUsername()))
                 failureAlert("username");
             else if (!correctCredentials(userField.getText(), passField.getText()))
                 failureAlert("password");
@@ -189,6 +195,15 @@ public class Controller extends Application {
         alert.setContentText("please enter passwords again");
         alert.setHeaderText("passwords are not the same");
         alert.showAndWait();
+    }
+
+    /**
+     * adds a transaction from the transaction.java to be added to the current user
+     * @param transaction the transaction being added to the user
+     */
+    public static void addTransaction(Transaction transaction) {
+        currentUser.addTransactions(transaction);
+        database.updateUserData(currentUser, false);
     }
 
     /**

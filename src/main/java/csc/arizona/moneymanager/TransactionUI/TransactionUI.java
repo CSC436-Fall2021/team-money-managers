@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.TransactionUI;
 
+import csc.arizona.moneymanager.Controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -145,6 +146,8 @@ public class TransactionUI extends GridPane {
 
             Transaction toAdd = new Transaction(date, category, amount);
 
+
+            Controller.addTransaction(toAdd);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setContentText(String.format("Transaction details:\n\nDate: %s\nCategory: %s\nAmount: %.2f",
