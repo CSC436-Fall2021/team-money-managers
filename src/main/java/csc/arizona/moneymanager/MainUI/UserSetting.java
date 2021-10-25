@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class UserSetting implements Serializable {
 
-    private int budget;
+    private double budget;
     private ArrayList<String> customCategory;
     private String budgetDuration;
 
@@ -41,7 +41,7 @@ public class UserSetting implements Serializable {
     /**
      * @return the budget
      */
-    public int getBudget() {
+    public double getBudget() {
         return budget;
     }
 
@@ -50,7 +50,7 @@ public class UserSetting implements Serializable {
      *
      * @param budget the desired amount
      */
-    public void setBudget(int budget) {
+    public void setBudget(double budget) {
         this.budget = budget;
     }
 
