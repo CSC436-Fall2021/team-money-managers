@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * @implNote data will be reached from the database so the database will have to have these
  * structures and store them
  */
-public class UserSetting {
+public class UserSetting implements Serializable {
 
     private int budget;
     private ArrayList<String> customCategory;
