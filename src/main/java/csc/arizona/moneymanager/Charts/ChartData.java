@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class ChartData {
 
-    Map<String, List<Transaction>> positiveBalances;
-    Map<String, List<Transaction>> negativeBalances;
+    private Map<String, List<Transaction>> positiveBalances;
+    private Map<String, List<Transaction>> negativeBalances;
 
     public ChartData(List<Transaction> transactions) {
         for (Transaction transaction : transactions) {
