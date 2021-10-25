@@ -18,6 +18,8 @@ module csc.arizona.moneymanager {
     exports csc.arizona.moneymanager.MainUI;
     opens csc.arizona.moneymanager.TransactionUI;
     exports csc.arizona.moneymanager.TransactionUI;
+    opens csc.arizona.moneymanager.Charts;
+    exports csc.arizona.moneymanager.Charts;
 
     opens csc.arizona.moneymanager;
     exports csc.arizona.moneymanager;
