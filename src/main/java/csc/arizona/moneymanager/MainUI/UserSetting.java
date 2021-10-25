@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -13,9 +14,9 @@ import java.util.ArrayList;
  * @implNote data will be reached from the database so the database will have to have these
  * structures and store them
  */
-public class UserSetting {
+public class UserSetting implements Serializable {
 
-    private int budget;
+    private double budget;
     private ArrayList<String> customCategory;
     private String budgetDuration;
 
@@ -40,7 +41,7 @@ public class UserSetting {
     /**
      * @return the budget
      */
-    public int getBudget() {
+    public double getBudget() {
         return budget;
     }
 
@@ -49,7 +50,7 @@ public class UserSetting {
      *
      * @param budget the desired amount
      */
-    public void setBudget(int budget) {
+    public void setBudget(double budget) {
         this.budget = budget;
     }
 

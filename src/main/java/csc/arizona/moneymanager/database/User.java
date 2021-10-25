@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.database;
 
+import csc.arizona.moneymanager.MainUI.UserSetting;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import org.bson.types.ObjectId;
 
@@ -15,6 +16,15 @@ public class User implements Serializable {
 
     private String username;
     private List<Transaction> transactions;
+    private UserSetting settings;
+
+    public UserSetting getSettings() {
+        return settings;
+    }
+
+    public void setSettings(UserSetting settings) {
+        this.settings = settings;
+    }
 
     public User(){
 

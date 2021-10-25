@@ -43,9 +43,9 @@ public class TestMainUI extends Application {
 
     public void testPanes(){
         // Test transaction pane
-        TransactionUI transactionPane = new TransactionUI(null);
+        //TransactionUI transactionPane = new TransactionUI(mainUI.getUserSettings().getCustomCategory()); // TODO add back transaction pane
         // Adding test transaction pane to mainUI
-        mainUI.setTransactionPane(transactionPane);
+        //mainUI.setTransactionPane(transactionPane); //TODO add back transaction pane
 
         // test Services pane
         BorderPane servicesPane = new BorderPane();

@@ -113,17 +113,32 @@ public class TransactionUI extends GridPane {
                 Error handling for missing information
              */
             if (date == null) {
-                System.out.println("Enter a date.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Missing transaction information");
+                alert.setContentText("Enter a date.");
+                alert.showAndWait();
+                //System.out.println("Enter a date.");
                 return;
             }
 
             if (category == null) {
-                System.out.println("Pick a category.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Missing transaction information");
+                alert.setContentText("Select a category.");
+                alert.showAndWait();
+                //System.out.println("Pick a category.");
                 return;
             }
 
             if (amountInput.getText().isEmpty()){
-                System.out.println("Enter an amount.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Missing transaction information");
+                alert.setContentText("Enter an amount.");
+                alert.showAndWait();
+                //System.out.println("Enter an amount.");
                 return;
             }
 
@@ -131,11 +146,17 @@ public class TransactionUI extends GridPane {
 
             Transaction toAdd = new Transaction(date, category, amount);
 
-            Controller.addTransaction(toAdd);
 
-            System.out.println(toAdd.getDate());
-            System.out.println(toAdd.getCategory());
-            System.out.println(toAdd.getAmount());
+            Controller.addTransaction(toAdd);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setContentText(String.format("Transaction details:\n\nDate: %s\nCategory: %s\nAmount: %.2f",
+                    toAdd.getDate().toString(), toAdd.getCategory(), toAdd.getAmount()));
+            alert.setHeaderText("Transaction addded");
+            alert.showAndWait();
+            //System.out.println(toAdd.getDate());
+            //System.out.println(toAdd.getCategory());
+            //System.out.println(toAdd.getAmount());
 
             // reset input field for amount, but leave date and category as is.
             amountInput.clear();
