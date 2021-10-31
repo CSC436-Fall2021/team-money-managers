@@ -111,9 +111,7 @@ public class MainUI {
         initLandingPage();
 
         // showing empty options pane
-        BorderPane emptyOptionsPane = new BorderPane();
-        emptyOptionsPane.setCenter(new Label("Empty Options Pane"));
-        setOptionsPane(emptyOptionsPane);
+        clearOptionsPane();
 
         // Setting up main pane
         mainPane = new BorderPane();
@@ -409,6 +407,22 @@ public class MainUI {
     // gives userSetting information to MainUI
     public void setUserSettings(UserSetting userSettings) {
         this.userSettings = userSettings;
+    }
+
+    /**
+     * Sets the options pane to display no content.
+     */
+    private void clearOptionsPane(){
+        String transparentStyle = "-fx-background-color: rgba(0,0,0,0); ";
+        HBox emptyOptions = createExitContentButtonOptionBox("");
+
+        // Setting default button to disabled and transparent
+        emptyOptions.getChildren().get(0).setStyle(transparentStyle);
+        emptyOptions.getChildren().get(0).setDisable(true);
+        // Setting options HBox to transparent
+        emptyOptions.setStyle(transparentStyle);
+
+        setOptionsPane(emptyOptions);
     }
 
 }
