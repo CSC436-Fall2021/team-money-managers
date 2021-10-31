@@ -107,13 +107,10 @@ public class MainUI {
         initServicesPane();
         initOptionsPane();
 
-        // Adding Default (empty indicating) Elements
-        BorderPane emptyTransactionPane = new BorderPane();
-        emptyTransactionPane.setCenter(new Label("Empty Transaction Pane"));
-        setTransactionPane(emptyTransactionPane);
-        BorderPane emptyServicesPane = new BorderPane();
-        emptyServicesPane.setCenter(new Label("Empty Services Pane"));
-        setServicesPane(emptyServicesPane);
+        // Showing landing page by default
+        initLandingPage();
+
+        // showing empty options pane
         BorderPane emptyOptionsPane = new BorderPane();
         emptyOptionsPane.setCenter(new Label("Empty Options Pane"));
         setOptionsPane(emptyOptionsPane);
@@ -137,6 +134,67 @@ public class MainUI {
         this.scene = new Scene(mainPane, width, height);
         // Adding .css stylesheet
         this.scene.getStylesheets().add("file:src/main/java/csc/arizona/moneymanager/MainUI/mainUIStyle.css");
+    }
+
+    /**
+     * Initializes the user landing page.
+     */
+    private void initLandingPage(){
+        UserLandingPage userLandingPage = new UserLandingPage();
+        String userNickname = userSettings.getUserNickname();
+
+        // If user nickname already set, updating welcome message
+        if(userNickname != null && !userNickname.equals("")){
+            userLandingPage.setWelcomeMessage("Welcome, " + userNickname + ".");
+        }
+
+        // Adding update user nickname to landing page
+        HBox updateNicknameBox = createUserNicknameUpdateBox(userNickname);
+        userLandingPage.addContent(updateNicknameBox);
+
+
+        //TODO add other content to landing page here
+
+        // Setting landing page as active page
+        setServicesPane(userLandingPage);
+    }
+
+    private HBox createUserNicknameUpdateBox(String currentNickname){
+        if(currentNickname == null || currentNickname.equals("")) { // user nickname not set
+            currentNickname = "none";
+        }
+
+        // Update user nickname row
+        HBox updateNicknameBox = new HBox();
+        updateNicknameBox.setPadding(PADDING);
+        updateNicknameBox.setSpacing(PADDING.getLeft());
+        Label currentLabel = new Label("Current Nickname :");
+        Label nickname = new Label(currentNickname);
+        TextField nicknameTF = new TextField();
+        Button updateNickname = new Button("Update");
+        updateNickname.setOnAction( e-> saveNickname(nicknameTF.getText()) ); // update button saves nickname
+        nicknameTF.setOnAction(e-> updateNickname.fire());
+        updateNicknameBox.getChildren().addAll(currentLabel, nickname, nicknameTF, updateNickname);
+
+        return updateNicknameBox;
+    }
+
+    /**
+     * Updates the user nickname stored in settings and reloads landing page.
+     * @param nickname the user nickname string to store.
+     */
+    public void saveNickname(String nickname){
+
+        // Checking for blank nickname from user and confirming update, if so.
+        if(nickname == null || nickname.equals("")){
+            Alert blankNicknameAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to have no nickname?");
+            blankNicknameAlert.showAndWait()
+                    .filter   (response -> response == ButtonType.OK ) // if user pressed "OK"
+                    .ifPresent(response -> userSettings.setUserNickname(nickname) ); // updating username to blank, if confirmed
+        }else {
+            userSettings.setUserNickname(nickname);
+        }
+        initLandingPage();
     }
 
     /**

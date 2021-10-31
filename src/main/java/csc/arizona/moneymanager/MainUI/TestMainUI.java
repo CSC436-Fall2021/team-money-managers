@@ -74,8 +74,9 @@ public class TestMainUI extends Application {
         servicesPane.setCenter(centerService);
         servicesPane.setRight(testList);
         servicesPane.setLeft(leftList);
+
         // Adding test services pane to mainUI
-        mainUI.setServicesPane(servicesPane);
+        // mainUI.setServicesPane(servicesPane);
 
         // Test options pane
         HBox optionsPane = new HBox();
