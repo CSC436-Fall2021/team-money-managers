@@ -89,7 +89,7 @@ public class TestMainUI extends Application {
         optionsPane.setAlignment(Pos.CENTER);
         optionsPane.setPadding(MainUI.PADDING);
 
-        mainUI.setOptionsPane(optionsPane);
+        //mainUI.setOptionsPane(optionsPane);
     }
 
 }
