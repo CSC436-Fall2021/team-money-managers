@@ -1,9 +1,12 @@
 package csc.arizona.moneymanager.MainUI;
 
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -107,16 +110,11 @@ public class MainUI {
         initServicesPane();
         initOptionsPane();
 
-        // Adding Default (empty indicating) Elements
-        BorderPane emptyTransactionPane = new BorderPane();
-        emptyTransactionPane.setCenter(new Label("Empty Transaction Pane"));
-        setTransactionPane(emptyTransactionPane);
-        BorderPane emptyServicesPane = new BorderPane();
-        emptyServicesPane.setCenter(new Label("Empty Services Pane"));
-        setServicesPane(emptyServicesPane);
-        BorderPane emptyOptionsPane = new BorderPane();
-        emptyOptionsPane.setCenter(new Label("Empty Options Pane"));
-        setOptionsPane(emptyOptionsPane);
+        // Showing landing page by default
+        initLandingPage();
+
+        // showing empty options pane
+        clearOptionsPane();
 
         // Setting up main pane
         mainPane = new BorderPane();
@@ -137,6 +135,67 @@ public class MainUI {
         this.scene = new Scene(mainPane, width, height);
         // Adding .css stylesheet
         this.scene.getStylesheets().add("file:src/main/java/csc/arizona/moneymanager/MainUI/mainUIStyle.css");
+    }
+
+    /**
+     * Initializes the user landing page.
+     */
+    private void initLandingPage(){
+        UserLandingPage userLandingPage = new UserLandingPage();
+        String userNickname = userSettings.getUserNickname();
+
+        // If user nickname already set, updating welcome message
+        if(userNickname != null && !userNickname.equals("")){
+            userLandingPage.setWelcomeMessage("Welcome, " + userNickname + ".");
+        }
+
+        // Adding update user nickname to landing page
+        HBox updateNicknameBox = createUserNicknameUpdateBox(userNickname);
+        userLandingPage.addContent(updateNicknameBox);
+
+
+        //TODO add other content to landing page here
+
+        // Setting landing page as active page
+        setServicesPane(userLandingPage);
+    }
+
+    private HBox createUserNicknameUpdateBox(String currentNickname){
+        if(currentNickname == null || currentNickname.equals("")) { // user nickname not set
+            currentNickname = "none";
+        }
+
+        // Update user nickname row
+        HBox updateNicknameBox = new HBox();
+        updateNicknameBox.setPadding(PADDING);
+        updateNicknameBox.setSpacing(PADDING.getLeft());
+        Label currentLabel = new Label("Current Nickname :");
+        Label nickname = new Label(currentNickname);
+        TextField nicknameTF = new TextField();
+        Button updateNickname = new Button("Update");
+        updateNickname.setOnAction( e-> saveNickname(nicknameTF.getText()) ); // update button saves nickname
+        nicknameTF.setOnAction(e-> updateNickname.fire());
+        updateNicknameBox.getChildren().addAll(currentLabel, nickname, nicknameTF, updateNickname);
+
+        return updateNicknameBox;
+    }
+
+    /**
+     * Updates the user nickname stored in settings and reloads landing page.
+     * @param nickname the user nickname string to store.
+     */
+    public void saveNickname(String nickname){
+
+        // Checking for blank nickname from user and confirming update, if so.
+        if(nickname == null || nickname.equals("")){
+            Alert blankNicknameAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to have no nickname?");
+            blankNicknameAlert.showAndWait()
+                    .filter   (response -> response == ButtonType.OK ) // if user pressed "OK"
+                    .ifPresent(response -> userSettings.setUserNickname(nickname) ); // updating username to blank, if confirmed
+        }else {
+            userSettings.setUserNickname(nickname);
+        }
+        initLandingPage();
     }
 
     /**
@@ -285,10 +344,10 @@ public class MainUI {
     }
 
     /**
-     * Updates the Services pane to the given InfoView content and
+     * Updates the Services pane to the given ServicesView content and
      * updates the Options pane with a return button to return to previously
      * displayed content.
-     * @param servicesView the InfoView object to display.
+     * @param servicesView the ServicesView object to display.
      */
     public void showInfo(ServicesView servicesView){
         // Setting services pane to About info
@@ -351,6 +410,43 @@ public class MainUI {
     // gives userSetting information to MainUI
     public void setUserSettings(UserSetting userSettings) {
         this.userSettings = userSettings;
+    }
+
+    /**
+     * Sets the options pane to display no content.
+     */
+    private void clearOptionsPane(){
+        String transparentStyle = "-fx-background-color: rgba(0,0,0,0); ";
+        HBox emptyOptions = createExitContentButtonOptionBox("");
+
+        // Setting default button to disabled and transparent
+        emptyOptions.getChildren().get(0).setStyle(transparentStyle);
+        emptyOptions.getChildren().get(0).setDisable(true);
+        // Setting options HBox to transparent
+        emptyOptions.setStyle(transparentStyle);
+
+        setOptionsPane(emptyOptions);
+    }
+
+    /**
+     * Shows the ChartUI in the services pane.
+     */ //TODO maybe add a parameter to select which chart type?
+    public void showChartUI(){
+        System.out.println("Show ChartUI"); //TODO remove when implemented
+        testShowPieChart(); // TODO remove when implemented
+    }
+
+    /**
+     * Test method to create and show a dummy pie chart
+     */
+    public void testShowPieChart(){ //TODO remove test method when not needed
+        ObservableList<PieChart.Data> testData =
+                FXCollections.observableArrayList(
+                        new PieChart.Data("Food", 20),
+                        new PieChart.Data("Other", 10));
+        PieChart testPieChart = new PieChart(testData);
+        testPieChart.setTitle("Test Pie Chart");
+        showInfo(new ChartUI(testPieChart));
     }
 
 }

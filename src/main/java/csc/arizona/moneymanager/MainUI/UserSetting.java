@@ -19,6 +19,7 @@ public class UserSetting implements Serializable {
     private double budget;
     private ArrayList<String> customCategory;
     private String budgetDuration;
+    private String userNickname;
 
     /**
      * default constructor for if this is the first time an account has been created and will
@@ -109,5 +110,20 @@ public class UserSetting implements Serializable {
      */
     public void addCategoryName(String category) {
         customCategory.add(category);
+    }
+
+    /**
+     *  Sets the user nickname.
+     */
+    public void setUserNickname(String nickname){
+        userNickname = nickname;
+    }
+
+    /**
+     * Gets the user nickname.
+     * @return the user nickname stored.
+     */
+    public String getUserNickname(){
+        return userNickname;
     }
 }
