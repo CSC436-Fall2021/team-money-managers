@@ -21,7 +21,8 @@ abstract public class ServicesView extends BorderPane {
 
     /**
      * Constructor.
-     * @param title the title to set in the info content pane.
+     * @param title the title to set in the services content pane.
+     * @param buttonText the text on the "Return" button
      */
     public ServicesView(String title, String buttonText){
         this.buttonText = buttonText;

@@ -1,9 +1,12 @@
 package csc.arizona.moneymanager.MainUI;
 
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -341,10 +344,10 @@ public class MainUI {
     }
 
     /**
-     * Updates the Services pane to the given InfoView content and
+     * Updates the Services pane to the given ServicesView content and
      * updates the Options pane with a return button to return to previously
      * displayed content.
-     * @param servicesView the InfoView object to display.
+     * @param servicesView the ServicesView object to display.
      */
     public void showInfo(ServicesView servicesView){
         // Setting services pane to About info
@@ -423,6 +426,27 @@ public class MainUI {
         emptyOptions.setStyle(transparentStyle);
 
         setOptionsPane(emptyOptions);
+    }
+
+    /**
+     * Shows the ChartUI in the services pane.
+     */ //TODO maybe add a parameter to select which chart type?
+    public void showChartUI(){
+        System.out.println("Show ChartUI"); //TODO remove when implemented
+        testShowPieChart(); // TODO remove when implemented
+    }
+
+    /**
+     * Test method to create and show a dummy pie chart
+     */
+    public void testShowPieChart(){ //TODO remove test method when not needed
+        ObservableList<PieChart.Data> testData =
+                FXCollections.observableArrayList(
+                        new PieChart.Data("Food", 20),
+                        new PieChart.Data("Other", 10));
+        PieChart testPieChart = new PieChart(testData);
+        testPieChart.setTitle("Test Pie Chart");
+        showInfo(new ChartUI(testPieChart));
     }
 
 }

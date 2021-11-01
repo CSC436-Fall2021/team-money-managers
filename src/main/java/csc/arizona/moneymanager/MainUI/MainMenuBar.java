@@ -18,7 +18,7 @@ import javafx.scene.control.SeparatorMenuItem;
  */
 public class MainMenuBar extends MenuBar {
 
-    private MainUI mainUI;
+    private final MainUI mainUI;
 
     /**
      * Constructor. Sets up the menu items and associated
@@ -30,7 +30,7 @@ public class MainMenuBar extends MenuBar {
         // Do not change OnActions in this function.
         super();
 
-        // File menu setup
+        //******* File menu setup *******/
         Menu file = new Menu("_File");
         SeparatorMenuItem fileMenuSeparator = new SeparatorMenuItem();
         // --> Set Budget option
@@ -54,7 +54,21 @@ public class MainMenuBar extends MenuBar {
         // Adding items to File menu
         file.getItems().addAll(setBudget, addCategories, saveData, fileMenuSeparator, logout,
          removeAccount, exit);
-        // Report menu setup
+
+        //******* Chart menu setup *******/
+        Menu charts = new Menu("_Charts");
+        // --> Pie Chart option
+        MenuItem pieChart = new MenuItem("_Pie Chart");
+        pieChart.setOnAction(e-> pieChartMenuAction() );
+        // --> Scatterplot option
+        MenuItem scatterplot = new MenuItem("_Scatterplot");
+        scatterplot.setOnAction(e-> scatterPlotMenuAction() );
+        // --> Histogram option
+        MenuItem histogram = new MenuItem("_Histogram");
+        histogram.setOnAction(e-> histogramMenuAction() );
+        charts.getItems().addAll(pieChart, scatterplot, histogram);
+
+        //******* Report menu setup *******/
         Menu reports = new Menu("_Reports");
         // --> Show Report option //TODO maybe make showReport a submenu with types of reports as menu items
         MenuItem showReport = new MenuItem("Show _Report");
@@ -65,7 +79,7 @@ public class MainMenuBar extends MenuBar {
         // Adding items to Reports menu
         reports.getItems().addAll(showReport, saveReport);
 
-        // Help menu setup
+        //******* Help menu setup *******/
         Menu help = new Menu("_Help");
         SeparatorMenuItem helpMenuSeparator = new SeparatorMenuItem();
         // --> Help option
@@ -78,7 +92,7 @@ public class MainMenuBar extends MenuBar {
         help.getItems().addAll(showHelp, helpMenuSeparator, about);
 
         // Adding menus to menu bar
-        this.getMenus().addAll(file, reports, help);
+        this.getMenus().addAll(file, charts, reports, help);
 
         // Saving reference to MainUI
         this.mainUI = mainUI;
@@ -132,6 +146,27 @@ public class MainMenuBar extends MenuBar {
         System.out.println("Exit Selected"); //TODO remove when action implemented
     }
 
+    /**
+     * Contains the actions performed when the Menu option "Pie Chart" is selected.
+     */
+    private void pieChartMenuAction(){
+        System.out.println("Pie Chart Selected"); //TODO remove when action implemented
+        mainUI.showChartUI(); // TODO remove when action implemented
+    }
+
+    /**
+     * Contains the actions performed when the Menu option "Scatterplot" is selected.
+     */
+    private void scatterPlotMenuAction(){
+        System.out.println("Scatterplot Selected"); //TODO remove when action implemented
+    }
+
+    /**
+     * Contains the actions performed when the Menu option "Histogram" is selected.
+     */
+    private void histogramMenuAction(){
+        System.out.println("Histogram Selected"); //TODO remove when action implemented
+    }
 
     /**
      * Contains the actions performed when the Menu option "Show Report" is selected.

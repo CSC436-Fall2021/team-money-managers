@@ -35,7 +35,10 @@ public class BudgetUI extends ServicesView {
     /**
      * Constructor.
      *
-     * Supplies the title to the super constructor.
+     * Supplies the title to the super constructor and saves the budget and duration values.
+     * Sets the duration to a default value, if null.
+     * @param budget the current budget amount
+     * @param duration the current budget duration string
      */
     public BudgetUI(double budget, String duration){
         super("Edit Budget", "Cancel");
