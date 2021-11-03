@@ -103,7 +103,7 @@ public class TransactionUI extends GridPane {
      * @return Label of the transaction amount, red in it has gone over budget
      */
     private Label getTotalAmountSpent() {
-        double totalAmount = Controller.getBudget();
+        double totalAmount = Controller.getTotalSpent();
         Label budgetDisplay = new Label('$' + Double.toString(totalAmount));
         if (totalAmount > Controller.getUser().getSettings().getBudget()) {
             budgetDisplay.setTextFill(Color.RED);
@@ -160,7 +160,7 @@ public class TransactionUI extends GridPane {
 
             Transaction toAdd = new Transaction(date, category, amount);
 
-            if (amount + Controller.getBudget() > Controller.getBudget() * .9) {
+            if (amount + Controller.getTotalSpent() > Controller.getTotalSpent() * .9) {
                 Alert overBudgetWarning = new Alert(Alert.AlertType.CONFIRMATION);
                 overBudgetWarning.setTitle("approaching budget");
                 overBudgetWarning.setContentText("You are close to or already going over your budget");

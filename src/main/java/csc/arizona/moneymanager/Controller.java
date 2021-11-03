@@ -149,7 +149,7 @@ public class Controller extends Application {
      * iterates through transactions to add up the total amount of the user
      * @return the total spending of the user
      */
-    public static double getBudget() {
+    public static double getTotalSpent() {
         double totalAmount = 0;
         for (Transaction trans : currentUser.getTransactions())
             totalAmount += trans.getAmount();
@@ -222,6 +222,13 @@ public class Controller extends Application {
     public static void addTransaction(Transaction transaction) {
         currentUser.addTransactions(transaction);
         database.updateUserData(currentUser, false);
+    }
+
+    /**
+     * @return the percentage that has been spent to the user
+     */
+    public static double getBudgetPercent() {
+        return getTotalSpent() / currentUser.getSettings().getBudget();
     }
 
     /**
