@@ -5,6 +5,7 @@ import csc.arizona.moneymanager.TransactionUI.Transaction;
 import org.bson.types.ObjectId;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,13 +27,13 @@ public class User implements Serializable {
         this.settings = settings;
     }
 
-    public User(){
-
+    public User() {
+        transactions = new ArrayList<>();
     }
 
     public User(String username) {
         this.username = username;
-        this.transactions = null;
+        this.transactions = new ArrayList<>();
     }
 
     @Override

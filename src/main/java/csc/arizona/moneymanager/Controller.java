@@ -146,6 +146,24 @@ public class Controller extends Application {
     }
 
     /**
+     * iterates through transactions to add up the total amount of the user
+     * @return the total spending of the user
+     */
+    public static double getBudget() {
+        double totalAmount = 0;
+        for (Transaction trans : currentUser.getTransactions())
+            totalAmount += trans.getAmount();
+        return totalAmount;
+    }
+
+    /**
+     * @return grabs the user
+     */
+    public static User getUser() {
+        return currentUser;
+    }
+
+    /**
      * button that will verify that the user wants to delete his account
      *
      * @param userField     the input of the username
