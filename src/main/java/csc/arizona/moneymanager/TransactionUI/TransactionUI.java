@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Provides input functionality for creating transactions.
@@ -159,7 +160,15 @@ public class TransactionUI extends GridPane {
 
             Transaction toAdd = new Transaction(date, category, amount);
 
-
+            if (amount + Controller.getBudget() > Controller.getBudget() * .9) {
+                Alert overBudgetWarning = new Alert(Alert.AlertType.CONFIRMATION);
+                overBudgetWarning.setTitle("approaching budget");
+                overBudgetWarning.setContentText("You are close to or already going over your budget");
+                Optional<ButtonType> result = overBudgetWarning.showAndWait();
+                ButtonType button = result.orElse(ButtonType.CANCEL);
+                if (button == ButtonType.CANCEL)
+                    return;
+            }
             Controller.addTransaction(toAdd);
             Label newTotal = getTotalAmountSpent();
             totalAmount.setTextFill(newTotal.getTextFill());
