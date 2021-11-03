@@ -14,6 +14,8 @@ import com.mongodb.client.MongoDatabase;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DatabaseHandler {
 
@@ -29,6 +31,10 @@ public class DatabaseHandler {
     public DatabaseHandler(){
         URI = "mongodb+srv://root:root@moneymanagerdata.v0ezf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
         pu = new PasswordUtilities();
+        Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        mongoLogger.setLevel(Level.SEVERE);
+        Logger bsonLogger = Logger.getLogger("org.bson");
+        bsonLogger.setLevel(Level.SEVERE);
         pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
     }
