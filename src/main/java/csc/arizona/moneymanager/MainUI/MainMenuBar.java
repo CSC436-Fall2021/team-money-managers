@@ -71,13 +71,16 @@ public class MainMenuBar extends MenuBar {
         //******* Report menu setup *******/
         Menu reports = new Menu("_Reports");
         // --> Show Report option //TODO maybe make showReport a submenu with types of reports as menu items
-        MenuItem showReport = new MenuItem("Show _Report");
-        showReport.setOnAction(e-> showReportsMenuAction() );
+        MenuItem showReport = new MenuItem("Show _Report Menu");
+        showReport.setOnAction(e-> {
+                    showReportsMenuAction();
+                    System.out.println("reports clicked");
+        });
         // --> Save... (report) option
-        MenuItem saveReport = new MenuItem("_Save...");
-        saveReport.setOnAction(e-> saveReportMenuAction() );
+//        MenuItem saveReport = new MenuItem("_Save...");
+//        saveReport.setOnAction(e-> saveReportMenuAction() );
         // Adding items to Reports menu
-        reports.getItems().addAll(showReport, saveReport);
+        reports.getItems().addAll(showReport);
 
         //******* Help menu setup *******/
         Menu help = new Menu("_Help");
@@ -172,7 +175,8 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Show Report" is selected.
      */
     private void showReportsMenuAction(){
-        System.out.println("Show Report selected"); //TODO remove when action implemented
+        mainUI.showInfo(new ReportUI("Reports", "Exit Reports"));
+
     }
 
     /**
