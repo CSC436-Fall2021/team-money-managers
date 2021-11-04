@@ -1,7 +1,8 @@
 package csc.arizona.moneymanager;
 
 import csc.arizona.moneymanager.Login.LoginUI;
-import csc.arizona.moneymanager.MainUI.*;
+import csc.arizona.moneymanager.MainUI.MainUI;
+import csc.arizona.moneymanager.MainUI.UserSetting;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
@@ -229,6 +230,20 @@ public class Controller extends Application {
      */
     public static double getBudgetPercent() {
         return getTotalSpent() / currentUser.getSettings().getBudget();
+    }
+
+    /**
+     * adds up the total amount of money spent on a category
+     *
+     * @param category the category being checked for
+     * @return the amount of money spent in that category
+     */
+    public static double getCategorySpent(String category) {
+        double totalAmount = 0;
+        for (Transaction trans : currentUser.getTransactions())
+            if (trans.getCategory().equals(category))
+                totalAmount += trans.getAmount();
+        return totalAmount;
     }
 
     /**
