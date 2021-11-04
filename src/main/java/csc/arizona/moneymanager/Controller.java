@@ -1,7 +1,8 @@
 package csc.arizona.moneymanager;
 
 import csc.arizona.moneymanager.Login.LoginUI;
-import csc.arizona.moneymanager.MainUI.*;
+import csc.arizona.moneymanager.MainUI.MainUI;
+import csc.arizona.moneymanager.MainUI.UserSetting;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
@@ -146,6 +147,24 @@ public class Controller extends Application {
     }
 
     /**
+     * iterates through transactions to add up the total amount of the user
+     * @return the total spending of the user
+     */
+    public static double getTotalSpent() {
+        double totalAmount = 0;
+        for (Transaction trans : currentUser.getTransactions())
+            totalAmount += trans.getAmount();
+        return totalAmount;
+    }
+
+    /**
+     * @return grabs the user
+     */
+    public static User getUser() {
+        return currentUser;
+    }
+
+    /**
      * button that will verify that the user wants to delete his account
      *
      * @param userField     the input of the username
@@ -204,6 +223,27 @@ public class Controller extends Application {
     public static void addTransaction(Transaction transaction) {
         currentUser.addTransactions(transaction);
         database.updateUserData(currentUser, false);
+    }
+
+    /**
+     * @return the percentage that has been spent to the user
+     */
+    public static double getBudgetPercent() {
+        return getTotalSpent() / currentUser.getSettings().getBudget();
+    }
+
+    /**
+     * adds up the total amount of money spent on a category
+     *
+     * @param category the category being checked for
+     * @return the amount of money spent in that category
+     */
+    public static double getCategorySpent(String category) {
+        double totalAmount = 0;
+        for (Transaction trans : currentUser.getTransactions())
+            if (trans.getCategory().equals(category))
+                totalAmount += trans.getAmount();
+        return totalAmount;
     }
 
     /**

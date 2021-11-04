@@ -4,16 +4,13 @@ import csc.arizona.moneymanager.Controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Provides input functionality for creating transactions.
@@ -35,6 +32,7 @@ public class TransactionUI extends GridPane {
     CategoryList categories; // combination: default + user
     ComboBox<String> categoryDropDown;
     TextField amountInput;
+    private final Label totalAmount;
 
 
     // Initialize TransactionUI with customCategories passed in from a userSettings class.
@@ -64,6 +62,7 @@ public class TransactionUI extends GridPane {
         amountInput.setOnAction(new EnterTransactionHandler());
         enterButton.setOnAction(new EnterTransactionHandler());
 
+        totalAmount = getTotalAmountSpent();
 
         add(new Label("Transactions"), 1, 0);
 
@@ -75,6 +74,7 @@ public class TransactionUI extends GridPane {
         add(categoryDropDown, 1, 2);
         add(amountInput, 2, 2);
         add(enterButton, 3, 2);
+        add(totalAmount, 4, 2);
 
         setHgap(5);
         setVgap(5);
@@ -96,6 +96,20 @@ public class TransactionUI extends GridPane {
     public void addCategory(String newCategory) {
         categories.addCategory(newCategory);
         categoryDropDown.setItems(FXCollections.observableArrayList(categories.getCategories()));
+    }
+
+    /**
+     * goes into the User transaction history and adds up all transaction
+     * @return Label of the transaction amount, red in it has gone over budget
+     */
+    private Label getTotalAmountSpent() {
+        double totalAmount = Controller.getTotalSpent();
+        Label budgetDisplay = new Label('$' + Double.toString(totalAmount));
+        if (totalAmount > Controller.getUser().getSettings().getBudget()) {
+            budgetDisplay.setTextFill(Color.RED);
+            budgetDisplay.setText(budgetDisplay.getText() + " OVER BUDGET");
+        }
+        return budgetDisplay;
     }
 
     /**
@@ -146,8 +160,19 @@ public class TransactionUI extends GridPane {
 
             Transaction toAdd = new Transaction(date, category, amount);
 
-
+            if (amount + Controller.getTotalSpent() > Controller.getTotalSpent() * .9) {
+                Alert overBudgetWarning = new Alert(Alert.AlertType.CONFIRMATION);
+                overBudgetWarning.setTitle("approaching budget");
+                overBudgetWarning.setContentText("You are close to or already going over your budget");
+                Optional<ButtonType> result = overBudgetWarning.showAndWait();
+                ButtonType button = result.orElse(ButtonType.CANCEL);
+                if (button == ButtonType.CANCEL)
+                    return;
+            }
             Controller.addTransaction(toAdd);
+            Label newTotal = getTotalAmountSpent();
+            totalAmount.setTextFill(newTotal.getTextFill());
+            totalAmount.setText(newTotal.getText());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setContentText(String.format("Transaction details:\n\nDate: %s\nCategory: %s\nAmount: %.2f",
