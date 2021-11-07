@@ -123,13 +123,14 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Save Data" is selected.
      */
     private void saveDataMenuAction(){
-        System.out.println("Save Data Selected"); //TODO remove when action implemented
+        Controller.updateUserData(Controller.getUser(), false);
     }
 
     /**
      * Contains the actions performed when the Menu option "Logout" is selected.
      */
-    private void logoutMenuAction(){
+    private void logoutMenuAction() {
+        saveDataMenuAction();
         Controller.mainUIToLogin();
     }
 
