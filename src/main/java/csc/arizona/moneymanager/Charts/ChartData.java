@@ -41,11 +41,19 @@ public class ChartData {
         return null;
     }
 
+    public int getExpensesCategorySum(String category) {
+        return 0;
+    }
+
     public List<Transaction> getIncomesCategory(String category) {
         if (positiveBalances.containsKey(category)) {
             return positiveBalances.get(category);
         }
 
         return null;
+    }
+
+    public int getIncomesCategorySum(String category) {
+        return 0;
     }
 }
