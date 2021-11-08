@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Shows scatterview of different category spending over time.
+ */
 public class ScatterView extends Chart {
 
     public ScatterView(List<Transaction> transactions) {
