@@ -1,5 +1,7 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.Controller;
+import csc.arizona.moneymanager.database.Report;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -15,6 +17,8 @@ public class ReportUI extends ServicesView{
      * @param title      the title to set in the info content pane.
      * @param buttonText
      */
+
+
     public ReportUI(String title, String buttonText) {
         super(title, buttonText);
     }
@@ -40,8 +44,9 @@ public class ReportUI extends ServicesView{
 
         Button generateButton = new Button("Generate Report");
         generateButton.setOnAction( e -> {
-            //generate report some how
-            System.out.println("generate");
+            if (reportType.getValue().equals("Transaction History")){
+                Controller.showReport("history", start.getValue(), end.getValue());
+            }
         });
 
 
