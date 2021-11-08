@@ -7,6 +7,9 @@ import javafx.scene.chart.PieChart;
 
 import java.util.*;
 
+/**
+ * Shows two pie charts for incomes and expenses by category type.
+ */
 public class PieView extends Chart {
 
     public PieView(List<Transaction> transactions) {
