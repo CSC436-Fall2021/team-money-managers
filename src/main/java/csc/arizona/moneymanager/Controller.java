@@ -242,6 +242,14 @@ public class Controller extends Application {
     }
 
     /**
+     * iterates through transactions to add up the total amount of the user
+     * @return the total spending of the user
+     */
+    public static double getBudget() {
+        return currentUser.getSettings().getBudget();
+    }
+
+    /**
      * @return grabs the user
      */
     public static User getUser() {

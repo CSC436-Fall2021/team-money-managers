@@ -159,8 +159,7 @@ public class TransactionUI extends GridPane {
             double amount = Double.parseDouble(amountInput.getText());
 
             Transaction toAdd = new Transaction(date, category, amount);
-
-            if (amount + Controller.getTotalSpent() > Controller.getTotalSpent() * .9) {
+            if (amount + Controller.getTotalSpent() > Controller.getBudget() * .9) {
                 Alert overBudgetWarning = new Alert(Alert.AlertType.CONFIRMATION);
                 overBudgetWarning.setTitle("approaching budget");
                 overBudgetWarning.setContentText("You are close to or already going over your budget");
