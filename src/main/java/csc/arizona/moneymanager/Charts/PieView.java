@@ -33,7 +33,7 @@ public class PieView extends TransactionChart {
         for (String category : categoryNames) {
             // getGross functions return 0 if N/A for category.
             double categoryIncome = data.getGrossIncomeCategory(category);
-            double categoryExpense = data.getGrossIncomeCategory(category);
+            double categoryExpense = data.getGrossExpenseCategory(category);
 
             // if there was income for a category, add it to the income pie chart
             if (categoryIncome != 0) {

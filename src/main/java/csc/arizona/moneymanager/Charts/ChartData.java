@@ -73,7 +73,7 @@ public class ChartData {
     public double getGrossExpenseCategory(String category) {
         double sum = 0.0;
 
-        for (Transaction transaction : negativeBalances.get(category)) {
+        for (Transaction transaction : getExpensesCategory(category)) {
             sum += transaction.getAmount();
         }
         return sum;
@@ -100,7 +100,7 @@ public class ChartData {
     public double getGrossIncomeCategory(String category) {
         double sum = 0.0;
 
-        for (Transaction transaction : positiveBalances.get(category)) {
+        for (Transaction transaction : getIncomesCategory(category)) {
             sum += transaction.getAmount();
         }
         return sum;
