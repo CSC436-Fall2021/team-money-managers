@@ -4,6 +4,8 @@ import csc.arizona.moneymanager.TransactionUI.Transaction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +15,12 @@ import java.util.Set;
  * Shows a histogram which has category names for the x-axis
  *  and net income-expense sums for the y-axis.
  */
-public class Histogram extends Chart {
+public class Histogram extends TransactionChart {
+
+    private BarChart<String, Double> chart;
 
     public Histogram(List<Transaction> transactions) {
+        title = "Spending by Category: Histogram";
         data = new ChartData(transactions);
 
         Set<String> categoryNames = data.getCategorySet();
@@ -51,9 +56,17 @@ public class Histogram extends Chart {
         Axis xAxis = new CategoryAxis(FXCollections.observableArrayList(categoryNames));
         Axis yAxis = new NumberAxis(min, max, 10);
 
-        BarChart<String, Double> chart = new BarChart<String, Double>(xAxis, yAxis, barObservable);
+        chart = new BarChart<String, Double>(xAxis, yAxis, barObservable);
 
         //display
     }
 
+    @Override
+    public Pane getView() {
+        BorderPane pane = new BorderPane();
+
+        pane.setCenter(chart);
+
+        return pane;
+    }
 }

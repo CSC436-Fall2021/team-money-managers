@@ -1,5 +1,8 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.Charts.Histogram;
+import csc.arizona.moneymanager.Charts.PieView;
+import csc.arizona.moneymanager.Charts.ScatterView;
 import csc.arizona.moneymanager.Controller;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -154,22 +157,21 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Pie Chart" is selected.
      */
     private void pieChartMenuAction(){
-        System.out.println("Pie Chart Selected"); //TODO remove when action implemented
-        mainUI.showChartUI(); // TODO remove when action implemented
+        mainUI.showChartUI(new PieView(Controller.getUser().getTransactions())); // TODO remove when action implemented
     }
 
     /**
      * Contains the actions performed when the Menu option "Scatterplot" is selected.
      */
     private void scatterPlotMenuAction(){
-        System.out.println("Scatterplot Selected"); //TODO remove when action implemented
+        mainUI.showChartUI(new ScatterView(Controller.getUser().getTransactions())); // TODO remove when action implemented
     }
 
     /**
      * Contains the actions performed when the Menu option "Histogram" is selected.
      */
     private void histogramMenuAction(){
-        System.out.println("Histogram Selected"); //TODO remove when action implemented
+        mainUI.showChartUI(new Histogram(Controller.getUser().getTransactions())); // TODO remove when action implemented
     }
 
     /**

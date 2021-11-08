@@ -4,6 +4,8 @@ import csc.arizona.moneymanager.TransactionUI.Transaction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,9 +15,13 @@ import java.util.Set;
 /**
  * Shows scatterview of different category spending over time.
  */
-public class ScatterView extends Chart {
+public class ScatterView extends TransactionChart {
+
+    private ScatterChart<String, Double> chart;
 
     public ScatterView(List<Transaction> transactions) {
+        title = "Transactions by category over time: Scatter";
+
         data = new ChartData(transactions);
 
         Set<String> categoryNames = data.getCategorySet();
@@ -76,10 +82,17 @@ public class ScatterView extends Chart {
         Axis xAxis = new CategoryAxis(FXCollections.observableArrayList(dates));
         Axis yAxis = new NumberAxis(min, max, 10);
 
-        ScatterChart<String, Double> chart = new ScatterChart<String, Double>(xAxis, yAxis);
+        chart = new ScatterChart<String, Double>(xAxis, yAxis);
         chart.getData().addAll(categorySeries);
 
         //display
     }
 
+    @Override
+    public Pane getView() {
+        BorderPane pane = new BorderPane();
+
+        pane.setCenter(chart);
+        return pane;
+    }
 }

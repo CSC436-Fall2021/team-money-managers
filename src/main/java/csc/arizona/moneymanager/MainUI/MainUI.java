@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.Charts.TransactionChart;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -431,9 +432,8 @@ public class MainUI {
     /**
      * Shows the ChartUI in the services pane.
      */ //TODO maybe add a parameter to select which chart type?
-    public void showChartUI(){
-        System.out.println("Show ChartUI"); //TODO remove when implemented
-        testShowPieChart(); // TODO remove when implemented
+    public void showChartUI(TransactionChart chart){
+        showInfo(new ChartUI(chart));
     }
 
     /**
@@ -446,7 +446,7 @@ public class MainUI {
                         new PieChart.Data("Other", 10));
         PieChart testPieChart = new PieChart(testData);
         testPieChart.setTitle("Test Pie Chart");
-        showInfo(new ChartUI(testPieChart));
+        //showInfo(new ChartUI(testPieChart));
     }
 
 }

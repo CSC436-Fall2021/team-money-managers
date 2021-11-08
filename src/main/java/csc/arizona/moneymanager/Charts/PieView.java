@@ -1,18 +1,27 @@
 package csc.arizona.moneymanager.Charts;
 
+import csc.arizona.moneymanager.MainUI.ChartUI;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 
 import java.util.*;
 
 /**
  * Shows two pie charts for incomes and expenses by category type.
  */
-public class PieView extends Chart {
+public class PieView extends TransactionChart {
+
+    PieChart incomeChart;
+    PieChart expenseChart;
 
     public PieView(List<Transaction> transactions) {
+        title = "Income and Expenses by category: PieChart";
         data = new ChartData(transactions);
 
         Set<String> categoryNames = data.getCategorySet();
@@ -43,9 +52,22 @@ public class PieView extends Chart {
         ObservableList<PieChart.Data> pieIncomeObservable = FXCollections.observableArrayList(pieDataIncome);
         ObservableList<PieChart.Data> pieExpenseObservable = FXCollections.observableArrayList(pieDataExpense);
 
-        PieChart incomeChart = new PieChart(pieIncomeObservable);
-        PieChart expenseChart = new PieChart(pieExpenseObservable);
+        incomeChart = new PieChart(pieIncomeObservable);
+        expenseChart = new PieChart(pieExpenseObservable);
 
         // display
+    }
+
+    @Override
+    public Pane getView() {
+        GridPane pane = new GridPane();
+
+        pane.add(new Label("Income"), 0, 0);
+        pane.add(new Label("Expense"), 1, 0);
+
+        pane.add(incomeChart, 0, 1);
+        pane.add(expenseChart, 1, 1);
+
+        return pane;
     }
 }
