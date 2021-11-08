@@ -34,6 +34,7 @@ public class User implements Serializable {
     public User(String username) {
         this.username = username;
         this.transactions = new ArrayList<>();
+        this.settings = new UserSetting();
     }
 
     @Override

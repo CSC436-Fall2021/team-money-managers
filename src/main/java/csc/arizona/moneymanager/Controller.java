@@ -46,6 +46,10 @@ public class Controller extends Application {
     public static void logInUser(String user) {
         try {
             currentUser = database.getUserData(user, false);
+            if (currentUser == null) {
+                currentUser = new User(user);
+                updateUserData(currentUser, false);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,6 +94,7 @@ public class Controller extends Application {
         // read from database: budget, category.
 
         UserSetting userSettings = currentUser.getSettings();
+
 
         test.setUserSettings(userSettings);
         test.setTransactionPane(new TransactionUI(userSettings.getCustomCategory()));
