@@ -48,7 +48,7 @@ public class MainUI {
     private BorderPane optionsPane;
     private Pane currentOptionsPane;
 
-    private UserSetting userSettings;
+    private UserSetting userSettings; // TODO: remove this. Can get user and settings through static Controller
 
     /**
      * Default Constructor.

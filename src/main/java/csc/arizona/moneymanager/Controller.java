@@ -87,11 +87,9 @@ public class Controller extends Application {
      * convert into the users main view account
      */
     public static void loginToMainUI() {
-        //TODO this method will also have to include the data that the main UI will need from the
-        // database
-
-        UserSetting userSettings = new UserSetting();
         // read from database: budget, category.
+
+        UserSetting userSettings = currentUser.getSettings();
 
         test.setUserSettings(userSettings);
         test.setTransactionPane(new TransactionUI(userSettings.getCustomCategory()));
@@ -244,6 +242,10 @@ public class Controller extends Application {
             if (trans.getCategory().equals(category))
                 totalAmount += trans.getAmount();
         return totalAmount;
+    }
+
+    public static boolean updateUserData(User user, boolean testing) {
+        return database.updateUserData(user, testing);
     }
 
     /**
