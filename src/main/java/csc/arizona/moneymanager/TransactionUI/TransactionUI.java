@@ -127,32 +127,17 @@ public class TransactionUI extends GridPane {
                 Error handling for missing information
              */
             if (date == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Missing transaction information");
-                alert.setContentText("Enter a date.");
-                alert.showAndWait();
-                //System.out.println("Enter a date.");
+                showAlert("Enter a date.");
                 return;
             }
 
             if (category == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Missing transaction information");
-                alert.setContentText("Select a category.");
-                alert.showAndWait();
-                //System.out.println("Pick a category.");
+                showAlert("Select a category.");
                 return;
             }
 
             if (amountInput.getText().isEmpty()){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Missing transaction information");
-                alert.setContentText("Enter an amount.");
-                alert.showAndWait();
-                //System.out.println("Enter an amount.");
+                showAlert("Enter an amount.");
                 return;
             }
 
@@ -185,6 +170,19 @@ public class TransactionUI extends GridPane {
             // reset input field for amount, but leave date and category as is.
             amountInput.clear();
 
+        }
+
+        /**
+         * sends an alert when the user fails to select all three of the transaction requirements
+         *
+         * @param content the specific context of what the user failed to add into the transaction
+         */
+        private static void showAlert(String content) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Missing transaction information");
+            alert.setContentText(content);
+            alert.showAndWait();
         }
     }
 }
