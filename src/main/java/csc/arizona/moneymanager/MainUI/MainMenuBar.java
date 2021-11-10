@@ -1,5 +1,8 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.Charts.Histogram;
+import csc.arizona.moneymanager.Charts.PieView;
+import csc.arizona.moneymanager.Charts.ScatterView;
 import csc.arizona.moneymanager.Controller;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -71,13 +74,16 @@ public class MainMenuBar extends MenuBar {
         //******* Report menu setup *******/
         Menu reports = new Menu("_Reports");
         // --> Show Report option //TODO maybe make showReport a submenu with types of reports as menu items
-        MenuItem showReport = new MenuItem("Show _Report");
-        showReport.setOnAction(e-> showReportsMenuAction() );
+        MenuItem showReport = new MenuItem("Show _Report Menu");
+        showReport.setOnAction(e-> {
+                    showReportsMenuAction();
+                    System.out.println("reports clicked");
+        });
         // --> Save... (report) option
-        MenuItem saveReport = new MenuItem("_Save...");
-        saveReport.setOnAction(e-> saveReportMenuAction() );
+//        MenuItem saveReport = new MenuItem("_Save...");
+//        saveReport.setOnAction(e-> saveReportMenuAction() );
         // Adding items to Reports menu
-        reports.getItems().addAll(showReport, saveReport);
+        reports.getItems().addAll(showReport);
 
         //******* Help menu setup *******/
         Menu help = new Menu("_Help");
@@ -120,13 +126,14 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Save Data" is selected.
      */
     private void saveDataMenuAction(){
-        System.out.println("Save Data Selected"); //TODO remove when action implemented
+        Controller.updateUserData(Controller.getUser(), false);
     }
 
     /**
      * Contains the actions performed when the Menu option "Logout" is selected.
      */
-    private void logoutMenuAction(){
+    private void logoutMenuAction() {
+        saveDataMenuAction();
         Controller.mainUIToLogin();
     }
 
@@ -150,29 +157,29 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Pie Chart" is selected.
      */
     private void pieChartMenuAction(){
-        System.out.println("Pie Chart Selected"); //TODO remove when action implemented
-        mainUI.showChartUI(); // TODO remove when action implemented
+        mainUI.showChartUI(new PieView(Controller.getUser().getTransactions())); // TODO remove when action implemented
     }
 
     /**
      * Contains the actions performed when the Menu option "Scatterplot" is selected.
      */
     private void scatterPlotMenuAction(){
-        System.out.println("Scatterplot Selected"); //TODO remove when action implemented
+        mainUI.showChartUI(new ScatterView(Controller.getUser().getTransactions())); // TODO remove when action implemented
     }
 
     /**
      * Contains the actions performed when the Menu option "Histogram" is selected.
      */
     private void histogramMenuAction(){
-        System.out.println("Histogram Selected"); //TODO remove when action implemented
+        mainUI.showChartUI(new Histogram(Controller.getUser().getTransactions())); // TODO remove when action implemented
     }
 
     /**
      * Contains the actions performed when the Menu option "Show Report" is selected.
      */
     private void showReportsMenuAction(){
-        System.out.println("Show Report selected"); //TODO remove when action implemented
+        mainUI.showInfo(new ReportUI("Reports", "Exit Reports"));
+
     }
 
     /**

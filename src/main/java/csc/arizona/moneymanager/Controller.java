@@ -1,22 +1,32 @@
 package csc.arizona.moneymanager;
 
 import csc.arizona.moneymanager.Login.LoginUI;
-import csc.arizona.moneymanager.MainUI.*;
+import csc.arizona.moneymanager.MainUI.MainUI;
+import csc.arizona.moneymanager.MainUI.UserSetting;
+import csc.arizona.moneymanager.TransactionUI.TableTransaction;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
 import csc.arizona.moneymanager.database.User;
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Carter Boyd
@@ -45,6 +55,10 @@ public class Controller extends Application {
     public static void logInUser(String user) {
         try {
             currentUser = database.getUserData(user, false);
+            if (currentUser == null) {
+                currentUser = new User(user);
+                updateUserData(currentUser, false);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,11 +100,10 @@ public class Controller extends Application {
      * convert into the users main view account
      */
     public static void loginToMainUI() {
-        //TODO this method will also have to include the data that the main UI will need from the
-        // database
-
-        UserSetting userSettings = new UserSetting();
         // read from database: budget, category.
+
+        UserSetting userSettings = currentUser.getSettings();
+
 
         test.setUserSettings(userSettings);
         test.setTransactionPane(new TransactionUI(userSettings.getCustomCategory()));
@@ -106,6 +119,78 @@ public class Controller extends Application {
     public static void mainUIToLogin() {
         currentUser = null;
         stage.setScene(LoginUI.createScene());
+    }
+
+    public static void showReport(String type, LocalDate start, LocalDate end)  {
+        Stage reportPopUp = new Stage();
+        reportPopUp.setTitle("Report");
+        BorderPane bp = new BorderPane();
+        Scene reportScene = new Scene(bp, 400,600);
+        try{
+            currentUser = database.getUserData(currentUser.getUsername(), false);
+        } catch (Exception e){
+            System.err.println("Getting user data failed.");
+        } finally {
+            if (type == "history"){
+                List<Transaction> transactions = new ArrayList<>(currentUser.getTransactions());
+
+                for (Transaction t: currentUser.getTransactions()){
+                    if (start != null) {
+                        if (!(t.getDate().isAfter(start))) {
+                            transactions.remove(t);
+                        }
+                    }
+                    if (end != null) {
+                        if (!(t.getDate().isBefore(end))) {
+                            transactions.remove(t);
+                        }
+                    }
+                }
+                Label label = new Label("Transaction History");
+                label.setFont(new Font("Arial", 20));
+                label.setPadding(new Insets(0,0,10,0));
+                bp.setTop(label);
+                bp.setCenter(transactionTableView(transactions));
+                bp.setPadding(new Insets(10,10,10,10));
+
+                reportPopUp.setScene(reportScene);
+                reportPopUp.show();
+            }
+
+        }
+
+
+    }
+
+    private static TableView transactionTableView(List<Transaction> transactions){
+        TableView tv = new TableView();
+        tv.setPlaceholder(new Label("No report to display"));
+
+        TableColumn<TableTransaction, String> dateColumn = new TableColumn<>("Date");
+        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+
+        TableColumn<TableTransaction, String> categoryColumn = new TableColumn<>("Category");
+        categoryColumn.setCellValueFactory(cellData -> cellData.getValue().categeroyProperty());
+
+        TableColumn<TableTransaction, String> amountColumn = new TableColumn<>("Amount");
+        amountColumn.setCellValueFactory(cellData -> cellData.getValue().amountProperty());
+
+        ObservableList<TableTransaction> observableList;
+
+        ArrayList<TableTransaction> temp = new ArrayList<>();
+
+        for (Transaction t: transactions){
+            temp.add(new TableTransaction(t.getDate().toString(), t.getCategory(), Double.toString(t.getAmount())));
+        }
+
+        observableList = FXCollections.observableList(temp);
+
+        tv.setItems(observableList);
+        tv.getColumns().addAll(dateColumn, categoryColumn, amountColumn);
+
+
+
+        return tv;
     }
 
     /**
@@ -143,6 +228,32 @@ public class Controller extends Application {
         pane.getChildren().add(box);
         removeAccount.setScene(newScene);
         removeAccount.show();
+    }
+
+    /**
+     * iterates through transactions to add up the total amount of the user
+     * @return the total spending of the user
+     */
+    public static double getTotalSpent() {
+        double totalAmount = 0;
+        for (Transaction trans : currentUser.getTransactions())
+            totalAmount += trans.getAmount();
+        return totalAmount;
+    }
+
+    /**
+     * iterates through transactions to add up the total amount of the user
+     * @return the total spending of the user
+     */
+    public static double getBudget() {
+        return currentUser.getSettings().getBudget();
+    }
+
+    /**
+     * @return grabs the user
+     */
+    public static User getUser() {
+        return currentUser;
     }
 
     /**
@@ -204,6 +315,31 @@ public class Controller extends Application {
     public static void addTransaction(Transaction transaction) {
         currentUser.addTransactions(transaction);
         database.updateUserData(currentUser, false);
+    }
+
+    /**
+     * @return the percentage that has been spent to the user
+     */
+    public static double getBudgetPercent() {
+        return getTotalSpent() / currentUser.getSettings().getBudget();
+    }
+
+    /**
+     * adds up the total amount of money spent on a category
+     *
+     * @param category the category being checked for
+     * @return the amount of money spent in that category
+     */
+    public static double getCategorySpent(String category) {
+        double totalAmount = 0;
+        for (Transaction trans : currentUser.getTransactions())
+            if (trans.getCategory().equals(category))
+                totalAmount += trans.getAmount();
+        return totalAmount;
+    }
+
+    public static boolean updateUserData(User user, boolean testing) {
+        return database.updateUserData(user, testing);
     }
 
     /**

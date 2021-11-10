@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.Charts.TransactionChart;
 import javafx.scene.chart.Chart;
 
 /**
@@ -9,7 +10,7 @@ import javafx.scene.chart.Chart;
  */
 public class ChartUI extends ServicesView{
 
-    private Chart chart;
+    private TransactionChart chartView;
     private final double CHART_SCALE = 1.0;
 
     /**
@@ -17,13 +18,13 @@ public class ChartUI extends ServicesView{
      *
      * @param chart the Chart object to display.
      */
-    public ChartUI(Chart chart) {
+    public ChartUI(TransactionChart chart) {
         super(chart.getTitle(), "Return" );
-        this.chart = chart;
+        this.chartView = chart;
 
-        setupChart();
+        //setupChart();
 
-        this.setCenter(chart);
+        this.setCenter(chartView.getView());
 
     }
 
@@ -36,9 +37,9 @@ public class ChartUI extends ServicesView{
      * Setup related to the chart.
      */
     private void setupChart(){
-        chart.setTitle(""); // Clearing title as it was set to main title of ChartUI
-        chart.setScaleX(CHART_SCALE);
-        chart.setScaleY(CHART_SCALE);
+        //chart.setTitle(""); // Clearing title as it was set to main title of ChartUI
+        //chart.setScaleX(CHART_SCALE);
+        //chart.setScaleY(CHART_SCALE);
     }
 
 }

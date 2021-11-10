@@ -7,6 +7,7 @@ module csc.arizona.moneymanager {
     requires org.mongodb.bson;
 //    requires com.google.gson;
     requires jdk.jsobject;
+    requires java.logging;
 //    requires logback.classic;
 //    requires slf4j.api;
 
@@ -18,6 +19,8 @@ module csc.arizona.moneymanager {
     exports csc.arizona.moneymanager.MainUI;
     opens csc.arizona.moneymanager.TransactionUI;
     exports csc.arizona.moneymanager.TransactionUI;
+    opens csc.arizona.moneymanager.Charts;
+    exports csc.arizona.moneymanager.Charts;
 
     opens csc.arizona.moneymanager;
     exports csc.arizona.moneymanager;

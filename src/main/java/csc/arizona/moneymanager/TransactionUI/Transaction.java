@@ -49,4 +49,12 @@ public class Transaction implements Serializable {
     public double getAmount() {
         return amount;
     }
+
+    public boolean isIncome() {
+        return amount >= 0;
+    }
+
+    public boolean isExpense() {
+        return amount < 0;
+    }
 }

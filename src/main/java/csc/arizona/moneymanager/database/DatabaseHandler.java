@@ -14,6 +14,8 @@ import com.mongodb.client.MongoDatabase;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DatabaseHandler {
 
@@ -22,12 +24,17 @@ public class DatabaseHandler {
     private String URI;
     private PasswordUtilities pu;
     private boolean logged_in = false;
+    private String loggedInAs = null;
 
 
 
     public DatabaseHandler(){
         URI = "mongodb+srv://root:root@moneymanagerdata.v0ezf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
         pu = new PasswordUtilities();
+        Logger mongoLogger = Logger.getLogger( "org.mongodb.driver" );
+        mongoLogger.setLevel(Level.SEVERE);
+        Logger bsonLogger = Logger.getLogger("org.bson");
+        bsonLogger.setLevel(Level.SEVERE);
         pojoCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
     }
@@ -53,7 +60,7 @@ public class DatabaseHandler {
         for (Document doc: usersList){
             if(doc.get("username").equals(username)){
                 if(pu.verifyUserPassword(password, doc.get("secure_password").toString(), doc.get("salt").toString())){
-                    doc.put("logged_in", "true");
+                    loggedInAs = username;
                     logged_in = true;
                     return true;
                 }
@@ -88,7 +95,7 @@ public class DatabaseHandler {
     }
 
     public boolean updateUserData(User user, boolean testing){
-        if (logged_in(user.getUsername()) && logged_in || testing) {
+        if (logged_in || testing) {
             MongoDatabase userDb = mongoClient.getDatabase("users").withCodecRegistry(pojoCodecRegistry);
             MongoCollection<User> users = userDb.getCollection("user_data", User.class);
             List<User> usersList = users.find().into(new ArrayList<>());
@@ -110,7 +117,7 @@ public class DatabaseHandler {
     }
 
     public User getUserData(String username, boolean testing) throws Exception {
-        if (logged_in(username) && logged_in || testing) {
+        if (logged_in && loggedInAs.equals(username)|| testing) {
             MongoDatabase userDb = mongoClient.getDatabase("users").withCodecRegistry(pojoCodecRegistry);
             MongoCollection<User> users = userDb.getCollection("user_data", User.class);
             List<User> usersList = users.find().into(new ArrayList<>());
@@ -125,31 +132,19 @@ public class DatabaseHandler {
         throw new Exception("Tried to access user data without being logged in.");
     }
 
-    public boolean logged_in(String username){
-        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("credentials");
-        List<Document> usersList = users.find().into(new ArrayList<>());
-        for(Document doc: usersList){
-            if(doc.get("username").equals(username)){
-                if (doc.get("logged_in").equals("true")){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-//
-//    public Object getData(String username, String key){
-//        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("user_data");
+//    public boolean logged_in(String username){
+//        MongoCollection<Document> users = mongoClient.getDatabase("users").getCollection("credentials");
 //        List<Document> usersList = users.find().into(new ArrayList<>());
 //        for(Document doc: usersList){
 //            if(doc.get("username").equals(username)){
-//                if (doc.containsKey(key)){
-//                    return doc.get(key);
+//                if (doc.get("logged_in").equals("true")){
+//                    return true;
 //                }
 //            }
 //        }
-//        return null;
+//        return false;
 //    }
+
 
 
     public boolean addUser(String username, String password){
@@ -158,7 +153,6 @@ public class DatabaseHandler {
         String salt = pu.getSalt(44);
         doc.append("salt", salt);
         doc.append("secure_password", pu.generateSecurePassword(password, salt));
-        doc.append("logged_in", "false");
         try {
             users.insertOne(doc);
         } catch (Exception e){
@@ -167,11 +161,6 @@ public class DatabaseHandler {
         return true;
     }
 
-//    public static void turnLoggerOff(){
-//        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-//        Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
-//        rootLogger.setLevel(Level.OFF);
-//    }
 
 
 }
