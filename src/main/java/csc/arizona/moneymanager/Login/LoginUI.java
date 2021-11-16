@@ -149,6 +149,12 @@ public class LoginUI {
     public static Scene createScene() {
         BorderPane pane = new BorderPane();
         pane.setCenter(createLogin());
-        return new Scene(pane, 600, 500);
+
+        // Adding .css styling to login scene
+        Scene scene = new Scene(pane, 600,500);
+        scene.getStylesheets().add("file:src/main/java/csc/arizona/moneymanager/main-style.css");
+
+        return scene;
+
     }
 }
