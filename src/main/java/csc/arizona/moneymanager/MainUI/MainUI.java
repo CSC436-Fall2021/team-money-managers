@@ -1,6 +1,7 @@
 package csc.arizona.moneymanager.MainUI;
 
 import csc.arizona.moneymanager.Charts.TransactionChart;
+import csc.arizona.moneymanager.Style;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -134,8 +135,7 @@ public class MainUI {
 
         // Creating scene
         this.scene = new Scene(mainPane, width, height);
-        // Adding .css stylesheet
-        this.scene.getStylesheets().add("file:src/main/java/csc/arizona/moneymanager/main-style.css");
+        Style.addStyling(this.scene);
     }
 
     /**

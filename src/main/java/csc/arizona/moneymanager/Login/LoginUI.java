@@ -1,6 +1,8 @@
 package csc.arizona.moneymanager.Login;
 
 import csc.arizona.moneymanager.Controller;
+import csc.arizona.moneymanager.Style;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -71,8 +73,11 @@ public class LoginUI {
         Stage stage = new Stage();
         stage.setTitle("Add user");
         BorderPane pane = new BorderPane();
-        Scene newScene = new Scene(pane, 300, 160);
+        Scene newScene = new Scene(pane, 400, 300);
+        Style.addStyling(newScene);
+
         VBox box = new VBox();
+        box.setPadding(new Insets(25)); // adding outside padding
         Label username = new Label("Username");
         username.setMinWidth(200);
         Label password = new Label("Password");
@@ -85,10 +90,17 @@ public class LoginUI {
         userField.setMinWidth(200);
         passField.setMinWidth(200);
         rePassField.setMinWidth(200);
+
+        // HBox to allow for centering of button
+        HBox buttonBox = new HBox();
         Button addUser = createAddUserButton(userField, passField, rePassField, stage);
+        buttonBox.getChildren().add(addUser);
+        buttonBox.setAlignment(Pos.CENTER);
+        VBox.setMargin(buttonBox, new Insets(20));
+
         box.getChildren().addAll(username, userField, password, passField,
-                passwordCheck, rePassField, addUser);
-        pane.getChildren().add(box);
+                passwordCheck, rePassField, buttonBox);
+        pane.setCenter(box);
         stage.setScene(newScene);
         stage.show();
     }
@@ -152,7 +164,7 @@ public class LoginUI {
 
         // Adding .css styling to login scene
         Scene scene = new Scene(pane, 600,500);
-        scene.getStylesheets().add("file:src/main/java/csc/arizona/moneymanager/main-style.css");
+        Style.addStyling(scene);
 
         return scene;
 

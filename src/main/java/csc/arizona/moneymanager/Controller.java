@@ -200,7 +200,9 @@ public class Controller extends Application {
         Stage removeAccount = new Stage();
         removeAccount.setTitle("remove account");
         BorderPane pane = new BorderPane();
-        Scene newScene = new Scene(pane, 300, 260);
+        Scene newScene = new Scene(pane, 400, 375);
+        Style.addStyling(newScene);
+
         Label confirm = new Label("Are you sure you want to delete your account?");
         confirm.setAlignment(Pos.CENTER);
         confirm.setMinWidth(300);
@@ -221,11 +223,14 @@ public class Controller extends Application {
         cancel.setMinWidth(100);
         HBox buttons = new HBox(deleteUser, cancel);
         cancel.setOnMouseClicked(event -> removeAccount.close());
+        buttons.setAlignment(Pos.CENTER);
+
         VBox box = new VBox();
+        box.setPadding(new Insets(25)); // adding outside padding
         box.setSpacing(10);
         box.getChildren().addAll(confirm, username, userField, password, passField, passwordCheck,
                 rePassField, buttons);
-        pane.getChildren().add(box);
+        pane.setCenter(box);
         removeAccount.setScene(newScene);
         removeAccount.show();
     }

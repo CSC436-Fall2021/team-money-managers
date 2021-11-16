@@ -14,7 +14,7 @@
  * @author Kris Rangel
  */
 
-/* Overall MainUI styling */
+/* Overall styling */
 .root{
     -fx-font-size: 12pt;
 
@@ -31,7 +31,31 @@
     -fx-transaction-pane-color: -fx-background;
     -fx-services-pane-color:    -fx-background;
     -fx-options-pane-color:     -fx-background;
+
+    /* Button colors */
+    -fx-button-shadow-color: #000000;
+    -fx-button-top-color: #ededed;
+    -fx-button-bottom-color: #6df0da;
+    -fx-button-scale: 0.9;
+
 }
+
+/* Button styling */
+.button {
+    -fx-scale-x: -fx-button-scale;
+    -fx-scale-y: -fx-button-scale;
+    -fx-scale-z: -fx-button-scale;
+	-fx-background-color:
+	    -fx-button-shadow-color,
+	    linear-gradient(to bottom, -fx-button-top-color 5%, -fx-button-bottom-color 100%);
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+.button:hover{
+   	-fx-background-color:
+   	    linear-gradient(to bottom, -fx-button-bottom-color 5%, -fx-button-top-color 100%);
+}
+
 
 /* Menu bar styling */
 .menu-bar{
