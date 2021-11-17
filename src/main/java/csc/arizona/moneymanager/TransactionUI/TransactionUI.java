@@ -212,7 +212,7 @@ public class TransactionUI extends GridPane {
             String amountText = amountInput.getText();
             if (amountText.isEmpty()) {
                 errorMsg += "Missing amount.\n";
-            } else if (Integer.parseInt(amountText) < 0) { // this is bad info, not missing.
+            } else if (Double.parseDouble(amountText) < 0) { // this is bad info, not missing.
                 errorMsg += "Amount can not be negative.\n";
             }
 
