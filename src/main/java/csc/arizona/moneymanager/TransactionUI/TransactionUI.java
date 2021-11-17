@@ -71,6 +71,7 @@ public class TransactionUI extends GridPane {
 
         totalAmount = getTotalAmountSpent();
 
+        // Pane Header/Title
         add(new Label("Transactions"), 1, 0);
 
         // Top row
@@ -137,18 +138,28 @@ public class TransactionUI extends GridPane {
             /*
                 Error handling for missing information
              */
+            String missingInfoMsg = "";
             if (date == null) {
-                showAlert("Enter a date.");
-                return;
+                missingInfoMsg += "Missing date.\n";
+                //showAlert("Enter a date.");
+                //return;
             }
 
             if (category == null) {
-                showAlert("Select a category.");
-                return;
+                missingInfoMsg += "Missing category.\n";
+                //showAlert("Select a category.");
+                //return;
             }
 
-            if (amountInput.getText().isEmpty()){
-                showAlert("Enter an amount.");
+            if (amountInput.getText().isEmpty()) {
+                missingInfoMsg += "Missing amount.\n";
+                //showAlert("Enter an amount.");
+                //return;
+            }
+
+            // show all errors (good for transactionUI with small # possible errors)
+            if (!missingInfoMsg.isEmpty()) {
+                showAlert(missingInfoMsg.stripTrailing());
                 return;
             }
 
