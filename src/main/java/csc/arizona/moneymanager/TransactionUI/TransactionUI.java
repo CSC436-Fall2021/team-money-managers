@@ -28,10 +28,11 @@ import java.util.Optional;
  */
 public class TransactionUI extends GridPane {
 
-    DatePicker dateInput;
-    CategoryList categories; // combination: default + user
-    ComboBox<String> categoryDropDown;
-    TextField amountInput;
+    private DatePicker dateInput;
+    private CategoryList categories; // combination: default + user
+    private ComboBox<String> categoryDropDown;
+    private TextField amountInput;
+    private TextField memoInput;
     private final Label totalAmount;
 
 
@@ -52,27 +53,37 @@ public class TransactionUI extends GridPane {
 
         categoryDropDown = new ComboBox(FXCollections.observableArrayList(categories.getCategories()));
         amountInput = new TextField();
+        memoInput = new TextField();
         Button enterButton = new Button("Enter");
 
         amountInput.setPromptText("Amount");
+        memoInput.setPromptText("Memo");
+
 
         // disable custom input in dropboxes
         categoryDropDown.setEditable(false);
 
         amountInput.setOnAction(new EnterTransactionHandler());
+        memoInput.setOnAction(new EnterTransactionHandler());
+        // TODO: add warning for memo cutoff / prevent entering new chars if more than Transaction's memo max.
         enterButton.setOnAction(new EnterTransactionHandler());
+
 
         totalAmount = getTotalAmountSpent();
 
         add(new Label("Transactions"), 1, 0);
 
+        // Top row
         add(new Label("Date"), 0, 1);
         add(new Label("Category"), 1, 1);
         add(new Label("Amount"), 2, 1);
+        add(new Label("Memo"), 3, 1);
 
+        // Bottom row
         add(dateInput, 0, 2);
         add(categoryDropDown, 1, 2);
         add(amountInput, 2, 2);
+        add(memoInput, 3, 2);
         add(enterButton, 3, 2);
         add(totalAmount, 4, 2);
 
@@ -142,8 +153,9 @@ public class TransactionUI extends GridPane {
             }
 
             double amount = Double.parseDouble(amountInput.getText());
+            String memo = memoInput.getText();
 
-            Transaction toAdd = new Transaction(date, category, amount);
+            Transaction toAdd = new Transaction(date, category, amount, memo);
             if (amount + Controller.getTotalSpent() > Controller.getBudget() * .9) {
                 Alert overBudgetWarning = new Alert(Alert.AlertType.CONFIRMATION);
                 overBudgetWarning.setTitle("approaching budget");
