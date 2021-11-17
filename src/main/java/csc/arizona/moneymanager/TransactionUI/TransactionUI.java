@@ -158,7 +158,7 @@ public class TransactionUI extends GridPane {
             double amount = Double.parseDouble(amountInput.getText());
             String memo = memoInput.getText();
 
-            Transaction toAdd = new Transaction(date, category, amount, memo);
+            // budget checking and potential warning message
             if (amount + Controller.getTotalSpent() > Controller.getBudget() * .9) {
                 Alert overBudgetWarning = new Alert(Alert.AlertType.CONFIRMATION);
                 overBudgetWarning.setTitle("approaching budget");
@@ -168,6 +168,11 @@ public class TransactionUI extends GridPane {
                 if (button == ButtonType.CANCEL)
                     return;
             }
+
+            // creating and adding Transaction, and updating total spent label.
+
+            Transaction toAdd = new Transaction(date, category, amount, memo);
+
             Controller.addTransaction(toAdd);
             Label newTotal = getTotalAmountSpent();
             totalAmount.setTextFill(newTotal.getTextFill());
@@ -182,7 +187,7 @@ public class TransactionUI extends GridPane {
             //System.out.println(toAdd.getCategory());
             //System.out.println(toAdd.getAmount());
 
-            // reset input field for amount, but leave date and category as is.
+            // reset input field for amount, but leave date, category, and memo as is.
             amountInput.clear();
 
         }
