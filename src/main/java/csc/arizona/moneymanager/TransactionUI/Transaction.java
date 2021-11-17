@@ -46,7 +46,9 @@ public class Transaction implements Serializable {
         this.date = date;
         this.category = category;
         this.amount = amount;
-        this.memo = memo.substring(0, MEMO_MAX_LENGTH);
+        this.memo = memo.substring(0, Math.min(memo.length(), MEMO_MAX_LENGTH));
+        // memo length limited in TransactionUI's input field
+        //  but substring still useful if Transaction ever created elsewhere (maybe for debug reasons?)
     }
 
 

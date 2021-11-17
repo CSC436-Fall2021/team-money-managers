@@ -3,14 +3,18 @@ package csc.arizona.moneymanager.TransactionUI;
 import csc.arizona.moneymanager.Controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 /**
  * Provides input functionality for creating transactions.
@@ -63,10 +67,21 @@ public class TransactionUI extends GridPane {
         // disable custom input in dropboxes
         categoryDropDown.setEditable(false);
 
-        amountInput.setOnAction(new EnterTransactionHandler());
-        memoInput.setOnAction(new EnterTransactionHandler());
-        // TODO: add warning for memo cutoff / prevent entering new chars if more than Transaction's memo max.
-        enterButton.setOnAction(new EnterTransactionHandler());
+        // set special text entering for memo field (reject input if length == max allowed)
+        memoInput.setTextFormatter(new MaxLengthFormatter(Transaction.MEMO_MAX_LENGTH));
+
+        /* attempt to add transaction when:
+        *
+        * 1. enter button clicked
+        * 2. enter key typed on amount field
+        * 3. enter key typed on memo field.
+        *
+        */
+        EnterTransactionHandler attemptAdd = new EnterTransactionHandler();
+        enterButton.setOnAction(attemptAdd);
+        amountInput.setOnAction(attemptAdd);
+        memoInput.setOnAction(attemptAdd);
+
 
 
         totalAmount = getTotalAmountSpent();
@@ -74,13 +89,13 @@ public class TransactionUI extends GridPane {
         // Pane Header/Title
         add(new Label("Transactions"), 1, 0);
 
-        // Top row
+        // First row
         add(new Label("Date"), 0, 1);
         add(new Label("Category"), 1, 1);
         add(new Label("Amount"), 2, 1);
         add(new Label("Memo"), 3, 1);
 
-        // Bottom row
+        // Second row
         add(dateInput, 0, 2);
         add(categoryDropDown, 1, 2);
         add(amountInput, 2, 2);
@@ -212,7 +227,7 @@ public class TransactionUI extends GridPane {
             String amountText = amountInput.getText();
             if (amountText.isEmpty()) {
                 errorMsg += "Missing amount.\n";
-            } else if (Double.parseDouble(amountText) < 0) { // this is bad info, not missing.
+            } else if (Double.parseDouble(amountText) < 0.0) { // this is bad info, not missing.
                 errorMsg += "Amount can not be negative.\n";
             }
 
@@ -224,5 +239,28 @@ public class TransactionUI extends GridPane {
 
             return false; // no errors.
         }
+    }
+
+    /**
+     * Limit text of a Textfield to a max length. Unfortunately lengthy way of doing this.
+     */
+    private class MaxLengthFormatter extends TextFormatter {
+        //private int max;
+
+        public MaxLengthFormatter(int max) {
+            super(new UnaryOperator<Change>() {
+                @Override
+                public Change apply(Change change) {
+                    if (change.isAdded()) {
+                        if (change.getControlText().length() == max) {
+                            change.setText("");
+                        }
+                    }
+                    return change;
+                }
+            });
+        }
+
+
     }
 }
