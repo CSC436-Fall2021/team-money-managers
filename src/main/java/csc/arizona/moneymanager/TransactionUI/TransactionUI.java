@@ -84,8 +84,8 @@ public class TransactionUI extends GridPane {
         add(categoryDropDown, 1, 2);
         add(amountInput, 2, 2);
         add(memoInput, 3, 2);
-        add(enterButton, 3, 2);
-        add(totalAmount, 4, 2);
+        add(enterButton, 4, 2);
+        add(totalAmount, 5, 2);
 
         setHgap(5);
         setVgap(5);
