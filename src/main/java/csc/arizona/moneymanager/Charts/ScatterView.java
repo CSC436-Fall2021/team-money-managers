@@ -18,9 +18,11 @@ import java.util.Set;
 public class ScatterView extends TransactionChart {
 
     private ScatterChart<String, Double> chart;
+    private double budget;
 
-    public ScatterView(List<Transaction> transactions) {
+    public ScatterView(List<Transaction> transactions, double budget) {
         title = "Transactions by category over time: Scatter";
+        this.budget = budget;
 
         data = new ChartData(transactions);
 
