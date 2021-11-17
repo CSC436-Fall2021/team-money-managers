@@ -132,37 +132,14 @@ public class TransactionUI extends GridPane {
         @Override
         public void handle(ActionEvent actionEvent) {
 
-            LocalDate date = dateInput.getValue();
-            String category = categoryDropDown.getValue();
-
-            /*
-                Error handling for missing information
-             */
-            String missingInfoMsg = "";
-            if (date == null) {
-                missingInfoMsg += "Missing date.\n";
-                //showAlert("Enter a date.");
-                //return;
-            }
-
-            if (category == null) {
-                missingInfoMsg += "Missing category.\n";
-                //showAlert("Select a category.");
-                //return;
-            }
-
-            if (amountInput.getText().isEmpty()) {
-                missingInfoMsg += "Missing amount.\n";
-                //showAlert("Enter an amount.");
-                //return;
-            }
-
-            // show all errors (good for transactionUI with small # possible errors)
-            if (!missingInfoMsg.isEmpty()) {
-                showAlert(missingInfoMsg.stripTrailing());
+            if (handleInputErrors()) {
                 return;
             }
 
+            // All user entered information considered valid.
+
+            LocalDate date = dateInput.getValue();
+            String category = categoryDropDown.getValue();
             double amount = Double.parseDouble(amountInput.getText());
             String memo = memoInput.getText();
 
@@ -206,6 +183,46 @@ public class TransactionUI extends GridPane {
             alert.setHeaderText("Missing transaction information");
             alert.setContentText(content);
             alert.showAndWait();
+        }
+
+        /**
+         * Error handling for unentered but required information from TransactionUI's fields.
+         * Error handling for bad input (currently just amount negative)
+         *
+         * In case of error, shows an alert:
+         *      In cases of missing information, shows what still needs
+         *          to be entered for their transaction to be added.
+         *
+         *      In case of bad information, displays what info is bad.
+         *
+         * @return true if there were any errors in user's input, otherwise false.
+         *
+         */
+        private boolean handleInputErrors() {
+            String errorMsg = "";
+
+            if (dateInput.getValue() == null) {
+                errorMsg += "Missing date.\n";
+            }
+
+            if (categoryDropDown.getValue() == null) {
+                errorMsg += "Missing category.\n";
+            }
+
+            String amountText = amountInput.getText();
+            if (amountText.isEmpty()) {
+                errorMsg += "Missing amount.\n";
+            } else if (Integer.parseInt(amountText) < 0) { // this is bad info, not missing.
+                errorMsg += "Amount can not be negative.\n";
+            }
+
+            // show all errors in one alert (good for transactionUI with small # possible errors)
+            if (!errorMsg.isEmpty()) {
+                showAlert(errorMsg.stripTrailing());
+                return true;
+            }
+
+            return false; // no errors.
         }
     }
 }
