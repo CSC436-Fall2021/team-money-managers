@@ -32,15 +32,15 @@ public class ScatterView extends TransactionChart {
         List<String> dates = new ArrayList<>();
 
         // construct XYChart.Data objects
-        double min = Double.MAX_VALUE;
+        double min = 0.00;
         double max = Double.MIN_VALUE;
         for (String category : categoryNames) {
             List<XYChart.Data<String, Double>> entries = new ArrayList<>();
 
-            List<Transaction> incomes = data.getIncomesCategory(category);
-            List<Transaction> expenses = data.getExpensesCategory(category);
+            // TODO: look over this now that ChartData updated. Might be better way to do this.
+            List<Transaction> categoryTransactions = data.getTransactionsCategory(category);
 
-            for (Transaction transaction: incomes) {
+            for (Transaction transaction: categoryTransactions) {
                 double amount = transaction.getAmount();
                 LocalDate date = transaction.getDate();
                 XYChart.Data<String, Double> entry = new XYChart.Data<String, Double>(date.toString(), amount);
@@ -48,26 +48,9 @@ public class ScatterView extends TransactionChart {
                 dates.add(date.toString());
 
                 // update lower and upper bounds for scatter chart
-                if (amount < min) {
+                /*if (amount < min) {
                     min = amount;
-                }
-
-                if (amount > max) {
-                    max = amount;
-                }
-            }
-
-            for (Transaction transaction: expenses) {
-                double amount = transaction.getAmount();
-                LocalDate date = transaction.getDate();
-                XYChart.Data<String, Double> entry = new XYChart.Data<String, Double>(date.toString(), amount);
-                entries.add(entry);
-                dates.add(date.toString());
-
-                // update lower and upper bounds for scatter chart
-                if (amount < min) {
-                    min = amount;
-                }
+                }*/
 
                 if (amount > max) {
                     max = amount;
@@ -79,6 +62,8 @@ public class ScatterView extends TransactionChart {
 
             categorySeries.add(series);
         }
+
+        // TODO: if no transactions, update max if error
 
         // Construct needed objects for Java's ScatterChart.
         Axis xAxis = new CategoryAxis(FXCollections.observableArrayList(dates));

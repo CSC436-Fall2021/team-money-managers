@@ -10,37 +10,24 @@ import java.util.*;
  */
 public class ChartData {
 
-    //private Set<String> categoryNames; // ease of access color coding. just a set of all transaction categories.
-    // not needed because == categorySums.keySet().
-
-    private Map<String, List<Transaction>> positiveBalances;
-    private Map<String, List<Transaction>> negativeBalances;
+    private Map<String, List<Transaction>> categoryTransactions;
     private Map<String, Double> categorySums;
 
     public ChartData(List<Transaction> transactions) {
-        //categoryNames = new HashSet<String>();
-        positiveBalances = new HashMap<>();
-        negativeBalances = new HashMap<>();
+
+        categoryTransactions = new HashMap<>();
         categorySums = new HashMap<>();
 
         for (Transaction transaction : transactions) {
             String category = transaction.getCategory();
 
-            //categoryNames.add(category);
 
-            if (transaction.isIncome()) {
-                if (!positiveBalances.containsKey(category)) {
-                    positiveBalances.put(category, new ArrayList<Transaction>());
-                }
-
-                positiveBalances.get(category).add(transaction);
-            } else {
-                if (!negativeBalances.containsKey(category)) {
-                    negativeBalances.put(category, new ArrayList<Transaction>());
-                }
-
-                negativeBalances.get(category).add(transaction);
+            if (!categoryTransactions.containsKey(category)) {
+                categoryTransactions.put(category, new ArrayList<Transaction>());
             }
+
+            categoryTransactions.get(category).add(transaction);
+
 
             if (!categorySums.containsKey(category)) {
                 categorySums.put(category, transaction.getAmount());
@@ -53,63 +40,22 @@ public class ChartData {
     }
 
     /**
-     * Returns the list of all negative balances of a category's spending.
+     * Returns the list of all transactions by category type.
      * @param category
-     * @return list of all negative balances of a category's spending.
+     * @return list of all transactions by category type.
      */
-    public List<Transaction> getExpensesCategory(String category) {
-        if (negativeBalances.containsKey(category)) {
-            return negativeBalances.get(category);
+    public List<Transaction> getTransactionsCategory(String category) {
+        if (categoryTransactions.containsKey(category)) {
+            return categoryTransactions.get(category);
         }
 
         return new ArrayList<Transaction>(); // no null check needed in caller
     }
 
     /**
-     * Returns the gross expense (all negative balances) of a category's spending.
+     * Returns the net sum of transactions of a category type.
      * @param category
-     * @return sum of all negative balances of a category's spending.
-     */
-    public double getGrossExpenseCategory(String category) {
-        double sum = 0.0;
-
-        for (Transaction transaction : getExpensesCategory(category)) {
-            sum += transaction.getAmount();
-        }
-        return sum;
-    }
-
-    /**
-     * Returns the list of all positive balances of a category's spending.
-     * @param category
-     * @return list of all positive balances of a category's spending.
-     */
-    public List<Transaction> getIncomesCategory(String category) {
-        if (positiveBalances.containsKey(category)) {
-            return positiveBalances.get(category);
-        }
-
-        return new ArrayList<Transaction>(); // no null check needed in caller
-    }
-
-    /**
-     * Returns the gross income (all positive balances) of a category's spending.
-     * @param category
-     * @return sum of all positive balances of a category's spending.
-     */
-    public double getGrossIncomeCategory(String category) {
-        double sum = 0.0;
-
-        for (Transaction transaction : getIncomesCategory(category)) {
-            sum += transaction.getAmount();
-        }
-        return sum;
-    }
-
-    /**
-     * Returns the net sum of incomes and expenses of a category's spending.
-     * @param category
-     * @return net sum of category's spending.
+     * @return net sum of transactions of a category type.
      */
     public double getNetCategory(String category) {
         return categorySums.get(category);

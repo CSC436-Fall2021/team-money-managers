@@ -20,7 +20,7 @@ public class Histogram extends TransactionChart {
     private BarChart<String, Double> chart;
 
     public Histogram(List<Transaction> transactions) {
-        title = "Spending by Category: Histogram";
+        title = "Transactions by Category: Histogram";
         data = new ChartData(transactions);
 
         Set<String> categoryNames = data.getCategorySet();
@@ -28,7 +28,7 @@ public class Histogram extends TransactionChart {
         List<XYChart.Data<String, Double>> entries = new ArrayList<>();
 
         // construct XYChart.Data objects
-        double min = Double.MAX_VALUE;
+        double min = 0.00;
         double max = Double.MIN_VALUE;
         for (String category : categoryNames) {
             double sum = data.getNetCategory(category);
@@ -38,9 +38,9 @@ public class Histogram extends TransactionChart {
             entries.add(entry);
 
             // update lower and upper bounds for bar chart
-            if (sum < min) {
+            /*if (sum < min) {
                 min = sum;
-            }
+            }*/
 
             if (sum > max) {
                 max = sum;
@@ -48,6 +48,8 @@ public class Histogram extends TransactionChart {
 
             // maybe update axis tick.
         }
+
+        // TODO: if no transactions, update max if error
 
         // Construct needed objects for Java's BarChart.
         XYChart.Series<String, Double> series = new XYChart.Series<String, Double>(FXCollections.observableArrayList(entries));
