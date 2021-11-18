@@ -2,6 +2,8 @@ package csc.arizona.moneymanager.Charts;
 
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -10,47 +12,99 @@ import java.util.*;
  */
 public class ChartData {
 
-    private Map<String, List<Transaction>> categoryTransactions;
-    private Map<String, Double> categorySums;
+    /*
+    *
+    * Useful restriction options for transactions and sums:
+    *
+    *   1. All-time (default)
+    *   2. Past week
+    *   3. Past month
+    *   4. This month
+    *
+    *
+     */
+
+    private Map<String, List<Transaction>> allCategoryTransactions;
+    private Map<String, List<Transaction>> timeframeTransactions;
+    private Map<String, Double> timeframeSums;
 
     public ChartData(List<Transaction> transactions) {
 
-        categoryTransactions = new HashMap<>();
-        categorySums = new HashMap<>();
+        allCategoryTransactions = new HashMap<>();
+        timeframeTransactions = allCategoryTransactions;
 
         for (Transaction transaction : transactions) {
             String category = transaction.getCategory();
 
 
-            if (!categoryTransactions.containsKey(category)) {
-                categoryTransactions.put(category, new ArrayList<Transaction>());
+            if (!allCategoryTransactions.containsKey(category)) {
+                allCategoryTransactions.put(category, new ArrayList<Transaction>());
             }
 
-            categoryTransactions.get(category).add(transaction);
-
-
-            if (!categorySums.containsKey(category)) {
-                categorySums.put(category, transaction.getAmount());
-            } else {
-                double prevAmount = categorySums.get(category);
-                categorySums.put(category, prevAmount + transaction.getAmount());
-            }
+            allCategoryTransactions.get(category).add(transaction);
 
         }
+
+        timeframeSums = new HashMap<>();
+        updateSums();
     }
 
     /**
-     * Returns the list of all transactions by category type.
+     * Returns the list of all transactions by category type within set timeframe.
      * @param category
-     * @return list of all transactions by category type.
+     * @return list of all transactions by category type within set timeframe.
      */
     public List<Transaction> getTransactionsCategory(String category) {
-        if (categoryTransactions.containsKey(category)) {
-            return categoryTransactions.get(category);
+        if (!timeframeTransactions.containsKey(category)) {
+            return new ArrayList<Transaction>(); // no null check needed in caller
         }
 
-        return new ArrayList<Transaction>(); // no null check needed in caller
+        return timeframeTransactions.get(category);
     }
+
+    /**
+     * Returns the list of all transactions by category type made in the current month.
+     * @param category
+     * @return list of all transactions by category type made in the current month.
+     */
+    private List<Transaction> getTransactionsCategoryThisMonth(String category) {
+        List<Transaction> transactions = allCategoryTransactions.get(category);
+        List<Transaction> inTimeframe = new ArrayList<>();
+
+        LocalDate curDate = LocalDate.now();
+        for (Transaction transaction : transactions) {
+            LocalDate otherDate = transaction.getDate();
+
+            if (curDate.getMonth() == otherDate.getMonth() ) { // may need .equals()
+                inTimeframe.add(transaction);
+            }
+        }
+
+        return inTimeframe;
+    }
+
+    /**
+     * Returns the list of all transactions by category type made within a given number of days.
+     * @param category
+     * @param days
+     * @return list of all transactions by category type made within a given number of days.
+     */
+    private List<Transaction> getTransactionsPastDays(String category, int days) {
+        List<Transaction> transactions = allCategoryTransactions.get(category);
+        List<Transaction> inTimeframe = new ArrayList<>();
+
+        LocalDate curDate = LocalDate.now();
+        for (Transaction transaction : transactions) {
+            LocalDate otherDate = transaction.getDate();
+
+            if (ChronoUnit.DAYS.between(otherDate, curDate) <= days) { // may need .equals()
+                inTimeframe.add(transaction);
+            }
+        }
+
+        return inTimeframe;
+    }
+
 
     /**
      * Returns the net sum of transactions of a category type.
@@ -58,15 +112,18 @@ public class ChartData {
      * @return net sum of transactions of a category type.
      */
     public double getNetCategory(String category) {
-        return categorySums.get(category);
+        return timeframeSums.get(category);
     }
 
+
+
+
     /**
-        Returns the set of categories of the transactions the ChartData was constructed with.
+        Returns the set of categories of the transactions within set timeframe.
      @return set of categories.
      */
     public Set<String> getCategorySet() {
-        return categorySums.keySet();
+        return timeframeSums.keySet();
     }
 
     /**
@@ -75,6 +132,69 @@ public class ChartData {
      * @return true if at least one transaction data was supplied, false otherwise.
      */
     public boolean hasData() {
-        return !categoryTransactions.isEmpty();
+        return !timeframeTransactions.isEmpty();
+    }
+
+    /**
+     * Sets a restriction on transactions to be within a given timeframe.
+     *
+     * After calling this method:
+     *
+     * 1. getTransactionsCategory will return only transactions of a category type within the passed in timeframe restriction.
+     *
+     * 2. getNetCategory will return the net sum of only the transactions within the given timeframe.
+     *
+     * 3. getCategorySet will return only the category types that appear in transactions within the timeframe.
+     *
+     * @param timeframe
+     */
+    public void updateTimeframe(ChartTimeframe timeframe) {
+        if (timeframe == ChartTimeframe.ALL) {
+            timeframeTransactions = allCategoryTransactions;
+            updateSums();
+            return;
+        }
+
+        timeframeTransactions = new HashMap<>();
+
+        for (String category : allCategoryTransactions.keySet()) {
+            List<Transaction> inTimeframe = null;
+
+            if (timeframe == ChartTimeframe.PAST_MONTH) {
+                inTimeframe = getTransactionsPastDays(category, 30);
+            } else if (timeframe == ChartTimeframe.PAST_WEEK) {
+                inTimeframe = getTransactionsPastDays(category, 7);
+            } else if (timeframe == ChartTimeframe.THIS_MONTH) {
+                inTimeframe = getTransactionsCategoryThisMonth(category);
+            }
+
+            timeframeTransactions.put(category, inTimeframe);
+        }
+
+        timeframeSums = new HashMap<>();
+        updateSums();
+    }
+
+    /**
+     * Updates the sums of the categories within a timeframe.
+     */
+    private void updateSums() {
+        for (String category : timeframeTransactions.keySet()) {
+            sumCategory(category);
+        }
+    }
+
+    /**
+     * Sets the sum for a category of transactions within a timeframe.
+     * @param category
+     */
+    private void sumCategory(String category) {
+        double sum = 0.0;
+
+        for (Transaction transaction : timeframeTransactions.get(category)) {
+            sum += transaction.getAmount();
+        }
+
+        timeframeSums.put(category, sum);
     }
 }

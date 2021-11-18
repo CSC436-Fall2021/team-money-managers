@@ -54,7 +54,7 @@ public class PieView extends TransactionChart {
         if (data.hasData()) {
             pane.setCenter(transactionsByCategoryChart);
         } else {
-            pane.setCenter(new Label("No transaction data available."));
+            pane.setCenter(MISSING_DATA_LABEL);
         }
 
         return pane;

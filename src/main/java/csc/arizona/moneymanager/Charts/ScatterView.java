@@ -83,7 +83,7 @@ public class ScatterView extends TransactionChart {
         if (data.hasData()) {
             pane.setCenter(chart);
         } else {
-            pane.setCenter(new Label("No transaction data available."));
+            pane.setCenter(MISSING_DATA_LABEL);
         }
 
         return pane;
