@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
@@ -47,11 +48,14 @@ public class PieView extends TransactionChart {
 
     @Override
     public Pane getView() {
-        GridPane pane = new GridPane();
+        BorderPane pane = new BorderPane();
 
-        pane.add(new Label("??potential title!!"), 0, 0);
 
-        pane.add(transactionsByCategoryChart, 0, 1);
+        if (data.hasData()) {
+            pane.setCenter(transactionsByCategoryChart);
+        } else {
+            pane.setCenter(new Label("No transaction data available."));
+        }
 
         return pane;
     }

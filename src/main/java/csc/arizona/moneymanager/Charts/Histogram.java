@@ -4,6 +4,7 @@ import csc.arizona.moneymanager.TransactionUI.Transaction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.*;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
@@ -67,7 +68,11 @@ public class Histogram extends TransactionChart {
     public Pane getView() {
         BorderPane pane = new BorderPane();
 
-        pane.setCenter(chart);
+        if (data.hasData()) {
+            pane.setCenter(chart);
+        } else {
+            pane.setCenter(new Label("No transaction data available."));
+        }
 
         return pane;
     }

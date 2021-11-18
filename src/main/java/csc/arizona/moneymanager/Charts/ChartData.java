@@ -68,4 +68,13 @@ public class ChartData {
     public Set<String> getCategorySet() {
         return categorySums.keySet();
     }
+
+    /**
+     * Returns whether there is any data to display.
+     *
+     * @return true if at least one transaction data was supplied, false otherwise.
+     */
+    public boolean hasData() {
+        return !categoryTransactions.isEmpty();
+    }
 }
