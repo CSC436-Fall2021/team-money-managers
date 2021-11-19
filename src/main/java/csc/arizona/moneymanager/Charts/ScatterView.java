@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.chart.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.Set;
  */
 public class ScatterView extends TransactionChart {
 
-    private ScatterChart<String, Double> chart;
+    private ScatterChart<Long, Double> chart;
     private double budget;
 
     public ScatterView(List<Transaction> transactions, double budget) {
@@ -32,24 +33,28 @@ public class ScatterView extends TransactionChart {
 
         Set<String> categoryNames = data.getCategorySet();
 
-        List<XYChart.Series<String, Double>> categorySeries = new ArrayList<>();
-        List<String> dates = new ArrayList<>();
+        List<XYChart.Series<Long, Double>> categorySeries = new ArrayList<>();
+        List<Long> dates = new ArrayList<>();
 
         // construct XYChart.Data objects
+        long minDate = Long.MAX_VALUE;
+        long maxDate = Long.MIN_VALUE;
+
         double min = 0.00;
         double max = Double.MIN_VALUE;
         for (String category : categoryNames) {
-            List<XYChart.Data<String, Double>> entries = new ArrayList<>();
+            List<XYChart.Data<Long, Double>> entries = new ArrayList<>();
 
             // TODO: look over this now that no more income/expense types. Might be better way to do this.
             List<Transaction> categoryTransactions = data.getTransactionsCategory(category);
 
             for (Transaction transaction: categoryTransactions) {
                 double amount = transaction.getAmount();
-                LocalDate date = transaction.getDate();
-                XYChart.Data<String, Double> entry = new XYChart.Data<String, Double>(date.toString(), amount);
+                long dateNum = transaction.getDateAsLong();
+
+                XYChart.Data<Long, Double> entry = new XYChart.Data<Long, Double>(dateNum, amount);
                 entries.add(entry);
-                dates.add(date.toString());
+                dates.add(dateNum);
 
                 // update lower and upper bounds for scatter chart
                 /*if (amount < min) {
@@ -59,10 +64,18 @@ public class ScatterView extends TransactionChart {
                 if (amount > max) {
                     max = amount;
                 }
+
+                if (dateNum > maxDate) {
+                    maxDate = dateNum;
+                }
+
+                if (dateNum < minDate) {
+                    minDate = dateNum;
+                }
             }
 
-            XYChart.Series<String, Double> series =
-                    new XYChart.Series<String, Double>(category, FXCollections.observableArrayList(entries));
+            XYChart.Series<Long, Double> series =
+                    new XYChart.Series<Long, Double>(category, FXCollections.observableArrayList(entries));
 
             categorySeries.add(series);
         }
@@ -70,11 +83,31 @@ public class ScatterView extends TransactionChart {
         // set max to be a little more than needed so chart looks better
         max *= 1.2;
 
+        // move min and max dates by small number so end points are not cut in half.
+        //minDate -= 1;
+        //maxDate += 1;
         // Construct needed objects for Java's ScatterChart.
-        Axis xAxis = new CategoryAxis(FXCollections.observableArrayList(dates));
+        NumberAxis xAxis = new NumberAxis(minDate, maxDate, 10);
         Axis yAxis = new NumberAxis(min, max, 10);
 
-        chart = new ScatterChart<String, Double>(xAxis, yAxis);
+        // convert xAxis date numbers into string dates.
+        xAxis.setTickLabelFormatter(new StringConverter<Number>() {
+            @Override
+            public String toString(Number number) {
+                long val = number.longValue();
+
+                LocalDate date = Transaction.getDateFromLong(val);
+                return date.toString();
+            }
+
+            @Override
+            public Number fromString(String s) {
+                LocalDate date = LocalDate.parse(s);
+                return date.toEpochDay();
+            }
+        });
+
+        chart = new ScatterChart<Long, Double>((Axis)xAxis, yAxis);
         chart.getData().addAll(categorySeries);
 
         //display

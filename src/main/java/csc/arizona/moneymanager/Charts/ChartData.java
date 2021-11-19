@@ -85,7 +85,7 @@ public class ChartData {
     public List<Transaction> getTransactions(ChartSort sortType) {
 
         if (sortType == ChartSort.DATE) {
-            timeframeTransactions.sort(Comparator.comparingInt(Transaction::getDateAsInt));
+            timeframeTransactions.sort(Comparator.comparingLong(Transaction::getDateAsLong));
         } else if (sortType == ChartSort.AMOUNT) {
             timeframeTransactions.sort(Comparator.comparingDouble(Transaction::getAmount));
         } else if (sortType == ChartSort.CATEGORY) {
@@ -129,7 +129,7 @@ public class ChartData {
         List<Transaction> transactions = timeframeCategoryTransactions.get(category);
 
         if (sortType == ChartSort.DATE) {
-            transactions.sort(Comparator.comparingInt(Transaction::getDateAsInt));
+            transactions.sort(Comparator.comparingLong(Transaction::getDateAsLong));
         } else if (sortType == ChartSort.AMOUNT) {
             transactions.sort(Comparator.comparingDouble(Transaction::getAmount));
         } else if (sortType == ChartSort.CATEGORY) {

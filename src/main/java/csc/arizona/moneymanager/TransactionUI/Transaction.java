@@ -51,12 +51,13 @@ public class Transaction implements Serializable {
         return amount;
     }
 
-    public int getDateAsInt() {
-        int val = date.get(ChronoField.EPOCH_DAY);
+    public long getDateAsLong() {
+        //long val = date.getLong(ChronoField.EPOCH_DAY);
+        long val = date.toEpochDay();
         return val;
     }
 
-    public static LocalDate getDateFromInt(int val) {
+    public static LocalDate getDateFromLong(long val) {
         LocalDate date = LocalDate.ofEpochDay(val);
         return date;
     }
