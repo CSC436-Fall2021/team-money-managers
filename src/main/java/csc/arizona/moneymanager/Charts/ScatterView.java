@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Shows scatterview of different category spending over time.
+ * Shows scatter chart view of different category spending over time.
  */
 public class ScatterView extends TransactionChart {
 
@@ -25,6 +25,11 @@ public class ScatterView extends TransactionChart {
 
         data = new ChartData(transactions);
 
+        if (!data.hasData()) {
+            chart = null;
+            return;
+        }
+
         Set<String> categoryNames = data.getCategorySet();
 
         List<XYChart.Series<String, Double>> categorySeries = new ArrayList<>();
@@ -36,7 +41,7 @@ public class ScatterView extends TransactionChart {
         for (String category : categoryNames) {
             List<XYChart.Data<String, Double>> entries = new ArrayList<>();
 
-            // TODO: look over this now that ChartData updated. Might be better way to do this.
+            // TODO: look over this now that no more income/expense types. Might be better way to do this.
             List<Transaction> categoryTransactions = data.getTransactionsCategory(category);
 
             for (Transaction transaction: categoryTransactions) {
@@ -62,7 +67,8 @@ public class ScatterView extends TransactionChart {
             categorySeries.add(series);
         }
 
-        // TODO: if no transactions, update max if error
+        // set max to be a little more than needed so chart looks better
+        max *= 1.2;
 
         // Construct needed objects for Java's ScatterChart.
         Axis xAxis = new CategoryAxis(FXCollections.observableArrayList(dates));

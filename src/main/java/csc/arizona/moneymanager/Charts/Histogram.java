@@ -23,6 +23,11 @@ public class Histogram extends TransactionChart {
         title = "Transactions by Category: Histogram";
         data = new ChartData(transactions);
 
+        if (!data.hasData()) {
+            chart = null;
+            return;
+        }
+
         Set<String> categoryNames = data.getCategorySet();
 
         List<XYChart.Data<String, Double>> entries = new ArrayList<>();
@@ -49,7 +54,8 @@ public class Histogram extends TransactionChart {
             // maybe update axis tick.
         }
 
-        // TODO: if no transactions, update max if error
+        // set max to be a little more than needed so chart looks better
+        max *= 1.2;
 
         // Construct needed objects for Java's BarChart.
         XYChart.Series<String, Double> series = new XYChart.Series<String, Double>(FXCollections.observableArrayList(entries));

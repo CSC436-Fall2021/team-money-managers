@@ -10,7 +10,7 @@ import java.util.*;
  *  for the purpose of displaying graphical information in a chart.
  *
  *  Named ChartData because it was meant to provide methods to act on a chart's data,
- *  but it can be used anywhere where you are acting on a list of Transactions by category.
+ *  but it can be used anywhere where you are acting on any list of transactions.
  *
  */
 public class ChartData {
@@ -27,16 +27,27 @@ public class ChartData {
     *
      */
 
+    private List<Transaction> allTransactions;
+    private List<Transaction> timeframeTransactions;
+
     private Map<String, List<Transaction>> allCategoryTransactions;
-    private Map<String, List<Transaction>> timeframeTransactions;
+    private Map<String, List<Transaction>> timeframeCategoryTransactions;
+
     private Map<String, Double> timeframeSums;
+    private double timeframeSumTotal;
 
     public ChartData(List<Transaction> transactions) {
 
+        allTransactions = new ArrayList<>(); // to copy user transactions
+        timeframeTransactions = allTransactions;
+
         allCategoryTransactions = new HashMap<>();
-        timeframeTransactions = allCategoryTransactions;
+        timeframeCategoryTransactions = allCategoryTransactions;
 
         for (Transaction transaction : transactions) {
+
+            allTransactions.add(transaction);
+
             String category = transaction.getCategory();
 
 
@@ -53,16 +64,49 @@ public class ChartData {
     }
 
     /**
+     * Returns the list of all transactions within set timeframe.
+     * @return list of all transactions within set timeframe.
+     */
+    public List<Transaction> getTransactions() {
+        return timeframeTransactions;
+    }
+
+    /**
+     * Returns the list of all transactions within set timeframe.
+     *
+     * Sorted on either:
+     * 1. transaction's date
+     * 2. transaction's amount
+     * 3. transaction's category
+     *
+     * @param sortType
+     * @return list of all sorted transactions within set timeframe.
+     */
+    public List<Transaction> getTransactions(ChartSort sortType) {
+
+        if (sortType == ChartSort.DATE) {
+            timeframeTransactions.sort(Comparator.comparingInt(Transaction::getDateAsInt));
+        } else if (sortType == ChartSort.AMOUNT) {
+            timeframeTransactions.sort(Comparator.comparingDouble(Transaction::getAmount));
+        } else if (sortType == ChartSort.CATEGORY) {
+            timeframeTransactions.sort(Comparator.comparing(Transaction::getCategory));
+        }
+
+        return timeframeTransactions;
+
+    }
+
+    /**
      * Returns the list of all transactions by category type within set timeframe.
      * @param category
      * @return list of all transactions by category type within set timeframe.
      */
     public List<Transaction> getTransactionsCategory(String category) {
-        if (!timeframeTransactions.containsKey(category)) {
+        if (!timeframeCategoryTransactions.containsKey(category)) {
             return new ArrayList<Transaction>(); // no null check needed in caller
         }
 
-        return timeframeTransactions.get(category);
+        return timeframeCategoryTransactions.get(category);
     }
 
     /**
@@ -74,14 +118,15 @@ public class ChartData {
      * 3. transaction's category
      *
      * @param category
+     * @param sortType
      * @return list of all sorted transactions of a category type within set timeframe.
      */
     public List<Transaction> getTransactionsCategory(String category, ChartSort sortType) {
-        if (!timeframeTransactions.containsKey(category)) {
+        if (!timeframeCategoryTransactions.containsKey(category)) {
             return new ArrayList<>(); // no null check needed in caller
         }
 
-        List<Transaction> transactions = timeframeTransactions.get(category);
+        List<Transaction> transactions = timeframeCategoryTransactions.get(category);
 
         if (sortType == ChartSort.DATE) {
             transactions.sort(Comparator.comparingInt(Transaction::getDateAsInt));
@@ -148,6 +193,13 @@ public class ChartData {
         return timeframeSums.get(category);
     }
 
+    /**
+     * Returns the net sum of transactions within set timeframe.
+     * @return net sum of transactions within set timeframe.
+     */
+    public double getNet() {
+        return timeframeSumTotal;
+    }
 
 
 
@@ -166,7 +218,7 @@ public class ChartData {
      * @return true if at least one transaction data is in the set timeframe, false otherwise.
      */
     public boolean hasData() {
-        return !timeframeTransactions.isEmpty();
+        return !timeframeCategoryTransactions.isEmpty();
     }
 
     /**
@@ -184,12 +236,14 @@ public class ChartData {
      */
     public void updateTimeframe(ChartTimeframe timeframe) {
         if (timeframe == ChartTimeframe.ALL) {
-            timeframeTransactions = allCategoryTransactions;
+            timeframeTransactions = allTransactions;
+            timeframeCategoryTransactions = allCategoryTransactions;
             updateSums();
             return;
         }
 
-        timeframeTransactions = new HashMap<>();
+        timeframeTransactions = new ArrayList<>();
+        timeframeCategoryTransactions = new HashMap<>();
 
         for (String category : allCategoryTransactions.keySet()) {
             List<Transaction> inTimeframe = null;
@@ -202,7 +256,8 @@ public class ChartData {
                 inTimeframe = getTransactionsCategoryThisMonth(category);
             }
 
-            timeframeTransactions.put(category, inTimeframe); // inTimeframe will never be null.
+            timeframeTransactions.addAll(inTimeframe);
+            timeframeCategoryTransactions.put(category, inTimeframe); // inTimeframe will never be null.
         }
 
         timeframeSums = new HashMap<>();
@@ -213,8 +268,9 @@ public class ChartData {
      * Updates the sums of the categories within a timeframe.
      */
     private void updateSums() {
-        for (String category : timeframeTransactions.keySet()) {
-            sumCategory(category);
+        timeframeSumTotal = 0.0;
+        for (String category : timeframeCategoryTransactions.keySet()) {
+            timeframeSumTotal += sumCategory(category);
         }
     }
 
@@ -222,14 +278,15 @@ public class ChartData {
      * Sets the sum for a category of transactions within a timeframe.
      * @param category
      */
-    private void sumCategory(String category) {
+    private double sumCategory(String category) {
         double sum = 0.0;
 
-        for (Transaction transaction : timeframeTransactions.get(category)) {
+        for (Transaction transaction : timeframeCategoryTransactions.get(category)) {
             sum += transaction.getAmount();
         }
 
         timeframeSums.put(category, sum);
+        return sum;
     }
 
 
