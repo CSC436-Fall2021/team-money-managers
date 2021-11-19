@@ -290,4 +290,33 @@ public class ChartData {
     }
 
 
+    public LocalDate getStartDate() {
+        LocalDate start = null;
+
+        for (Transaction transaction : timeframeTransactions) {
+            LocalDate date = transaction.getDate();
+
+            if (start == null || start.isAfter(date)) {
+                start = date;
+            }
+
+        }
+
+        return start;
+    }
+
+    public LocalDate getEndDate() {
+        LocalDate end = null;
+
+        for (Transaction transaction : timeframeTransactions) {
+            LocalDate date = transaction.getDate();
+
+            if (end == null || end.isBefore(date)) {
+                end = date;
+            }
+
+        }
+
+        return end;
+    }
 }
