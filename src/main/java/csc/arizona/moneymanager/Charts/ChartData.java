@@ -1,6 +1,7 @@
 package csc.arizona.moneymanager.Charts;
 
 import csc.arizona.moneymanager.TransactionUI.Transaction;
+import javafx.collections.transformation.SortedList;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -63,6 +64,36 @@ public class ChartData {
     }
 
     /**
+     * Returns the list of all transactions by category type within set timeframe.
+     *
+     * Sorted on either:
+     * 1. transaction's date
+     * 2. transaction's amount
+     * 3. transaction's category
+     *
+     * @param category
+     * @return list of all sorted transactions of a category type within set timeframe.
+     */
+    public List<Transaction> getTransactionsCategory(String category, ChartSort sortType) {
+        if (!timeframeTransactions.containsKey(category)) {
+            return new ArrayList<>(); // no null check needed in caller
+        }
+
+        List<Transaction> transactions = timeframeTransactions.get(category);
+
+        if (sortType == ChartSort.DATE) {
+            transactions.sort(Comparator.comparingInt(Transaction::getDateAsInt));
+        } else if (sortType == ChartSort.AMOUNT) {
+            transactions.sort(Comparator.comparingDouble(Transaction::getAmount));
+        } else if (sortType == ChartSort.CATEGORY) {
+            transactions.sort(Comparator.comparing(Transaction::getCategory));
+        }
+
+        return transactions;
+
+    }
+
+    /**
      * Returns the list of all transactions by category type made in the current month.
      * @param category
      * @return list of all transactions by category type made in the current month.
@@ -97,7 +128,7 @@ public class ChartData {
         for (Transaction transaction : transactions) {
             LocalDate otherDate = transaction.getDate();
 
-            if (ChronoUnit.DAYS.between(otherDate, curDate) <= days) { // may need .equals()
+            if (ChronoUnit.DAYS.between(otherDate, curDate) <= days) {
                 inTimeframe.add(transaction);
             }
         }
@@ -107,9 +138,9 @@ public class ChartData {
 
 
     /**
-     * Returns the net sum of transactions of a category type.
+     * Returns the net sum of transactions of a category type within set timeframe.
      * @param category
-     * @return net sum of transactions of a category type.
+     * @return net sum of transactions of a category within set timeframe.
      */
     public double getNetCategory(String category) {
         return timeframeSums.get(category);
@@ -119,7 +150,8 @@ public class ChartData {
 
 
     /**
-        Returns the set of categories of the transactions within set timeframe.
+     * Returns the set of categories of the transactions within set timeframe.
+     *
      @return set of categories.
      */
     public Set<String> getCategorySet() {
@@ -127,9 +159,9 @@ public class ChartData {
     }
 
     /**
-     * Returns whether there is any data to display.
+     * Returns whether there is any data within set timeframe to display.
      *
-     * @return true if at least one transaction data was supplied, false otherwise.
+     * @return true if at least one transaction data is in the set timeframe, false otherwise.
      */
     public boolean hasData() {
         return !timeframeTransactions.isEmpty();
@@ -168,7 +200,7 @@ public class ChartData {
                 inTimeframe = getTransactionsCategoryThisMonth(category);
             }
 
-            timeframeTransactions.put(category, inTimeframe);
+            timeframeTransactions.put(category, inTimeframe); // inTimeframe will never be null.
         }
 
         timeframeSums = new HashMap<>();
@@ -197,4 +229,6 @@ public class ChartData {
 
         timeframeSums.put(category, sum);
     }
+
+
 }

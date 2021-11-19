@@ -2,6 +2,9 @@ package csc.arizona.moneymanager.TransactionUI;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
 
 /**
  * Models a transaction.
@@ -16,7 +19,7 @@ public class Transaction implements Serializable {
     private double amount;
     private String category;
 
-    public Transaction(){
+    public Transaction() {
 
     }
 
@@ -50,11 +53,13 @@ public class Transaction implements Serializable {
         return amount;
     }
 
-    public boolean isIncome() {
-        return amount >= 0;
+    public int getDateAsInt() {
+        int val = date.get(ChronoField.EPOCH_DAY);
+        return val;
     }
 
-    public boolean isExpense() {
-        return amount < 0;
+    public static LocalDate getDateFromInt(int val) {
+        LocalDate date = LocalDate.ofEpochDay(val);
+        return date;
     }
 }
