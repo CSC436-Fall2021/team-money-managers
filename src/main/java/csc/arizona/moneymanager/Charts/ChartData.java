@@ -1,8 +1,6 @@
 package csc.arizona.moneymanager.Charts;
 
 import csc.arizona.moneymanager.TransactionUI.Transaction;
-import javafx.collections.transformation.SortedList;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -10,6 +8,10 @@ import java.util.*;
 /**
  * Provides useful functions for getting data about a list of Transactions
  *  for the purpose of displaying graphical information in a chart.
+ *
+ *  Named ChartData because it was meant to provide methods to act on a chart's data,
+ *  but it can be used anywhere where you are acting on a list of Transactions by category.
+ *
  */
 public class ChartData {
 

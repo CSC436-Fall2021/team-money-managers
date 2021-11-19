@@ -3,8 +3,6 @@ package csc.arizona.moneymanager.TransactionUI;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
 
 /**
  * Models a transaction.

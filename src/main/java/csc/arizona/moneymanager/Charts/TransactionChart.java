@@ -1,7 +1,5 @@
 package csc.arizona.moneymanager.Charts;
 
-import csc.arizona.moneymanager.MainUI.ServicesView;
-import javafx.scene.chart.Chart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
