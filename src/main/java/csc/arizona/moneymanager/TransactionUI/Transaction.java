@@ -19,8 +19,11 @@ public class Transaction implements Serializable {
     private String category;
     private String memo;
 
-    public Transaction(){
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
 
+    public Transaction(){
     }
 
     public void setDate(LocalDate date) {
