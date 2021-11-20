@@ -164,6 +164,7 @@ public class Controller extends Application {
 
     private static TableView transactionTableView(List<Transaction> transactions){
         TableView tv = new TableView();
+        tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tv.setPlaceholder(new Label("No report to display"));
 
         TableColumn<TableTransaction, String> dateColumn = new TableColumn<>("Date");
@@ -171,6 +172,9 @@ public class Controller extends Application {
 
         TableColumn<TableTransaction, String> categoryColumn = new TableColumn<>("Category");
         categoryColumn.setCellValueFactory(cellData -> cellData.getValue().categeroyProperty());
+
+        TableColumn<TableTransaction, String> memoColumn = new TableColumn<>("Memo");
+        memoColumn.setCellValueFactory(cellData -> cellData.getValue().memoProperty());
 
         TableColumn<TableTransaction, String> amountColumn = new TableColumn<>("Amount");
         amountColumn.setCellValueFactory(cellData -> cellData.getValue().amountProperty());
@@ -180,13 +184,13 @@ public class Controller extends Application {
         ArrayList<TableTransaction> temp = new ArrayList<>();
 
         for (Transaction t: transactions){
-            temp.add(new TableTransaction(t.getDate().toString(), t.getCategory(), Double.toString(t.getAmount())));
+            temp.add(new TableTransaction(t.getDate().toString(), t.getCategory(), Double.toString(t.getAmount()), t.getMemo()));
         }
 
         observableList = FXCollections.observableList(temp);
 
         tv.setItems(observableList);
-        tv.getColumns().addAll(dateColumn, categoryColumn, amountColumn);
+        tv.getColumns().addAll(dateColumn, categoryColumn,memoColumn, amountColumn);
 
 
 
@@ -200,7 +204,9 @@ public class Controller extends Application {
         Stage removeAccount = new Stage();
         removeAccount.setTitle("remove account");
         BorderPane pane = new BorderPane();
-        Scene newScene = new Scene(pane, 300, 260);
+        Scene newScene = new Scene(pane, 400, 375);
+        Style.addStyling(newScene);
+
         Label confirm = new Label("Are you sure you want to delete your account?");
         confirm.setAlignment(Pos.CENTER);
         confirm.setMinWidth(300);
@@ -221,11 +227,14 @@ public class Controller extends Application {
         cancel.setMinWidth(100);
         HBox buttons = new HBox(deleteUser, cancel);
         cancel.setOnMouseClicked(event -> removeAccount.close());
+        buttons.setAlignment(Pos.CENTER);
+
         VBox box = new VBox();
+        box.setPadding(new Insets(25)); // adding outside padding
         box.setSpacing(10);
         box.getChildren().addAll(confirm, username, userField, password, passField, passwordCheck,
                 rePassField, buttons);
-        pane.getChildren().add(box);
+        pane.setCenter(box);
         removeAccount.setScene(newScene);
         removeAccount.show();
     }
