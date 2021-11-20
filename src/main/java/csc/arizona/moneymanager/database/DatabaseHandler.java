@@ -1,7 +1,10 @@
 package csc.arizona.moneymanager.database;
 import com.mongodb.*;
 import com.mongodb.client.model.Filters;
+import csc.arizona.moneymanager.TransactionUI.TableTransaction;
 import csc.arizona.moneymanager.TransactionUI.Transaction;
+import javafx.util.converter.LocalDateStringConverter;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import com.mongodb.client.*;
@@ -12,6 +15,7 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -93,6 +97,28 @@ public class DatabaseHandler {
         }
         return false;
     }
+
+    public boolean removeTransaction(User user, TableTransaction convert, boolean testing){
+        return removeTransaction(user, new Transaction(LocalDate.parse(convert.getDate())
+                , convert.getCategeroy(), Double.parseDouble(convert.getAmount()), convert.getMemo()), testing);
+    }
+
+    public boolean removeTransaction(User user, Transaction toRemove, boolean testing){
+        if (logged_in || testing){
+            User updated = new User();
+            updated.setSettings(user.getSettings());
+            updated.setTransactions(user.getTransactions());
+            updated.setUsername(user.getUsername());
+            updated.setId(user.getId());
+
+            if (!updated.getTransactions().remove(toRemove)){
+                return false;
+            }
+            return updateUserData(updated, testing);
+        }
+        return false;
+    }
+
 
     public boolean updateUserData(User user, boolean testing){
         if (logged_in || testing) {

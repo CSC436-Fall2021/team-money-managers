@@ -24,11 +24,11 @@ public class DatabaseHandlerTest {
         if (connectTest(handler)){
             addingAndGettingCredentialsTest(handler);
 
-            deleteUserTest(handler);
+            //deleteUserTest(handler);
         }
     }
 
-    private static void addingAndGettingCredentialsTest(DatabaseHandler handler){
+    private static void addingAndGettingCredentialsTest(DatabaseHandler handler) {
         if (handler.addUser("test", "test")){
             System.out.println("addUser(): passed");
             if(handler.userExists("test")){
@@ -42,23 +42,30 @@ public class DatabaseHandlerTest {
                 System.err.println("validateUser(): failed");
             }
             List<Transaction> transactionList = new ArrayList<>();
-            for (int i = 0; i < 5; i++){
-                Transaction temp = new Transaction(LocalDate.now().plusDays(i), "food", i);
-                transactionList.add(temp);
-            }
-            User test = new User("mason");
+            transactionList.add(new Transaction(LocalDate.now(), "rent", 710, "December"));
+            transactionList.add(new Transaction(LocalDate.now(), "food", 30.2, "Pasta"));
+            transactionList.add(new Transaction(LocalDate.now().minusDays(30), "stock", 100, "Bitcoin"));
+            transactionList.add(new Transaction(LocalDate.now().plusDays(2), "stock", 200, "Ethereum"));
+            transactionList.add(new Transaction(LocalDate.now().minusDays(10), "gas", 48.23, "Full Tank"));
+            transactionList.add(new Transaction(LocalDate.now().minusDays(1), "gas", 19.92, "Half Tank"));
+            User test = new User();
+            test.setUsername("test");
             test.setTransactions(transactionList);
             UserSetting settings = new UserSetting();
-            settings.setBudget(429);
+            settings.setBudget(2000);
             settings.setBudgetDuration("Monthly");
-            settings.addCategoryName("testCat");
+            settings.addCategoryName("test");
             test.setSettings(settings);
             if (handler.updateUserData(test,true)){
                 System.out.println("addTransactions(): passed");
             } else {
                 System.out.println("addTransactions(): failed");
             }
-
+            if (handler.removeTransaction(test, new Transaction(LocalDate.now(), "food", 30.2, "Pasta"), true)){
+                System.out.println("removeTransaction(): passed");
+            } else {
+                System.out.println("removeTransaction(): failed");
+            }
         } else{
             System.err.println("addUser(): failed");
         }

@@ -184,7 +184,6 @@ public class Controller extends Application {
         ArrayList<TableTransaction> temp = new ArrayList<>();
 
         for (Transaction t: transactions){
-            System.out.println(t.getMemo());
             temp.add(new TableTransaction(t.getDate().toString(), t.getCategory(), Double.toString(t.getAmount()), t.getMemo()));
         }
 
