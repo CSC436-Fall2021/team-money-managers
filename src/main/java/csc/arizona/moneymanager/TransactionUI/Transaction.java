@@ -23,6 +23,19 @@ public class Transaction implements Serializable {
         this.memo = memo;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Double.compare(that.amount, amount) == 0 && date.equals(that.date) && category.equals(that.category) && memo.equals(that.memo);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
     public Transaction(){
     }
 
