@@ -127,9 +127,14 @@ public class ScatterView extends TransactionChart {
         // move min and max dates by small number so end points are not cut in half.
         //minDate -= 1;
         //maxDate += 1;
+
         // Construct needed objects for Java's ScatterChart.
+        // set spending tick to be a portion of the highest series, to the nearest divisible by 5.
+        int yAxisTick = (int)(max / 20);
+        yAxisTick = getNearest(yAxisTick, 5);
+
         NumberAxis xAxis = new NumberAxis(minDate, maxDate, 1);
-        Axis yAxis = new NumberAxis(min, max, 10);
+        Axis yAxis = new NumberAxis(min, max, yAxisTick);
 
         // convert xAxis date numbers into string dates.
         xAxis.setTickLabelFormatter(new StringConverter<Number>() {
@@ -148,9 +153,28 @@ public class ScatterView extends TransactionChart {
             }
         });
 
-
         chart = new LineChart<Long, Double>((Axis)xAxis, yAxis);
+        chart.setCreateSymbols(true);
         chart.getData().addAll(categorySeries);
+
+        // set budget to always be red and total to always be purple
+        String budgetColor = "red";
+        String totalColor = "purple";
+        int totalIndex = categorySeries.size() - 1;
+
+        Node budgetLineNode = chart.lookup(".default-color0.chart-series-line");
+        Node budgetSymbolNode = chart.lookup(".default-color0.chart-line-symbol");
+
+        budgetLineNode.setStyle("-fx-stroke: " + budgetColor);
+        // TODO: why does this do nothing? why does it only affect the first node
+        budgetSymbolNode.setStyle("-fx-background-color: transparent, transparent"); // remove budget's symbol
+
+        Node totalLineNode = chart.lookup(".default-color" + totalIndex + ".chart-series-line");
+        Node totalSymbolNode = chart.lookup(".default-color" + totalIndex + ".chart-line-symbol");
+
+        totalLineNode.setStyle("-fx-stroke: " + totalColor);
+        // TODO: why does this do nothing? why does it only affect the first node
+        totalSymbolNode.setStyle("-fx-background-color: " + totalColor + ", " + totalColor);
 
 
         // remove lines for all series except budget and total
@@ -162,6 +186,18 @@ public class ScatterView extends TransactionChart {
         }
 
         //display
+    }
+
+    private int getNearest(int original, int divisibleBy) {
+        int nearest = original;
+        int rem = original % divisibleBy;
+
+        if (rem > divisibleBy / 2) { // if closer to the next number divisible by x
+            nearest += (divisibleBy - rem);
+        } else { // if closer to the previous number divisible by x
+            nearest -= rem;
+        }
+        return nearest;
     }
 
     @Override
