@@ -2,15 +2,25 @@ package csc.arizona.moneymanager.Login;
 
 import csc.arizona.moneymanager.Controller;
 import csc.arizona.moneymanager.Style;
+import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
+import java.io.File;
 
 /**
  * @apiNote the dummy username is "username" and the password is "1"
@@ -158,12 +168,50 @@ public class LoginUI {
         alert.showAndWait();
     }
 
+    /**
+     * creates a rectangle and the icon to appear in the beginning and then fade to the login functions
+     *
+     * @return the splash screen pane
+     */
+    private static Pane createSplashScreen() {
+        Rectangle blocker = new Rectangle(600, 500);
+        blocker.setFill(Color.LIGHTCYAN);
+        blocker.setX(0);
+        blocker.setY(0);
+        File img = new File("src/main/java/csc/arizona/moneymanager/IMG/Icon.png");
+        Image image = new Image(img.toURI().toString());
+        ImageView imageView = new ImageView(image);
+        imageView.setTranslateX(250);
+        imageView.setTranslateY(200);
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(100);
+        imageView.setPreserveRatio(true);
+        createFade(blocker);
+        createFade(imageView);
+        Pane pane = new Pane();
+        pane.getChildren().addAll(blocker, imageView);
+        return pane;
+    }
+
+    /**
+     * sets whatever the node is to fade in 3 seconds
+     *
+     * @param fade whatever object needs to disappear
+     */
+    private static void createFade(Node fade) {
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), fade);
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+        fadeTransition.setCycleCount(1);
+        fadeTransition.play();
+    }
+
     public static Scene createScene() {
         BorderPane pane = new BorderPane();
         pane.setCenter(createLogin());
-
+        pane.getChildren().add(createSplashScreen());
         // Adding .css styling to login scene
-        Scene scene = new Scene(pane, 600,500);
+        Scene scene = new Scene(pane, 600, 500);
         Style.addStyling(scene);
 
         return scene;
