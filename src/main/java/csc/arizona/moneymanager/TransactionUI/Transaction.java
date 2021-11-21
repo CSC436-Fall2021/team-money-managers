@@ -86,7 +86,6 @@ public class Transaction implements Serializable {
         //long val = date.getLong(ChronoField.EPOCH_DAY);
         long val = date.toEpochDay();
         return val;
-    }
 
     public String getMemo() { return memo; }
 
