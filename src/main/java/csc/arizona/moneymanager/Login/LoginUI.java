@@ -199,7 +199,7 @@ public class LoginUI {
      * @param fade whatever object needs to disappear
      */
     private static void createFade(Node fade) {
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), fade);
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(5), fade);
         fadeTransition.setFromValue(1);
         fadeTransition.setToValue(0);
         fadeTransition.setCycleCount(1);
