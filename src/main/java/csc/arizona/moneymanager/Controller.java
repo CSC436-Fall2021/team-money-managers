@@ -9,14 +9,12 @@ import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
 import csc.arizona.moneymanager.database.User;
 import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -25,7 +23,6 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -125,32 +122,39 @@ public class Controller extends Application {
         Stage reportPopUp = new Stage();
         reportPopUp.setTitle("Report");
         BorderPane bp = new BorderPane();
-        Scene reportScene = new Scene(bp, 400,600);
+        Scene reportScene = new Scene(bp, 600,600);
+        Style.addStyling(reportScene);
+
         try{
             currentUser = database.getUserData(currentUser.getUsername(), false);
         } catch (Exception e){
             System.err.println("Getting user data failed.");
         } finally {
             if (type == "history"){
-                List<Transaction> transactions = new ArrayList<>(currentUser.getTransactions());
+                TableView reportTable = getHistoryTable(start, end);
 
-                for (Transaction t: currentUser.getTransactions()){
-                    if (start != null) {
-                        if (!(t.getDate().isAfter(start))) {
-                            transactions.remove(t);
-                        }
-                    }
-                    if (end != null) {
-                        if (!(t.getDate().isBefore(end))) {
-                            transactions.remove(t);
-                        }
-                    }
-                }
+                HBox labelBox = new HBox();
+                labelBox.setAlignment(Pos.CENTER);
                 Label label = new Label("Transaction History");
                 label.setFont(new Font("Arial", 20));
                 label.setPadding(new Insets(0,0,10,0));
-                bp.setTop(label);
-                bp.setCenter(transactionTableView(transactions));
+                labelBox.getChildren().add(label);
+
+                HBox removeTransactionBox = new HBox();
+                removeTransactionBox.setAlignment(Pos.CENTER);
+                Button removeTransactionButton = new Button("Remove Transaction");
+                removeTransactionButton.setOnAction(e->{
+                    TableTransaction tableTransaction = (TableTransaction) reportTable.getSelectionModel().getSelectedItem();
+                    if(tableTransaction != null){
+                        removeTransactionFromHistory(tableTransaction);
+                        bp.setCenter(getHistoryTable(start, end)); // updating table
+                    }
+                });
+                removeTransactionBox.getChildren().add(removeTransactionButton);
+
+                bp.setTop(labelBox);
+                bp.setCenter(reportTable);
+                bp.setBottom(removeTransactionBox);
                 bp.setPadding(new Insets(10,10,10,10));
 
                 reportPopUp.setScene(reportScene);
@@ -158,8 +162,40 @@ public class Controller extends Application {
             }
 
         }
+    }
 
+    /**
+     * Gets a table containing transaction history between the specified start and end dates.
+     * @param start the report start date
+     * @param end the report end date
+     * @return the TableView with the transaction between the given dates.
+     */
+    private static TableView getHistoryTable(LocalDate start, LocalDate end){
+        List<Transaction> transactions = new ArrayList<>(currentUser.getTransactions());
 
+        for (Transaction t: currentUser.getTransactions()){
+            if (start != null) {
+                if (!(t.getDate().isAfter(start))) {
+                    transactions.remove(t);
+                }
+            }
+            if (end != null) {
+                if (!(t.getDate().isBefore(end))) {
+                    transactions.remove(t);
+                }
+            }
+        }
+
+        return transactionTableView(transactions);
+    }
+
+    /**
+     * Removes the given transaction from the database.
+     * @param transaction the transaction to remove.
+     */
+    private static void removeTransactionFromHistory(TableTransaction transaction){
+        System.out.printf("Removing transaction with date: %s category: %s amount: %s\n", transaction.getDate(), transaction.getCategeroy(), transaction.getAmount());
+        database.removeTransaction(currentUser, transaction, false);
     }
 
     private static TableView transactionTableView(List<Transaction> transactions){
@@ -191,8 +227,6 @@ public class Controller extends Application {
 
         tv.setItems(observableList);
         tv.getColumns().addAll(dateColumn, categoryColumn,memoColumn, amountColumn);
-
-
 
         return tv;
     }
