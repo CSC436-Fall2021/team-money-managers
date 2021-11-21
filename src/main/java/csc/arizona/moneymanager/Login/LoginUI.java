@@ -25,6 +25,7 @@ public class LoginUI {
         VBox loginTextFields = new VBox();
         loginTextFields.setAlignment(Pos.CENTER);
         loginTextFields.setSpacing(10);
+        VBox welcomeBanner = getWelcomeBanner();
         Text loginStatus = new Text();
         Text login = new Text("Username");
         TextField loginField = new TextField();
@@ -42,10 +43,7 @@ public class LoginUI {
         hBox.setAlignment(Pos.CENTER);
         loginTextFields.getChildren().addAll(
                 loginStatus,
-                new Text("Welcome"),
-                new Text("to"),
-                new Text("Money Managers!"),
-                new Text(" "), // spacing
+                welcomeBanner,
                 login,
                 loginField,
                 password,
@@ -53,6 +51,21 @@ public class LoginUI {
                 hBox);  // buttons
 
         return loginTextFields;
+    }
+
+    private static VBox getWelcomeBanner(){
+        VBox welcomeBanner = new VBox();
+        welcomeBanner.setAlignment(Pos.CENTER);
+        welcomeBanner.setPadding(new Insets(10));
+        welcomeBanner.setId("welcome-banner");
+        welcomeBanner.getChildren().addAll(
+            new Text("Welcome"),
+            new Text("to"),
+            new Text("Money Managers!"),
+            new Text(" ") // spacing
+        );
+
+        return welcomeBanner;
     }
 
     /**
