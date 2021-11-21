@@ -3,6 +3,7 @@ package csc.arizona.moneymanager.Login;
 import csc.arizona.moneymanager.Controller;
 import csc.arizona.moneymanager.Style;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -21,6 +22,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @apiNote the dummy username is "username" and the password is "1"
@@ -194,27 +197,49 @@ public class LoginUI {
     }
 
     /**
-     * sets whatever the node is to fade in 3 seconds
+     * Creates a transition to keep the node still for three seconds, once that is over it will begin to fade in 2
+     * seconds
      *
      * @param fade whatever object needs to disappear
      */
     private static void createFade(Node fade) {
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(5), fade);
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), fade);
         fadeTransition.setFromValue(1);
-        fadeTransition.setToValue(0);
+        fadeTransition.setToValue(1);
         fadeTransition.setCycleCount(1);
         fadeTransition.play();
+        fadeTransition.setOnFinished(event -> {
+            FadeTransition end = new FadeTransition(Duration.seconds(2), fade);
+            end.setFromValue(1);
+            end.setToValue(0);
+            end.setCycleCount(1);
+            end.play();
+        });
     }
 
     public static Scene createScene() {
         BorderPane pane = new BorderPane();
         pane.setCenter(createLogin());
         pane.getChildren().add(createSplashScreen());
+        removeSplashScreen(pane);
         // Adding .css styling to login scene
         Scene scene = new Scene(pane, 600, 500);
         Style.addStyling(scene);
-
         return scene;
+    }
 
+    /**
+     * removes the splash pane from the login so the user can press the buttons
+     *
+     * @param splashScreen the pane that holds all the splash screen contents
+     */
+    private static void removeSplashScreen(BorderPane splashScreen) {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> splashScreen.getChildren().remove(1));
+            }
+        }, 5000);
     }
 }
