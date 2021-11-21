@@ -142,7 +142,7 @@ public class ScatterView extends TransactionChart {
             public String toString(Number number) {
                 long val = number.longValue();
 
-                LocalDate date = Transaction.getDateFromLong(val);
+                LocalDate date = LocalDate.ofEpochDay(val);
                 return date.toString();
             }
 
