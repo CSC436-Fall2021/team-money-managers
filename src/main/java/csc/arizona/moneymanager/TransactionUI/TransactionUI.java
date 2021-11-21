@@ -3,14 +3,18 @@ package csc.arizona.moneymanager.TransactionUI;
 import csc.arizona.moneymanager.Controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 /**
  * Provides input functionality for creating transactions.
@@ -28,10 +32,11 @@ import java.util.Optional;
  */
 public class TransactionUI extends GridPane {
 
-    DatePicker dateInput;
-    CategoryList categories; // combination: default + user
-    ComboBox<String> categoryDropDown;
-    TextField amountInput;
+    private DatePicker dateInput;
+    private CategoryList categories; // combination: default + user
+    private ComboBox<String> categoryDropDown;
+    private TextField amountInput;
+    private TextField memoInput;
     private final Label totalAmount;
 
 
@@ -52,29 +57,51 @@ public class TransactionUI extends GridPane {
 
         categoryDropDown = new ComboBox(FXCollections.observableArrayList(categories.getCategories()));
         amountInput = new TextField();
+        memoInput = new TextField();
         Button enterButton = new Button("Enter");
 
         amountInput.setPromptText("Amount");
+        memoInput.setPromptText("Memo");
+
 
         // disable custom input in dropboxes
         categoryDropDown.setEditable(false);
 
-        amountInput.setOnAction(new EnterTransactionHandler());
-        enterButton.setOnAction(new EnterTransactionHandler());
+        // set special text entering for memo field (reject input if length == max allowed)
+        memoInput.setTextFormatter(new MaxLengthFormatter(Transaction.MEMO_MAX_LENGTH));
+
+        /* attempt to add transaction when:
+        *
+        * 1. enter button clicked
+        * 2. enter key typed on amount field
+        * 3. enter key typed on memo field.
+        *
+        */
+        EnterTransactionHandler attemptAdd = new EnterTransactionHandler();
+        enterButton.setOnAction(attemptAdd);
+        amountInput.setOnAction(attemptAdd);
+        memoInput.setOnAction(attemptAdd);
+
+
 
         totalAmount = getTotalAmountSpent();
 
+        // Pane Header/Title
         add(new Label("Transactions"), 1, 0);
 
+        // First row
         add(new Label("Date"), 0, 1);
         add(new Label("Category"), 1, 1);
         add(new Label("Amount"), 2, 1);
+        add(new Label("Memo"), 3, 1);
 
+        // Second row
         add(dateInput, 0, 2);
         add(categoryDropDown, 1, 2);
         add(amountInput, 2, 2);
-        add(enterButton, 3, 2);
-        add(totalAmount, 4, 2);
+        add(memoInput, 3, 2);
+        add(enterButton, 4, 2);
+        add(totalAmount, 5, 2);
 
         setHgap(5);
         setVgap(5);
@@ -120,30 +147,18 @@ public class TransactionUI extends GridPane {
         @Override
         public void handle(ActionEvent actionEvent) {
 
+            if (handleInputErrors()) {
+                return;
+            }
+
+            // All user entered information considered valid.
+
             LocalDate date = dateInput.getValue();
             String category = categoryDropDown.getValue();
-
-            /*
-                Error handling for missing information
-             */
-            if (date == null) {
-                showAlert("Enter a date.");
-                return;
-            }
-
-            if (category == null) {
-                showAlert("Select a category.");
-                return;
-            }
-
-            if (amountInput.getText().isEmpty()){
-                showAlert("Enter an amount.");
-                return;
-            }
-
             double amount = Double.parseDouble(amountInput.getText());
+            String memo = memoInput.getText();
 
-            Transaction toAdd = new Transaction(date, category, amount);
+            // budget checking and potential warning message
             if (amount + Controller.getTotalSpent() > Controller.getBudget() * .9) {
                 Alert overBudgetWarning = new Alert(Alert.AlertType.CONFIRMATION);
                 overBudgetWarning.setTitle("approaching budget");
@@ -153,6 +168,11 @@ public class TransactionUI extends GridPane {
                 if (button == ButtonType.CANCEL)
                     return;
             }
+
+            // creating and adding Transaction, and updating total spent label.
+
+            Transaction toAdd = new Transaction(date, category, amount, memo);
+
             Controller.addTransaction(toAdd);
             Label newTotal = getTotalAmountSpent();
             totalAmount.setTextFill(newTotal.getTextFill());
@@ -167,7 +187,7 @@ public class TransactionUI extends GridPane {
             //System.out.println(toAdd.getCategory());
             //System.out.println(toAdd.getAmount());
 
-            // reset input field for amount, but leave date and category as is.
+            // reset input field for amount, but leave date, category, and memo as is.
             amountInput.clear();
 
         }
@@ -184,5 +204,68 @@ public class TransactionUI extends GridPane {
             alert.setContentText(content);
             alert.showAndWait();
         }
+
+        /**
+         * Error handling for unentered but required information from TransactionUI's fields.
+         * Error handling for bad input (currently just amount negative)
+         *
+         * In case of error, shows an alert:
+         *      In cases of missing information, shows what still needs
+         *          to be entered for their transaction to be added.
+         *
+         *      In case of bad information, displays what info is bad.
+         *
+         * @return true if there were any errors in user's input, otherwise false.
+         *
+         */
+        private boolean handleInputErrors() {
+            String errorMsg = "";
+
+            if (dateInput.getValue() == null) {
+                errorMsg += "Missing date.\n";
+            }
+
+            if (categoryDropDown.getValue() == null) {
+                errorMsg += "Missing category.\n";
+            }
+
+            String amountText = amountInput.getText();
+            if (amountText.isEmpty()) {
+                errorMsg += "Missing amount.\n";
+            } else if (Double.parseDouble(amountText) < 0.0) { // this is bad info, not missing.
+                errorMsg += "Amount can not be negative.\n";
+            }
+
+            // show all errors in one alert (good for transactionUI with small # possible errors)
+            if (!errorMsg.isEmpty()) {
+                showAlert(errorMsg.stripTrailing());
+                return true;
+            }
+
+            return false; // no errors.
+        }
+    }
+
+    /**
+     * Limit text of a Textfield to a max length. Unfortunately lengthy way of doing this.
+     */
+    private class MaxLengthFormatter extends TextFormatter {
+        //private int max;
+
+        public MaxLengthFormatter(int max) {
+            super(new UnaryOperator<Change>() {
+                @Override
+                public Change apply(Change change) {
+                    if (change.isAdded()) {
+                        if (change.getControlText().length() == max) {
+                            change.setText("");
+                        }
+                    }
+                    return change;
+                }
+            });
+        }
+
+
     }
 }
