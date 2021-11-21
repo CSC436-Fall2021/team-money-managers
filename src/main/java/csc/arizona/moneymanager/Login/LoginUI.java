@@ -240,6 +240,6 @@ public class LoginUI {
             public void run() {
                 Platform.runLater(() -> splashScreen.getChildren().remove(1));
             }
-        }, 5000);
+        }, 5000); // time until the splash screen ends
     }
 }
