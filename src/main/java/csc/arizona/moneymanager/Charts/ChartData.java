@@ -24,6 +24,7 @@ public class ChartData {
     *   3. Past month
     *   4. This month
     *
+    * Could have user enter a start and an end date as well in the future
     *
      */
 
