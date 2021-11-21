@@ -132,7 +132,7 @@ public class Controller extends Application {
         } catch (Exception e){
             System.err.println("Getting user data failed.");
         } finally {
-            if (type == "history"){
+            if (type.equals("history")){
                 TableView reportTable = getHistoryTable(start, end);
 
                 HBox labelBox = new HBox();
