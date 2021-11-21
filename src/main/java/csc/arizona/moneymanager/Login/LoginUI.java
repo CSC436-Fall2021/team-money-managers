@@ -177,10 +177,10 @@ public class LoginUI {
      * @return the splash screen pane
      */
     private static Pane createSplashScreen() {
-        Rectangle blocker = new Rectangle(600, 500);
-        blocker.setFill(Color.LIGHTCYAN);
-        blocker.setX(0);
-        blocker.setY(0);
+        Rectangle splashCover = new Rectangle(600, 500);
+        splashCover.setFill(Color.LIGHTCYAN);
+        splashCover.setX(0);
+        splashCover.setY(0);
         File img = new File("src/main/java/csc/arizona/moneymanager/IMG/Icon.png");
         Image image = new Image(img.toURI().toString());
         ImageView imageView = new ImageView(image);
@@ -189,10 +189,10 @@ public class LoginUI {
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
         imageView.setPreserveRatio(true);
-        createFade(blocker);
+        createFade(splashCover);
         createFade(imageView);
         Pane pane = new Pane();
-        pane.getChildren().addAll(blocker, imageView);
+        pane.getChildren().addAll(splashCover, imageView);
         return pane;
     }
 
