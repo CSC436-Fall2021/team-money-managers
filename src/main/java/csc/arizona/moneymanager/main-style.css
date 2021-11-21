@@ -102,3 +102,11 @@
 #options-pane {
     -fx-background-color: -fx-options-pane-color;
 }
+
+#over-budget {
+    -fx-text-fill: Red;
+}
+
+#under-budget {
+    -fx-text-fill: Black;
+}
