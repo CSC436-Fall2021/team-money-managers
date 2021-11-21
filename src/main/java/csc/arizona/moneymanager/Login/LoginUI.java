@@ -38,6 +38,7 @@ public class LoginUI {
         VBox loginTextFields = new VBox();
         loginTextFields.setAlignment(Pos.CENTER);
         loginTextFields.setSpacing(10);
+        VBox welcomeBanner = getWelcomeBanner();
         Text loginStatus = new Text();
         Text login = new Text("Username");
         TextField loginField = new TextField();
@@ -45,12 +46,39 @@ public class LoginUI {
         Text password = new Text("Password");
         PasswordField passwordField = new PasswordField();
         passwordField.setMaxWidth(150);
-        HBox hBox = new HBox(createLoginButton(loginField, passwordField, loginStatus),
-                createAddUserButton());
+
+        Button loginButton = createLoginButton(loginField, passwordField, loginStatus);
+        loginField.setOnAction(e-> loginButton.fire());   // if user presses ENTER, will fire the login button
+        passwordField.setOnAction(e->loginButton.fire()); // if user presses ENTER, will fire the login button
+
+        HBox hBox = new HBox(loginButton, createAddUserButton());
+
         hBox.setAlignment(Pos.CENTER);
-        loginTextFields.getChildren().addAll(loginStatus, new Text("Welcome!"), login, loginField,
-                password, passwordField, hBox);
+        loginTextFields.getChildren().addAll(
+                loginStatus,
+                welcomeBanner,
+                login,
+                loginField,
+                password,
+                passwordField,
+                hBox);  // buttons
+
         return loginTextFields;
+    }
+
+    private static VBox getWelcomeBanner(){
+        VBox welcomeBanner = new VBox();
+        welcomeBanner.setAlignment(Pos.CENTER);
+        welcomeBanner.setPadding(new Insets(10));
+        welcomeBanner.setId("welcome-banner");
+        welcomeBanner.getChildren().addAll(
+            new Text("Welcome"),
+            new Text("to"),
+            new Text("Money Managers!"),
+            new Text(" ") // spacing
+        );
+
+        return welcomeBanner;
     }
 
     /**
@@ -65,7 +93,8 @@ public class LoginUI {
     private static Button createLoginButton(TextField loginField, PasswordField passwordField,
                                             Text loginStatus) {
         Button loginButton = new Button("Login");
-        loginButton.setOnMouseClicked(event -> {
+
+        loginButton.setOnAction(event -> {
             if (!Controller.userExists(loginField.getText()))
                 loginStatus.setText("username does not exist");
             else if (!Controller.correctCredentials(loginField.getText(), passwordField.getText()))
