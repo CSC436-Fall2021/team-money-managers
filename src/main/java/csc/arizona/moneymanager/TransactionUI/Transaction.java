@@ -2,7 +2,6 @@ package csc.arizona.moneymanager.TransactionUI;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 
 /**
  * Models a transaction.
@@ -82,14 +81,15 @@ public class Transaction implements Serializable {
         return amount;
     }
 
-    public long getDateAsLong() {
-        //long val = date.getLong(ChronoField.EPOCH_DAY);
-        long val = date.toEpochDay();
-        return val;
-    }
-
     public String getMemo() { return memo; }
 
+    public boolean isIncome() {
+        return amount >= 0;
+    }
+
+    public boolean isExpense() {
+        return amount < 0;
+    }
 
     //public static int getMemoMaxLength() { return MEMO_MAX_LENGTH; }
 }

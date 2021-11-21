@@ -7,7 +7,6 @@ import javafx.scene.chart.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
-import java.net.ProxySelector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -21,31 +20,27 @@ public class Histogram extends TransactionChart {
     private BarChart<String, Double> chart;
 
     public Histogram(List<Transaction> transactions) {
-        title = "Transactions by Category: Histogram";
+        title = "Spending by Category: Histogram";
         data = new ChartData(transactions);
-
-        if (!data.hasData()) {
-            chart = null;
-            return;
-        }
 
         Set<String> categoryNames = data.getCategorySet();
 
-        List<XYChart.Series<String, Double>> allSeries = new ArrayList<>();
+        List<XYChart.Data<String, Double>> entries = new ArrayList<>();
 
         // construct XYChart.Data objects
-        double min = 0.00;
+        double min = Double.MAX_VALUE;
         double max = Double.MIN_VALUE;
         for (String category : categoryNames) {
             double sum = data.getNetCategory(category);
+
             XYChart.Data<String, Double> entry = new XYChart.Data<String, Double>(category, sum);
 
-            XYChart.Series<String, Double> series = new XYChart.Series<>(category,
-                    FXCollections.observableArrayList(entry));
-
-            allSeries.add(series);
+            entries.add(entry);
 
             // update lower and upper bounds for bar chart
+            if (sum < min) {
+                min = sum;
+            }
 
             if (sum > max) {
                 max = sum;
@@ -54,11 +49,9 @@ public class Histogram extends TransactionChart {
             // maybe update axis tick.
         }
 
-        // set max to be a little more than needed so chart looks better
-        max *= 1.2;
-
         // Construct needed objects for Java's BarChart.
-        ObservableList<XYChart.Series<String, Double>> barObservable = FXCollections.observableArrayList(allSeries);
+        XYChart.Series<String, Double> series = new XYChart.Series<String, Double>(FXCollections.observableArrayList(entries));
+        ObservableList<XYChart.Series<String, Double>> barObservable = FXCollections.observableArrayList(series);
 
         Axis xAxis = new CategoryAxis(FXCollections.observableArrayList(categoryNames));
         Axis yAxis = new NumberAxis(min, max, 10);
@@ -72,11 +65,7 @@ public class Histogram extends TransactionChart {
     public Pane getView() {
         BorderPane pane = new BorderPane();
 
-        if (data.hasData()) {
-            pane.setCenter(chart);
-        } else {
-            pane.setCenter(MISSING_DATA_LABEL);
-        }
+        pane.setCenter(chart);
 
         return pane;
     }
