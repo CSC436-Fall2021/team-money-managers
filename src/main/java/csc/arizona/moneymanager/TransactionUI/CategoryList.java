@@ -29,6 +29,7 @@ public class CategoryList implements Serializable {
             defaultCategories.add(category);
             categories.add(category);
         }
+
     }
 
     // add from database. probably from userSettings class.
