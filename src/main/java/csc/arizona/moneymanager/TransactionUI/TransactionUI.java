@@ -132,11 +132,11 @@ public class TransactionUI extends GridPane {
     private Label getTotalAmountSpent() {
         double totalAmount = Controller.getTotalSpent();
         Label budgetDisplay = new Label('$' + Double.toString(totalAmount));
+        budgetDisplay.setId("under-budget");
         if (totalAmount > Controller.getUser().getSettings().getBudget()) {
             budgetDisplay.setId("over-budget");
             budgetDisplay.setText(budgetDisplay.getText() + " OVER BUDGET");
-        } else
-            budgetDisplay.setId("under-budget");
+        }
         return budgetDisplay;
     }
 
