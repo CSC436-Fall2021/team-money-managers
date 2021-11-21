@@ -157,21 +157,22 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Pie Chart" is selected.
      */
     private void pieChartMenuAction(){
-        mainUI.showChartUI(new PieView(Controller.getUser().getTransactions())); // TODO remove when action implemented
+        mainUI.showChartUI(new PieView(Controller.getUser().getTransactions()));
     }
 
     /**
      * Contains the actions performed when the Menu option "Scatterplot" is selected.
      */
     private void scatterPlotMenuAction(){
-        mainUI.showChartUI(new ScatterView(Controller.getUser().getTransactions())); // TODO remove when action implemented
+        mainUI.showChartUI(new ScatterView(Controller.getUser().getTransactions(),
+                Controller.getBudget()));
     }
 
     /**
      * Contains the actions performed when the Menu option "Histogram" is selected.
      */
     private void histogramMenuAction(){
-        mainUI.showChartUI(new Histogram(Controller.getUser().getTransactions())); // TODO remove when action implemented
+        mainUI.showChartUI(new Histogram(Controller.getUser().getTransactions()));
     }
 
     /**
