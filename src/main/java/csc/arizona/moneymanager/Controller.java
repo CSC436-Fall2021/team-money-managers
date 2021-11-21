@@ -132,35 +132,37 @@ public class Controller extends Application {
         } catch (Exception e){
             System.err.println("Getting user data failed.");
         } finally {
-            if (type.equals("history")){
-                TableView reportTable = getHistoryTable(start, end);
+            if (type != null) {
+                if (type.equals("history")) {
+                    TableView reportTable = getHistoryTable(start, end);
 
-                HBox labelBox = new HBox();
-                labelBox.setAlignment(Pos.CENTER);
-                Label label = new Label("Transaction History");
-                label.setFont(new Font("Arial", 20));
-                label.setPadding(new Insets(0,0,10,0));
-                labelBox.getChildren().add(label);
+                    HBox labelBox = new HBox();
+                    labelBox.setAlignment(Pos.CENTER);
+                    Label label = new Label("Transaction History");
+                    label.setFont(new Font("Arial", 20));
+                    label.setPadding(new Insets(0, 0, 10, 0));
+                    labelBox.getChildren().add(label);
 
-                HBox removeTransactionBox = new HBox();
-                removeTransactionBox.setAlignment(Pos.CENTER);
-                Button removeTransactionButton = new Button("Remove Transaction");
-                removeTransactionButton.setOnAction(e->{
-                    TableTransaction tableTransaction = (TableTransaction) reportTable.getSelectionModel().getSelectedItem();
-                    if(tableTransaction != null){
-                        removeTransactionFromHistory(tableTransaction);
-                        bp.setCenter(getHistoryTable(start, end)); // updating table
-                    }
-                });
-                removeTransactionBox.getChildren().add(removeTransactionButton);
+                    HBox removeTransactionBox = new HBox();
+                    removeTransactionBox.setAlignment(Pos.CENTER);
+                    Button removeTransactionButton = new Button("Remove Transaction");
+                    removeTransactionButton.setOnAction(e -> {
+                        TableTransaction tableTransaction = (TableTransaction) reportTable.getSelectionModel().getSelectedItem();
+                        if (tableTransaction != null) {
+                            removeTransactionFromHistory(tableTransaction);
+                            bp.setCenter(getHistoryTable(start, end)); // updating table
+                        }
+                    });
+                    removeTransactionBox.getChildren().add(removeTransactionButton);
 
-                bp.setTop(labelBox);
-                bp.setCenter(reportTable);
-                bp.setBottom(removeTransactionBox);
-                bp.setPadding(new Insets(10,10,10,10));
+                    bp.setTop(labelBox);
+                    bp.setCenter(reportTable);
+                    bp.setBottom(removeTransactionBox);
+                    bp.setPadding(new Insets(10, 10, 10, 10));
 
-                reportPopUp.setScene(reportScene);
-                reportPopUp.show();
+                    reportPopUp.setScene(reportScene);
+                    reportPopUp.show();
+                }
             }
 
         }

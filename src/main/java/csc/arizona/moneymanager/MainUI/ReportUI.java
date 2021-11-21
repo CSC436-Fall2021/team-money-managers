@@ -44,8 +44,10 @@ public class ReportUI extends ServicesView{
 
         Button generateButton = new Button("Generate Report");
         generateButton.setOnAction( e -> {
-            if (reportType.getValue().equals("Transaction History")){
-                Controller.showReport("history", start.getValue(), end.getValue());
+            if(reportType.getValue() != null) {
+                if (reportType.getValue().equals("Transaction History")) {
+                    Controller.showReport("history", start.getValue(), end.getValue());
+                }
             }
         });
 
