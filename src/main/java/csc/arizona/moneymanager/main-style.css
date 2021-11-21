@@ -83,6 +83,11 @@
     -fx-background-color: -fx-menu-color;
 }
 
+#welcome-banner {
+        -fx-font-size: 20pt;
+        -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
 /* Transaction pane styling */
 #transaction-pane {
     -fx-background-color: -fx-transaction-pane-color;

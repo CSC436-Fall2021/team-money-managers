@@ -9,6 +9,8 @@ import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import csc.arizona.moneymanager.database.DatabaseHandler;
 import csc.arizona.moneymanager.database.User;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -212,8 +214,22 @@ public class Controller extends Application {
         TableColumn<TableTransaction, String> memoColumn = new TableColumn<>("Memo");
         memoColumn.setCellValueFactory(cellData -> cellData.getValue().memoProperty());
 
-        TableColumn<TableTransaction, String> amountColumn = new TableColumn<>("Amount");
-        amountColumn.setCellValueFactory(cellData -> cellData.getValue().amountProperty());
+        // Using Number object and ReadOnlyDoubleWrapper to format 'Amount' column in dollars format
+        TableColumn<TableTransaction, Number> amountColumn = new TableColumn<>("Amount");
+        amountColumn.setCellValueFactory(cellData ->
+                new ReadOnlyDoubleWrapper(Double.parseDouble(cellData.getValue().getAmount())));
+        amountColumn.setCellFactory(tc -> new TableCell<TableTransaction, Number>() {
+            @Override
+            protected void updateItem(Number value, boolean empty) {
+                super.updateItem(value, empty) ;
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(String.format("%01.2f", value.doubleValue()));
+                }
+            }
+        });
+        amountColumn.setStyle( "-fx-alignment: CENTER-RIGHT;");
 
         ObservableList<TableTransaction> observableList;
 
