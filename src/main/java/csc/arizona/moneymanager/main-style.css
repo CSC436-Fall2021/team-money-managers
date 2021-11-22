@@ -83,6 +83,7 @@
     -fx-background-color: -fx-menu-color;
 }
 
+/* Login Screen welcom banner styling */
 #welcome-banner {
         -fx-font-size: 20pt;
         -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
@@ -98,15 +99,21 @@
     -fx-background-color: -fx-services-pane-color;
 }
 
-/* Transaction pane styling */
+/* Options pane styling */
 #options-pane {
     -fx-background-color: -fx-options-pane-color;
 }
 
+/* TransactionUI amount spent styling */
 #over-budget {
     -fx-text-fill: Red;
 }
 
 #under-budget {
     -fx-text-fill: Black;
+}
+
+/* Title styling (used in ServicesView Content pane, TransactionUI, etc.) */
+#title {
+    -fx-font-size: 20pt;
 }
