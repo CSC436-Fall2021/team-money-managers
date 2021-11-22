@@ -431,6 +431,8 @@ public class MainUI {
 
     /**
      * Shows the ChartUI in the services pane.
+     *
+     * @param chart
      */ //TODO maybe add a parameter to select which chart type?
     public void showChartUI(TransactionChart chart){
         showInfo(new ChartUI(chart));
