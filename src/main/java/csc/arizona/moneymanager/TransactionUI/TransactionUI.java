@@ -3,13 +3,11 @@ package csc.arizona.moneymanager.TransactionUI;
 import csc.arizona.moneymanager.Controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
+import javafx.scene.layout.HBox;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,14 +36,18 @@ public class TransactionUI extends GridPane {
     private TextField amountInput;
     private TextField memoInput;
     private final Label totalAmount;
+    private Label currentSpendingLabel;
 
 
     // Initialize TransactionUI with customCategories passed in from a userSettings class.
     public TransactionUI(List<String> customCategories) {
 
+        currentSpendingLabel = new Label();
+
         // date input
         dateInput = new DatePicker();
         dateInput.setEditable(false); // must pick date from UI.
+        dateInput.setPrefWidth(150);
 
         // transaction amount and category input
         // load in default categories list
@@ -56,11 +58,15 @@ public class TransactionUI extends GridPane {
         categories.addCategories(customCategories);
 
         categoryDropDown = new ComboBox(FXCollections.observableArrayList(categories.getCategories()));
+        categoryDropDown.setMinWidth(120);
+
         amountInput = new TextField();
         memoInput = new TextField();
         Button enterButton = new Button("Enter");
 
         amountInput.setPromptText("Amount");
+        amountInput.setMaxWidth(100);
+
         memoInput.setPromptText("Memo");
 
 
@@ -81,33 +87,39 @@ public class TransactionUI extends GridPane {
         enterButton.setOnAction(attemptAdd);
         amountInput.setOnAction(attemptAdd);
         memoInput.setOnAction(attemptAdd);
-
-
-
         totalAmount = getTotalAmountSpent();
+        HBox totalAmountBox = new HBox(); // HBox used to add amount alignment
+        totalAmountBox.setAlignment(Pos.CENTER);
+        totalAmountBox.getChildren().add(totalAmount);
 
         // Pane Header/Title
-        add(new Label("Transactions"), 1, 0);
+        HBox titleBox = new HBox();
+        Label title = new Label("Transactions");
+        title.setId("title");
+        titleBox.getChildren().add(title);
+        titleBox.setAlignment(Pos.CENTER);
+        //add(new Label("Transactions"), 1, 0);
+        add(titleBox, 0,0,6,1);
 
         // First row
-        add(new Label("Date"), 0, 1);
+        add(new Label("Date"),     0, 1);
         add(new Label("Category"), 1, 1);
-        add(new Label("Amount"), 2, 1);
-        add(new Label("Memo"), 3, 1);
+        add(new Label("Amount"),   2, 1);
+        add(new Label("Memo"),     3, 1);
+        // column 4 has enterButton in second row that doesn't need heading label
+        add(currentSpendingLabel,     5, 1);
 
         // Second row
-        add(dateInput, 0, 2);
+        add(dateInput,        0, 2);
         add(categoryDropDown, 1, 2);
-        add(amountInput, 2, 2);
-        add(memoInput, 3, 2);
-        add(enterButton, 4, 2);
-        add(totalAmount, 5, 2);
+        add(amountInput,      2, 2);
+        add(memoInput,        3, 2);
+        add(enterButton,      4, 2);
+        add(totalAmountBox,   5, 2);
 
         setHgap(5);
         setVgap(5);
-
-
-
+        setAlignment(Pos.CENTER);
 
     }
 
@@ -130,13 +142,21 @@ public class TransactionUI extends GridPane {
      * @return Label of the transaction amount, red in it has gone over budget
      */
     private Label getTotalAmountSpent() {
+        String id = "under-budget";
         double totalAmount = Controller.getTotalSpent();
-        Label budgetDisplay = new Label('$' + Double.toString(totalAmount));
+        //Label budgetDisplay = new Label('$' + Double.toString(totalAmount)); // does not format with 2 decimal places
+        Label budgetDisplay = new Label('$' + String.format("%01.2f", totalAmount));
         if (totalAmount > Controller.getUser().getSettings().getBudget()) {
-            budgetDisplay.setId("over-budget");
-            budgetDisplay.setText(budgetDisplay.getText() + " OVER BUDGET");
-        } else
-            budgetDisplay.setId("under-budget");
+            currentSpendingLabel.setText("OVER BUDGET");
+            id = "over-budget";
+            //budgetDisplay.setId("over-budget");
+            //budgetDisplay.setText(budgetDisplay.getText() + " OVER BUDGET");
+        } else {
+            currentSpendingLabel.setText("Current Spent");
+        }
+        currentSpendingLabel.setId(id);
+        budgetDisplay.setId(id);
+
         return budgetDisplay;
     }
 
@@ -182,7 +202,7 @@ public class TransactionUI extends GridPane {
             alert.setTitle("Success");
             alert.setContentText(String.format("Transaction details:\n\nDate: %s\nCategory: %s\nAmount: %.2f",
                     toAdd.getDate().toString(), toAdd.getCategory(), toAdd.getAmount()));
-            alert.setHeaderText("Transaction addded");
+            alert.setHeaderText("Transaction added");
             alert.showAndWait();
             //System.out.println(toAdd.getDate());
             //System.out.println(toAdd.getCategory());

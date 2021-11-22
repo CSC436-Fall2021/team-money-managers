@@ -60,7 +60,7 @@ public class BudgetUI extends ServicesView {
     @Override
     void initContent() {
 
-        int contentRowGap = 12;
+        int contentRowGap = 5;
 
         // Current Budget Amount
         Label currentBudgetLabel = new Label ("Current Budget Amount:");
