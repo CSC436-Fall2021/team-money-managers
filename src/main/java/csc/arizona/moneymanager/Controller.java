@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Carter Boyd
@@ -148,7 +149,7 @@ public class Controller extends Application {
                     Button removeTransactionButton = new Button("Remove Transaction");
                     removeTransactionButton.setOnAction(e -> {
                         TableTransaction tableTransaction = (TableTransaction) reportTable.getSelectionModel().getSelectedItem();
-                        if (tableTransaction != null) {
+                        if (tableTransaction != null && confirmTransactionDeletion()) {
                             removeTransactionFromHistory(tableTransaction);
                             bp.setCenter(getHistoryTable(start, end)); // updating table
                         }
@@ -166,6 +167,22 @@ public class Controller extends Application {
             }
 
         }
+    }
+
+    /**
+     * Displays a pop-up alert informing the user that they are about to delete
+     * one of their transactions and allowing them to confirm if they want to do that.
+     *
+     * @return true if user clicks confirm, false if user clicks cancel.
+     */
+    private static boolean confirmTransactionDeletion() {
+        Alert popup = new Alert(Alert.AlertType.CONFIRMATION);
+        popup.setTitle("Deleting Transaction");
+        popup.setContentText("You are about to delete a transaction");
+
+        Optional<ButtonType> result = popup.showAndWait();
+        ButtonType clicked = result.orElse(ButtonType.CANCEL);
+        return clicked == ButtonType.OK;
     }
 
     /**
