@@ -1,5 +1,5 @@
 package csc.arizona.moneymanager.Login;
-
+//
 import csc.arizona.moneymanager.Controller;
 import csc.arizona.moneymanager.Style;
 import javafx.animation.FadeTransition;

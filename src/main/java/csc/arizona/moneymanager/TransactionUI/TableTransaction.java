@@ -1,5 +1,5 @@
 package csc.arizona.moneymanager.TransactionUI;
-
+//
 import javafx.beans.property.SimpleStringProperty;
 
 public class TableTransaction {

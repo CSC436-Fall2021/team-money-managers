@@ -8,7 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Random;
-
+//
 /**
  * This class contains the functionality related to generating a secure
  * password hash and salt as well as a method to verify a password given

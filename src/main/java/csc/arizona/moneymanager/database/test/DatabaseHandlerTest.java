@@ -1,5 +1,5 @@
 package csc.arizona.moneymanager.database.test;
-
+//
 
 import csc.arizona.moneymanager.MainUI.UserSetting;
 import csc.arizona.moneymanager.TransactionUI.Transaction;

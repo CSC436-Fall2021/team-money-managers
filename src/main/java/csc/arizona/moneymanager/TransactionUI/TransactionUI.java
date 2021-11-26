@@ -1,5 +1,5 @@
 package csc.arizona.moneymanager.TransactionUI;
-
+//
 import csc.arizona.moneymanager.Controller;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;

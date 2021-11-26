@@ -1,5 +1,5 @@
 package csc.arizona.moneymanager.TransactionUI;
-
+//
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

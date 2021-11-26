@@ -1,5 +1,5 @@
 package csc.arizona.moneymanager.TransactionUI;
-
+//
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;

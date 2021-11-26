@@ -1,5 +1,5 @@
 package csc.arizona.moneymanager.Charts;
-
+//
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
