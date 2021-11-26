@@ -7,7 +7,7 @@ import javafx.scene.Scene;
  * This class is intended to contain the ONLY reference to the .css stylesheet.
  */
 abstract public class Style {
-
+//test
     /**
      * Applies uniform styling to Scenes within the program. Scene creation should be followed
      * by a call to this method to ensure application of .css styling.
