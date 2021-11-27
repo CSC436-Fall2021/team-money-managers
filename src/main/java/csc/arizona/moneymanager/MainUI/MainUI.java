@@ -283,6 +283,11 @@ public class MainUI {
 
     }
 
+    public void displayCategoryBudget() {
+        CategoryBudget categoryBudget = new CategoryBudget("Set Category Budget", "Bottom text");
+        servicesPane.setCenter(categoryBudget);
+    }
+
     /**
      * Saves the given budget in Account Settings.
      * @param budget the budget amount to save in account settings.

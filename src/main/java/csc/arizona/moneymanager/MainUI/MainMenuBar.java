@@ -58,7 +58,7 @@ public class MainMenuBar extends MenuBar {
         MenuItem exit = new MenuItem("E_xit");
         exit.setOnAction(e-> exitMenuAction() );
         // Adding items to File menu
-        file.getItems().addAll(setBudget, addCategories, saveData, fileMenuSeparator, logout,
+        file.getItems().addAll(setBudget, setCategoryBudget, addCategories, saveData, fileMenuSeparator, logout,
          removeAccount, exit);
 
         //******* Chart menu setup *******/
@@ -217,6 +217,6 @@ public class MainMenuBar extends MenuBar {
      * @author Carter Boyd
      */
     private void categoryBudgetAction() {
-        mainUI.showInfo(new CategoryBudget());
+        mainUI.displayCategoryBudget();
     }
 }
