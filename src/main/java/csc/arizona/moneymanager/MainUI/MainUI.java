@@ -1,6 +1,7 @@
 package csc.arizona.moneymanager.MainUI;
 
 import csc.arizona.moneymanager.Charts.TransactionChart;
+import csc.arizona.moneymanager.Controller;
 import csc.arizona.moneymanager.Style;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import javafx.collections.FXCollections;
@@ -286,6 +287,8 @@ public class MainUI {
     public void displayCategoryBudget() {
         CategoryBudget categoryBudget = new CategoryBudget("Set Category Budget", "Bottom text");
         servicesPane.setCenter(categoryBudget);
+        Button setCatBudBut = new Button("Set Category Budget");
+//        setCatBudBut.setOnMouseClicked(event -> Controller.setCategoryBudget(value, setCatBud.getText()));
     }
 
     /**
