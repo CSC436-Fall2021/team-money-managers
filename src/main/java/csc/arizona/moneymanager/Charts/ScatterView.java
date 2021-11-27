@@ -4,8 +4,11 @@ import csc.arizona.moneymanager.TransactionUI.Transaction;
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.chart.*;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
@@ -16,7 +19,6 @@ import java.util.*;
  */
 public class ScatterView extends TransactionChart {
 
-    private LineChart<Long, Double> chart;
     private double budget;
 
     public ScatterView(List<Transaction> transactions, double budget) {
@@ -26,7 +28,7 @@ public class ScatterView extends TransactionChart {
         data = new ChartData(transactions);
 
         if (!data.hasData()) {
-            chart = null;
+            mainChart = null;
             return;
         }
 
@@ -153,24 +155,24 @@ public class ScatterView extends TransactionChart {
             }
         });
 
-        chart = new LineChart<Long, Double>((Axis)xAxis, yAxis);
-        chart.setCreateSymbols(true);
-        chart.getData().addAll(categorySeries);
+        mainChart = new LineChart<Long, Double>((Axis)xAxis, yAxis);
+        ((LineChart)mainChart).setCreateSymbols(true);
+        ((LineChart)mainChart).getData().addAll(categorySeries);
 
         // set budget to always be red and total to always be purple
         String budgetColor = "red";
         String totalColor = "purple";
         int totalIndex = categorySeries.size() - 1;
 
-        Node budgetLineNode = chart.lookup(".default-color0.chart-series-line");
-        Node budgetSymbolNode = chart.lookup(".default-color0.chart-line-symbol");
+        Node budgetLineNode = mainChart.lookup(".default-color0.chart-series-line");
+        Node budgetSymbolNode = mainChart.lookup(".default-color0.chart-line-symbol");
 
         budgetLineNode.setStyle("-fx-stroke: " + budgetColor);
         // TODO: why does this do nothing? why does it only affect the first node
         budgetSymbolNode.setStyle("-fx-background-color: transparent, transparent"); // remove budget's symbol
 
-        Node totalLineNode = chart.lookup(".default-color" + totalIndex + ".chart-series-line");
-        Node totalSymbolNode = chart.lookup(".default-color" + totalIndex + ".chart-line-symbol");
+        Node totalLineNode = mainChart.lookup(".default-color" + totalIndex + ".chart-series-line");
+        Node totalSymbolNode = mainChart.lookup(".default-color" + totalIndex + ".chart-line-symbol");
 
         totalLineNode.setStyle("-fx-stroke: " + totalColor);
         // TODO: why does this do nothing? why does it only affect the first node
@@ -180,10 +182,12 @@ public class ScatterView extends TransactionChart {
         // remove lines for all series except budget and total
         for (int i = 1; i < categorySeries.size()-1; i++) {
             String element = ".default-color" + i + ".chart-series-line";
-            Node node = chart.lookup(element);
+            Node node = mainChart.lookup(element);
             node.setStyle("-fx-stroke: transparent");
 
         }
+
+        additionalInfo = new VBox(new Label("default"));
 
         //display
     }
@@ -200,16 +204,4 @@ public class ScatterView extends TransactionChart {
         return nearest;
     }
 
-    @Override
-    public Pane getView() {
-        BorderPane pane = new BorderPane();
-
-        if (data.hasData()) {
-            pane.setCenter(chart);
-        } else {
-            pane.setCenter(MISSING_DATA_LABEL);
-        }
-
-        return pane;
-    }
 }

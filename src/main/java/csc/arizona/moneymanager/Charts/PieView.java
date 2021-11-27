@@ -4,8 +4,10 @@ import csc.arizona.moneymanager.TransactionUI.Transaction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.util.*;
 
@@ -13,8 +15,6 @@ import java.util.*;
  * Shows two pie charts for incomes and expenses by category type.
  */
 public class PieView extends TransactionChart {
-
-    PieChart transactionsByCategoryChart;
 
     public PieView(List<Transaction> transactions) {
         title = "Transactions by Category: PieChart";
@@ -39,22 +39,11 @@ public class PieView extends TransactionChart {
         // set up actual PieChart using the PieChart.Data objects we created
         ObservableList<PieChart.Data> pieDataObservable = FXCollections.observableArrayList(pieCategoryTotals);
 
-        transactionsByCategoryChart = new PieChart(pieDataObservable);
+        mainChart = new PieChart(pieDataObservable);
+        additionalInfo = new VBox(new Label("default"));
 
         // display
     }
 
-    @Override
-    public Pane getView() {
-        BorderPane pane = new BorderPane();
 
-
-        if (data.hasData()) {
-            pane.setCenter(transactionsByCategoryChart);
-        } else {
-            pane.setCenter(MISSING_DATA_LABEL);
-        }
-
-        return pane;
-    }
 }
