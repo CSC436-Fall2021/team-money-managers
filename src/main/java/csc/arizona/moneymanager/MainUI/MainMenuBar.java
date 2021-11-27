@@ -150,7 +150,7 @@ public class MainMenuBar extends MenuBar {
     private void exitMenuAction(){
         // ensures logout prior to exit
         logoutMenuAction();
-        System.out.println("Exit Selected"); //TODO remove when action implemented
+        System.exit(0);
     }
 
     /**
