@@ -247,13 +247,13 @@ public class TransactionUI extends GridPane {
             }
 
             String amountText = amountInput.getText().strip();
-            String optNegative = "-?";
-            String posDoubleRegex = "\\d+[.\\d+]?";
+            String posDoubleRegex = "\\d+(\\.\\d+)?";
+
             if (amountText.isEmpty()) {
                 errorMsg += "Missing amount.\n";
-            } else if (amountText.matches(optNegative + posDoubleRegex)) { // input is a negative number
+            } else if (amountText.matches("-" + posDoubleRegex)) { // input is a negative number
                 errorMsg += "Amount can not be negative.\n";
-            } else if (!amountText.matches(posDoubleRegex)) { // input is positive and not a number
+            } else if (!amountText.matches(posDoubleRegex)) { // input is not a number
                 errorMsg += "Amount must be a non-negative number.\n";
             }
 

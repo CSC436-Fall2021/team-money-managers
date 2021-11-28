@@ -2,6 +2,7 @@ package csc.arizona.moneymanager.MainUI;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -95,6 +96,43 @@ public class BudgetUI extends ServicesView {
         content.setVgap(VGAP);
         content.setAlignment(Pos.CENTER);
 
+    }
+
+    /**
+     * sends an alert when the user fails to select all three of the transaction requirements
+     *
+     * @param content the specific context of what the user failed to add into the transaction
+     */
+    private static void showAlert(String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Entered budget information is invalid");
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    /**
+     * Checks whether the user entered a valid budget.
+     *
+     * If the entered budget is invalid, displays an error message and returns false, else true.
+     * @return true if budget is a positive double, false if empty, not a number, or a negative number
+     */
+    public boolean validateBudget() {
+        String budgetText = newBudgetTF.getText().strip();
+        String posDoubleRegex = "\\d+(\\.\\d+)?";
+
+        if (budgetText.isEmpty()) {
+            showAlert("No budget entered.");
+            return false;
+        } else if (budgetText.matches("-" + posDoubleRegex)) { // input is a negative number
+            showAlert("Budget can not be negative.");
+            return false;
+        } else if (!budgetText.matches(posDoubleRegex)) { // input is not a number
+            showAlert("Budget must be a non-negative number.");
+            return false;
+        }
+
+        return true;
     }
 
     /**
