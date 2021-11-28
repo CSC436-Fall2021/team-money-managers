@@ -22,6 +22,7 @@ public abstract class TransactionChart {
 
     protected static final Label MISSING_DATA_LABEL = new Label("No Transaction data available.");
 
+    protected BorderPane viewPane;
     protected String title;
     protected ChartData data;
     protected Chart mainChart;
@@ -33,6 +34,7 @@ public abstract class TransactionChart {
     private Label dateLabel2;
 
     public TransactionChart(List<Transaction> transactions) {
+        viewPane = new BorderPane();
         data = new ChartData(transactions);
         List<String> timeOptions = Arrays.asList("All time",
                 "Past week",
@@ -80,16 +82,14 @@ public abstract class TransactionChart {
         timeframeTypeDropdown.setOnAction(e -> {
 
             String selectedType = timeframeTypeDropdown.getValue();
+            System.out.println(selectedType);
 
             if (selectedType.equals("Custom")) {
                 dateLabel1.setVisible(true);
                 dateLabel2.setVisible(true);
                 dateSelect1.setVisible(true);
                 dateSelect2.setVisible(true);
-
-                LocalDate startDate = dateSelect1.getValue();
-                LocalDate endDate = dateSelect2.getValue();
-                data.updateTimeframe(startDate, endDate);
+                checkCustomUpdate();
             } else {
                 dateLabel1.setVisible(false);
                 dateLabel2.setVisible(false);
@@ -100,13 +100,24 @@ public abstract class TransactionChart {
 
             recreateChart();
 
+
+        });
+
+        dateSelect1.setOnAction(e -> {
+            checkCustomUpdate();
+            recreateChart();
+        });
+
+        dateSelect2.setOnAction(e -> {
+            checkCustomUpdate();
+            recreateChart();
         });
 
 
 
 
         additionalInfo.setCenter(timeframeSettings);
-        //additionalInfo.setCenter(MISSING_DATA_LABEL);
+        viewPane.setBottom(additionalInfo);
     }
 
     public String getTitle() {
@@ -118,18 +129,28 @@ public abstract class TransactionChart {
     }
 
     public Pane getView() {
-        BorderPane pane = new BorderPane();
-
-        if (data.hasData()) {
-            pane.setCenter(mainChart);
-            pane.setBottom(additionalInfo);
-        } else {
-            pane.setCenter(MISSING_DATA_LABEL);
-        }
-
-        return pane;
+        return viewPane;
     }
 
     protected abstract void recreateChart();
+
+    protected void updatePane() {
+        if (data.hasData()) {
+            viewPane.setCenter(mainChart);
+        } else {
+            viewPane.setCenter(MISSING_DATA_LABEL);
+        }
+    }
+
+    private void checkCustomUpdate() {
+        LocalDate startDate = dateSelect1.getValue();
+        LocalDate endDate = dateSelect2.getValue();
+
+        if (startDate != null && endDate != null) {
+            data.updateTimeframe(startDate, endDate);
+        }
+
+
+    }
 
 }

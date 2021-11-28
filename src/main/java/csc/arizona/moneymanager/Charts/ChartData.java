@@ -189,7 +189,7 @@ public class ChartData {
      * @param category
      * @param start
      * @param end
-     * @return list of all transactions by category type made within a given number of days.
+     * @return list of all transactions by category type made between two dates.
      */
     private List<Transaction> getTransactionsBetween(String category, LocalDate start, LocalDate end) {
         List<Transaction> transactions = allCategoryTransactions.get(category);
@@ -200,6 +200,7 @@ public class ChartData {
 
             if (otherDate.isEqual(start) || otherDate.isEqual(end) ||
                     (otherDate.isAfter(start) && otherDate.isBefore(end))) {
+                System.out.println(otherDate.toString());
                 inTimeframe.add(transaction);
             }
         }
@@ -233,7 +234,7 @@ public class ChartData {
      @return set of categories.
      */
     public Set<String> getCategorySet() {
-        return timeframeSums.keySet();
+        return timeframeCategoryTransactions.keySet();
     }
 
     /**
@@ -242,7 +243,7 @@ public class ChartData {
      * @return true if at least one transaction data is in the set timeframe, false otherwise.
      */
     public boolean hasData() {
-        return !timeframeCategoryTransactions.isEmpty();
+        return !timeframeTransactions.isEmpty();
     }
 
     /**
@@ -295,14 +296,17 @@ public class ChartData {
      * @param endDate
      */
     public void updateTimeframe(LocalDate startDate, LocalDate endDate) {
+        System.out.println("updateTimeframe");
         timeframeTransactions = new ArrayList<>();
         timeframeCategoryTransactions = new HashMap<>();
 
-        for (String category : allCategoryTransactions.keySet()) {
-            List<Transaction> inTimeframe = getTransactionsBetween(category, startDate, endDate);
+        if (startDate.isEqual(endDate) || startDate.isBefore(endDate)) {
+            for (String category : allCategoryTransactions.keySet()) {
+                List<Transaction> inTimeframe = getTransactionsBetween(category, startDate, endDate);
 
-            timeframeTransactions.addAll(inTimeframe);
-            timeframeCategoryTransactions.put(category, inTimeframe);
+                timeframeTransactions.addAll(inTimeframe);
+                timeframeCategoryTransactions.put(category, inTimeframe);
+            }
         }
 
         timeframeSums = new HashMap<>();

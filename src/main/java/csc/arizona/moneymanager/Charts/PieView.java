@@ -28,6 +28,7 @@ public class PieView extends TransactionChart {
     protected void recreateChart() {
         if (!data.hasData()) {
             mainChart = null;
+            updatePane();
             return;
         }
 
@@ -51,5 +52,7 @@ public class PieView extends TransactionChart {
         ObservableList<PieChart.Data> pieDataObservable = FXCollections.observableArrayList(pieCategoryTotals);
 
         mainChart = new PieChart(pieDataObservable);
+
+        updatePane();
     }
 }

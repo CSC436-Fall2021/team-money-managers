@@ -46,6 +46,7 @@ public class ScatterView extends TransactionChart {
     protected void recreateChart() {
         if (!data.hasData()) {
             mainChart = null;
+            updatePane();
             return;
         }
 
@@ -203,5 +204,8 @@ public class ScatterView extends TransactionChart {
             node.setStyle("-fx-stroke: transparent");
 
         }
+
+        updatePane();
+
     }
 }

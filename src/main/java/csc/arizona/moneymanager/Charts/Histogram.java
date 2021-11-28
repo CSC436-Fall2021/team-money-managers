@@ -30,6 +30,7 @@ public class Histogram extends TransactionChart {
     protected void recreateChart() {
         if (!data.hasData()) {
             mainChart = null;
+            updatePane();
             return;
         }
 
@@ -70,6 +71,9 @@ public class Histogram extends TransactionChart {
         mainChart = new StackedBarChart<String, Double>(xAxis, yAxis);
         mainChart.setAnimated(false);
         ((StackedBarChart)mainChart).getData().addAll(allSeries);
+
+        updatePane();
+
     }
 
 
