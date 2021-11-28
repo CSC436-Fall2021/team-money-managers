@@ -65,9 +65,6 @@ public class Histogram extends TransactionChart {
         mainChart.setAnimated(false);
         ((StackedBarChart)mainChart).getData().addAll(allSeries);
 
-        additionalInfo = new VBox(new Label("default"));
-
-
 
 
         //display

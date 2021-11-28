@@ -4,5 +4,6 @@ public enum ChartTimeframe {
     ALL,
     PAST_WEEK,
     PAST_MONTH,
-    THIS_MONTH
+    THIS_MONTH,
+    CUSTOM
 }

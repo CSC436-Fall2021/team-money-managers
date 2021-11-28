@@ -40,7 +40,6 @@ public class PieView extends TransactionChart {
         ObservableList<PieChart.Data> pieDataObservable = FXCollections.observableArrayList(pieCategoryTotals);
 
         mainChart = new PieChart(pieDataObservable);
-        additionalInfo = new VBox(new Label("default"));
 
         // display
     }

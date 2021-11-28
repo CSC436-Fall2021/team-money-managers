@@ -187,8 +187,6 @@ public class ScatterView extends TransactionChart {
 
         }
 
-        additionalInfo = new VBox(new Label("default"));
-
         //display
     }
 
