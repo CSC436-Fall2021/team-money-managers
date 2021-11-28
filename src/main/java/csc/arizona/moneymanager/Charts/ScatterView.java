@@ -22,11 +22,28 @@ public class ScatterView extends TransactionChart {
     private double budget;
 
     public ScatterView(List<Transaction> transactions, double budget) {
+        super(transactions);
         title = "Transactions by category over time: Scatter";
         this.budget = budget;
 
-        data = new ChartData(transactions);
+        recreateChart();
 
+    }
+
+    private int getNearest(int original, int divisibleBy) {
+        int nearest = original;
+        int rem = original % divisibleBy;
+
+        if (rem > divisibleBy / 2) { // if closer to the next number divisible by x
+            nearest += (divisibleBy - rem);
+        } else { // if closer to the previous number divisible by x
+            nearest -= rem;
+        }
+        return nearest;
+    }
+
+    @Override
+    protected void recreateChart() {
         if (!data.hasData()) {
             mainChart = null;
             return;
@@ -186,20 +203,5 @@ public class ScatterView extends TransactionChart {
             node.setStyle("-fx-stroke: transparent");
 
         }
-
-        //display
     }
-
-    private int getNearest(int original, int divisibleBy) {
-        int nearest = original;
-        int rem = original % divisibleBy;
-
-        if (rem > divisibleBy / 2) { // if closer to the next number divisible by x
-            nearest += (divisibleBy - rem);
-        } else { // if closer to the previous number divisible by x
-            nearest -= rem;
-        }
-        return nearest;
-    }
-
 }

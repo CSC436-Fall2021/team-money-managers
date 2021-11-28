@@ -17,8 +17,19 @@ import java.util.*;
 public class PieView extends TransactionChart {
 
     public PieView(List<Transaction> transactions) {
+        super(transactions);
+
         title = "Transactions by Category: PieChart";
-        data = new ChartData(transactions);
+        recreateChart();
+    }
+
+
+    @Override
+    protected void recreateChart() {
+        if (!data.hasData()) {
+            mainChart = null;
+            return;
+        }
 
         Set<String> categoryNames = data.getCategorySet();
 
@@ -40,9 +51,5 @@ public class PieView extends TransactionChart {
         ObservableList<PieChart.Data> pieDataObservable = FXCollections.observableArrayList(pieCategoryTotals);
 
         mainChart = new PieChart(pieDataObservable);
-
-        // display
     }
-
-
 }

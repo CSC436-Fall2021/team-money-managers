@@ -184,6 +184,29 @@ public class ChartData {
         return inTimeframe;
     }
 
+    /**
+     * Returns the list of all transactions by category type made between a start and an end date
+     * @param category
+     * @param start
+     * @param end
+     * @return list of all transactions by category type made within a given number of days.
+     */
+    private List<Transaction> getTransactionsBetween(String category, LocalDate start, LocalDate end) {
+        List<Transaction> transactions = allCategoryTransactions.get(category);
+        List<Transaction> inTimeframe = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            LocalDate otherDate = transaction.getDate();
+
+            if (otherDate.isEqual(start) || otherDate.isEqual(end) ||
+                    (otherDate.isAfter(start) && otherDate.isBefore(end))) {
+                inTimeframe.add(transaction);
+            }
+        }
+
+        return inTimeframe;
+    }
+
 
     /**
      * Returns the net sum of transactions of a category type within set timeframe.
@@ -235,8 +258,8 @@ public class ChartData {
      *
      * @param timeframe
      */
-    public void updateTimeframe(ChartTimeframe timeframe) {
-        if (timeframe == ChartTimeframe.ALL) {
+    public void updateTimeframe(String timeframe) {
+        if (timeframe.equals("All time")) {
             timeframeTransactions = allTransactions;
             timeframeCategoryTransactions = allCategoryTransactions;
             updateSums();
@@ -249,16 +272,37 @@ public class ChartData {
         for (String category : allCategoryTransactions.keySet()) {
             List<Transaction> inTimeframe = null;
 
-            if (timeframe == ChartTimeframe.PAST_MONTH) {
+            if (timeframe.equals("Past month")) {
                 inTimeframe = getTransactionsPastDays(category, 30);
-            } else if (timeframe == ChartTimeframe.PAST_WEEK) {
+            } else if (timeframe.equals("Past week")) {
                 inTimeframe = getTransactionsPastDays(category, 7);
-            } else if (timeframe == ChartTimeframe.THIS_MONTH) {
+            } else if (timeframe.equals("This month")) {
                 inTimeframe = getTransactionsCategoryThisMonth(category);
             }
 
             timeframeTransactions.addAll(inTimeframe);
             timeframeCategoryTransactions.put(category, inTimeframe); // inTimeframe will never be null.
+        }
+
+        timeframeSums = new HashMap<>();
+        updateSums();
+    }
+
+    /**
+     * Sets a restriction on transactions to be within a custom start and end date.
+     *
+     * @param startDate
+     * @param endDate
+     */
+    public void updateTimeframe(LocalDate startDate, LocalDate endDate) {
+        timeframeTransactions = new ArrayList<>();
+        timeframeCategoryTransactions = new HashMap<>();
+
+        for (String category : allCategoryTransactions.keySet()) {
+            List<Transaction> inTimeframe = getTransactionsBetween(category, startDate, endDate);
+
+            timeframeTransactions.addAll(inTimeframe);
+            timeframeCategoryTransactions.put(category, inTimeframe);
         }
 
         timeframeSums = new HashMap<>();

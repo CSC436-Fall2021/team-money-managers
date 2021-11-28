@@ -19,9 +19,15 @@ import java.util.Set;
 public class Histogram extends TransactionChart {
 
     public Histogram(List<Transaction> transactions) {
+        super(transactions);
         title = "Transactions by Category: Histogram";
-        data = new ChartData(transactions);
 
+        recreateChart();
+
+    }
+
+    @Override
+    protected void recreateChart() {
         if (!data.hasData()) {
             mainChart = null;
             return;
@@ -64,10 +70,6 @@ public class Histogram extends TransactionChart {
         mainChart = new StackedBarChart<String, Double>(xAxis, yAxis);
         mainChart.setAnimated(false);
         ((StackedBarChart)mainChart).getData().addAll(allSeries);
-
-
-
-        //display
     }
 
 

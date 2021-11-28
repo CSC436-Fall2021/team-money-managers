@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.Charts;
 
+import csc.arizona.moneymanager.TransactionUI.Transaction;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.chart.Chart;
@@ -11,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +32,8 @@ public abstract class TransactionChart {
     private Label dateLabel1;
     private Label dateLabel2;
 
-    public TransactionChart() {
+    public TransactionChart(List<Transaction> transactions) {
+        data = new ChartData(transactions);
         List<String> timeOptions = Arrays.asList("All time",
                 "Past week",
                 "Past month",
@@ -83,12 +86,19 @@ public abstract class TransactionChart {
                 dateLabel2.setVisible(true);
                 dateSelect1.setVisible(true);
                 dateSelect2.setVisible(true);
+
+                LocalDate startDate = dateSelect1.getValue();
+                LocalDate endDate = dateSelect2.getValue();
+                data.updateTimeframe(startDate, endDate);
             } else {
                 dateLabel1.setVisible(false);
                 dateLabel2.setVisible(false);
                 dateSelect1.setVisible(false);
                 dateSelect2.setVisible(false);
+                data.updateTimeframe(selectedType);
             }
+
+            recreateChart();
 
         });
 
@@ -119,5 +129,7 @@ public abstract class TransactionChart {
 
         return pane;
     }
+
+    protected abstract void recreateChart();
 
 }
