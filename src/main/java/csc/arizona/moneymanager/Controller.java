@@ -408,7 +408,7 @@ public class Controller extends Application {
      * @param value the category
      * @param text the budget
      */
-    public static void setCategoryBudget(String value, String text) {
+    public static void setCategoryBudget(String value, double text) {
 
     }
 
