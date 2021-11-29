@@ -285,10 +285,14 @@ public class MainUI {
     }
 
     public void displayCategoryBudget() {
-        CategoryBudget categoryBudget = new CategoryBudget("Set Category Budget", "Bottom text");
+        CategoryBudget categoryBudget = new CategoryBudget("Set Category Budget", "Cancel");
         servicesPane.setCenter(categoryBudget);
         Button setCatBudBut = new Button("Set Category Budget");
-//        setCatBudBut.setOnMouseClicked(event -> Controller.setCategoryBudget(value, setCatBud.getText()));
+        setCatBudBut.setOnMouseClicked(event -> Controller.setCategoryBudget(
+                categoryBudget.getSelectedCategory().getText(), categoryBudget.getSelectedBudget()));
+        HBox budgetOptions = createExitContentButtonOptionBox(categoryBudget.getButtonText());
+        budgetOptions.getChildren().add(0, setCatBudBut);
+        optionsPane.setCenter(budgetOptions);
     }
 
     /**
