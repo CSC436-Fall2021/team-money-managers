@@ -217,6 +217,6 @@ public class MainMenuBar extends MenuBar {
      * @author Carter Boyd
      */
     private void categoryBudgetAction() {
-        mainUI.displayCategoryBudget();
+        mainUI.displayCategoryBudgetUI();
     }
 }
