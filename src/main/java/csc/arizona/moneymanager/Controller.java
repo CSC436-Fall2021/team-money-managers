@@ -409,7 +409,8 @@ public class Controller extends Application {
      * @param text the budget
      */
     public static void setCategoryBudget(String value, double text) {
-
+        System.out.println(value);
+        System.out.println(text);
     }
 
     /**
