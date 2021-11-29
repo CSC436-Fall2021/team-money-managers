@@ -17,6 +17,7 @@ public class CategoryBudget extends ServicesView {
     private static final double HGAP = 20.0;
     private static final double VGAP = 20.0;
     private Label categoryLabel;
+    private Label categoryTotal;
     private String category;
     private TextField setCatBud;
     private boolean hasDisplayed = false;
@@ -77,33 +78,33 @@ public class CategoryBudget extends ServicesView {
         content.setVgap(VGAP);
         content.addRow(0, introBox);
         category.setOnAction(event -> {
+            this.category = category.getValue();
             if (hasDisplayed) {
-                updateDisplay(category.getValue());
-                this.category = category.getValue();
+                updateDisplay();
             } else {
-                displayRestOfUI(category.getValue());
-                this.category = category.getValue();
+                displayRestOfUI();
                 hasDisplayed = true;
             }
         });
     }
 
-    private void displayRestOfUI(String value) {
-        categoryLabel = new Label("Your current budget for " + value + " is:");
+    private void displayRestOfUI() {
+        categoryLabel = new Label("Your current budget for " + category + " is:"); //TODO get the budget for this category
         content.addRow(1, categoryLabel);
+        categoryTotal = new Label("the total amount that has been spent in " + category + " is $" + Controller.getCategorySpent(category));
+        content.addRow(2, categoryTotal);
         Label setCatBudLabel = new Label("What would you like the budget for this category to be?");
         setCatBud = new TextField();
         HBox setBox = new HBox(setCatBudLabel, setCatBud);
         setBox.setSpacing(5.0);
-        content.addRow(2, setBox);
+        content.addRow(3, setBox);
     }
 
     /**
      * if the rest of the UI has already been created then
-     *
-     * @param value the category selected
      */
-    private void updateDisplay(String value) {
-        categoryLabel.setText("Your current budget for " + value + " is:");
+    private void updateDisplay() {
+        categoryLabel.setText("Your current budget for " + category + " is:");
+        categoryTotal.setText("the total amount that has been spent in " + category + " is $" + Controller.getCategorySpent(category));
     }
 }
