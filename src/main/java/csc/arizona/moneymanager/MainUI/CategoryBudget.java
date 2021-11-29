@@ -16,7 +16,8 @@ public class CategoryBudget extends ServicesView {
 
     private static final double HGAP = 20.0;
     private static final double VGAP = 20.0;
-    private Label selectedCategory;
+    private Label categoryLabel;
+    private String category;
     private TextField setCatBud;
     private boolean hasDisplayed = false;
 
@@ -46,8 +47,8 @@ public class CategoryBudget extends ServicesView {
     /**
      * @return the category that the user wants to budget
      */
-    public Label getSelectedCategory() {
-        return selectedCategory;
+    public String getCategory() {
+        return category;
     }
 
     /**
@@ -78,16 +79,18 @@ public class CategoryBudget extends ServicesView {
         category.setOnAction(event -> {
             if (hasDisplayed) {
                 updateDisplay(category.getValue());
+                this.category = category.getValue();
             } else {
                 displayRestOfUI(category.getValue());
+                this.category = category.getValue();
                 hasDisplayed = true;
             }
         });
     }
 
     private void displayRestOfUI(String value) {
-        selectedCategory = new Label("Your current budget for " + value + " is:");
-        content.addRow(1, selectedCategory);
+        categoryLabel = new Label("Your current budget for " + value + " is:");
+        content.addRow(1, categoryLabel);
         Label setCatBudLabel = new Label("What would you like the budget for this category to be?");
         setCatBud = new TextField();
         HBox setBox = new HBox(setCatBudLabel, setCatBud);
@@ -101,6 +104,6 @@ public class CategoryBudget extends ServicesView {
      * @param value the category selected
      */
     private void updateDisplay(String value) {
-        selectedCategory.setText("Your current budget for " + value + " is:");
+        categoryLabel.setText("Your current budget for " + value + " is:");
     }
 }
