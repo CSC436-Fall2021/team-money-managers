@@ -17,16 +17,8 @@ public class CategoryBudget extends ServicesView {
     private static final double HGAP = 20.0;
     private static final double VGAP = 20.0;
     private Label selectedCategory;
-    private double selectedBudget;
+    private TextField setCatBud;
     private boolean hasDisplayed = false;
-
-    public Label getSelectedCategory() {
-        return selectedCategory;
-    }
-
-    public double getSelectedBudget() {
-        return selectedBudget;
-    }
 
     /**
      * Constructor.
@@ -52,6 +44,25 @@ public class CategoryBudget extends ServicesView {
     }
 
     /**
+     * @return the category that the user wants to budget
+     */
+    public Label getSelectedCategory() {
+        return selectedCategory;
+    }
+
+    /**
+     * @return the budget the user wanted to budget, if the user selected a non-numeral then it will return -1 as a
+     * fail-safe
+     */
+    public double getSelectedBudget() {
+        try {
+            return Double.parseDouble(setCatBud.getText());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    /**
      * Sets up GridPane contents.
      */
     @Override
@@ -74,11 +85,11 @@ public class CategoryBudget extends ServicesView {
         });
     }
 
-    private void displayRestOfUI(String value) { //FIXME if the user changes value it will not register
+    private void displayRestOfUI(String value) {
         selectedCategory = new Label("Your current budget for " + value + " is:");
         content.addRow(1, selectedCategory);
         Label setCatBudLabel = new Label("What would you like the budget for this category to be?");
-        TextField setCatBud = new TextField();
+        setCatBud = new TextField();
         HBox setBox = new HBox(setCatBudLabel, setCatBud);
         setBox.setSpacing(5.0);
         content.addRow(2, setBox);
@@ -87,7 +98,7 @@ public class CategoryBudget extends ServicesView {
     /**
      * if the rest of the UI has already been created then
      *
-     * @param value
+     * @param value the category selected
      */
     private void updateDisplay(String value) {
         selectedCategory.setText("Your current budget for " + value + " is:");
