@@ -284,12 +284,20 @@ public class MainUI {
 
     }
 
-    public void displayCategoryBudget() {
+    /**
+     * Displays the category budget UI where the user is able to set a budget on a category
+     */
+    public void displayCategoryBudgetUI() {
         CategoryBudget categoryBudget = new CategoryBudget("Set Category Budget", "Cancel");
         servicesPane.setCenter(categoryBudget);
         Button setCatBudBut = new Button("Set Category Budget");
-        setCatBudBut.setOnMouseClicked(event -> Controller.setCategoryBudget(
-                categoryBudget.getSelectedCategory().getText(), categoryBudget.getSelectedBudget()));
+        setCatBudBut.setOnMouseClicked(event -> {
+            double budget = categoryBudget.getSelectedBudget();
+            if (budget <= 0)
+                Controller.failureAlert("budget");
+            else
+                Controller.setCategoryBudget(categoryBudget.getSelectedCategory().getText(), budget);
+        });
         HBox budgetOptions = createExitContentButtonOptionBox(categoryBudget.getButtonText());
         budgetOptions.getChildren().add(0, setCatBudBut);
         optionsPane.setCenter(budgetOptions);
