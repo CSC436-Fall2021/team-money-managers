@@ -296,7 +296,7 @@ public class MainUI {
             if (budget <= 0)
                 Controller.failureAlert("budget");
             else
-                Controller.setCategoryBudget(categoryBudget.getSelectedCategory().getText(), budget);
+                Controller.setCategoryBudget(categoryBudget.getCategory(), budget);
         });
         HBox budgetOptions = createExitContentButtonOptionBox(categoryBudget.getButtonText());
         budgetOptions.getChildren().add(0, setCatBudBut);
