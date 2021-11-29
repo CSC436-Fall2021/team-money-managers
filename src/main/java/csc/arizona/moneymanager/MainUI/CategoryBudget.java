@@ -16,8 +16,17 @@ public class CategoryBudget extends ServicesView {
 
     private static final double HGAP = 20.0;
     private static final double VGAP = 20.0;
-    public Label selectedCategory;
+    private Label selectedCategory;
+    private double selectedBudget;
     private boolean hasDisplayed = false;
+
+    public Label getSelectedCategory() {
+        return selectedCategory;
+    }
+
+    public double getSelectedBudget() {
+        return selectedBudget;
+    }
 
     /**
      * Constructor.
