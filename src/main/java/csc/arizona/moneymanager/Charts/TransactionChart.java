@@ -18,6 +18,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Base class for displaying charts in the service view.
+ *
+ * Sets up the space for the chart and date selection.
+ *
+ * Provides base methods for updating what the pane should display.
+ */
 public abstract class TransactionChart {
 
     protected static final Label MISSING_DATA_LABEL = new Label("No Transaction data available.");
