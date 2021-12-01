@@ -122,7 +122,7 @@ public class Controller extends Application {
         stage.setScene(LoginUI.createScene());
     }
 
-    public static void showReport(String type, LocalDate start, LocalDate end)  {
+    public static void showHistory(LocalDate start, LocalDate end)  {
         Stage reportPopUp = new Stage();
         reportPopUp.setTitle("Report");
         BorderPane bp = new BorderPane();
@@ -134,48 +134,43 @@ public class Controller extends Application {
         } catch (Exception e){
             System.err.println("Getting user data failed.");
         } finally {
-            if (type != null) {
-                if (type.equals("history")) {
-                    TextField searchBox = new TextField();
-                    TableView reportTable = getHistoryTable(start, end, searchBox);
-                    VBox topBox = new VBox();
+            TextField searchBox = new TextField();
+            TableView reportTable = getHistoryTable(start, end, searchBox);
+            VBox topBox = new VBox();
 
-                    HBox labelBox = new HBox();
-                    labelBox.setAlignment(Pos.CENTER);
-                    Label label = new Label("Transaction History");
-                    label.setFont(new Font("Arial", 20));
-                    label.setPadding(new Insets(0, 0, 10, 0));
-                    labelBox.getChildren().add(label);
+            HBox labelBox = new HBox();
+            labelBox.setAlignment(Pos.CENTER);
+            Label label = new Label("Transaction History");
+            label.setFont(new Font("Arial", 20));
+            label.setPadding(new Insets(0, 0, 10, 0));
+            labelBox.getChildren().add(label);
 
-                    HBox searchHBox = new HBox();
-                    searchHBox.setAlignment(Pos.CENTER_RIGHT);
-                    searchBox.setPrefSize(120,3);
-                    searchHBox.getChildren().addAll(new Label("Search: "), searchBox);
+            HBox searchHBox = new HBox();
+            searchHBox.setAlignment(Pos.CENTER_RIGHT);
+            searchBox.setPrefSize(120,3);
+            searchHBox.getChildren().addAll(new Label("Search: "), searchBox);
 
-                    topBox.getChildren().addAll(labelBox, searchHBox);
+            topBox.getChildren().addAll(labelBox, searchHBox);
 
-                    HBox removeTransactionBox = new HBox();
-                    removeTransactionBox.setAlignment(Pos.CENTER);
-                    Button removeTransactionButton = new Button("Remove Transaction");
-                    removeTransactionButton.setOnAction(e -> {
-                        TableTransaction tableTransaction = (TableTransaction) reportTable.getSelectionModel().getSelectedItem();
-                        if (tableTransaction != null) {
-                            removeTransactionFromHistory(tableTransaction);
-                            bp.setCenter(getHistoryTable(start, end, searchBox)); // updating table
-                        }
-                    });
-                    removeTransactionBox.getChildren().add(removeTransactionButton);
-
-                    bp.setTop(topBox);
-                    bp.setCenter(reportTable);
-                    bp.setBottom(removeTransactionBox);
-                    bp.setPadding(new Insets(10, 10, 10, 10));
-
-                    reportPopUp.setScene(reportScene);
-                    reportPopUp.show();
+            HBox removeTransactionBox = new HBox();
+            removeTransactionBox.setAlignment(Pos.CENTER);
+            Button removeTransactionButton = new Button("Remove Transaction");
+            removeTransactionButton.setOnAction(e -> {
+                TableTransaction tableTransaction = (TableTransaction) reportTable.getSelectionModel().getSelectedItem();
+                if (tableTransaction != null) {
+                    removeTransactionFromHistory(tableTransaction);
+                    bp.setCenter(getHistoryTable(start, end, searchBox)); // updating table
                 }
-            }
+            });
+            removeTransactionBox.getChildren().add(removeTransactionButton);
 
+            bp.setTop(topBox);
+            bp.setCenter(reportTable);
+            bp.setBottom(removeTransactionBox);
+            bp.setPadding(new Insets(10, 10, 10, 10));
+
+            reportPopUp.setScene(reportScene);
+            reportPopUp.show();
         }
     }
 

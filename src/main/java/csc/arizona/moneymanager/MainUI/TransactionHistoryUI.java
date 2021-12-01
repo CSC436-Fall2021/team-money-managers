@@ -1,11 +1,8 @@
 package csc.arizona.moneymanager.MainUI;
 
 import csc.arizona.moneymanager.Controller;
-import csc.arizona.moneymanager.database.Report;
-import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -42,7 +39,7 @@ public class TransactionHistoryUI extends ServicesView{
 
         Button generateButton = new Button("Get Transaction History");
         generateButton.setOnAction( e -> {
-                    Controller.showReport("history", start.getValue(), end.getValue());
+                    Controller.showHistory(start.getValue(), end.getValue());
             });
 
 
