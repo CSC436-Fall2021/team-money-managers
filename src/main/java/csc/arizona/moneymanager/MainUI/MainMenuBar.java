@@ -74,7 +74,7 @@ public class MainMenuBar extends MenuBar {
         //******* Report menu setup *******/
         Menu reports = new Menu("_Reports");
         // --> Show Report option //TODO maybe make showReport a submenu with types of reports as menu items
-        MenuItem showReport = new MenuItem("Show _Report Menu");
+        MenuItem showReport = new MenuItem("Transaction History");
         showReport.setOnAction(e-> {
                     showReportsMenuAction();
                     System.out.println("reports clicked");
@@ -150,7 +150,7 @@ public class MainMenuBar extends MenuBar {
     private void exitMenuAction(){
         // ensures logout prior to exit
         logoutMenuAction();
-        System.out.println("Exit Selected"); //TODO remove when action implemented
+        System.exit(0);
     }
 
     /**
@@ -179,7 +179,7 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Show Report" is selected.
      */
     private void showReportsMenuAction(){
-        mainUI.showInfo(new ReportUI("Reports", "Exit Reports"));
+        mainUI.showInfo(new TransactionHistoryUI("Transaction History", "Exit Transaction History"));
 
     }
 
