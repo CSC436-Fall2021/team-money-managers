@@ -273,7 +273,11 @@ public class MainUI {
         // Options pane elements
         HBox budgetOptions = createExitContentButtonOptionBox(budgetUI.getButtonText());
         Button okay = new Button("Set Budget");
-        okay.setOnAction(e-> saveBudget(budgetUI.getBudget(), budgetUI.getDuration())); // if budget changed, saving new budget
+        okay.setOnAction(e-> {
+            if (budgetUI.validateBudget()) {
+                saveBudget(budgetUI.getBudget(), budgetUI.getDuration());
+            }
+        }); // if budget changed, saving new budget
         budgetOptions.getChildren().add(0, okay); // Adding confirmation button to leftmost position
 
         // Displaying budget UI in services pane
