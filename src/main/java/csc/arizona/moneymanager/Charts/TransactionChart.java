@@ -100,7 +100,6 @@ public abstract class TransactionChart {
         timeframeTypeDropdown.setOnAction(e -> {
 
             String selectedType = timeframeTypeDropdown.getValue();
-            System.out.println(selectedType);
 
             if (selectedType.equals("Custom")) {
                 dateLabel1.setVisible(true);
