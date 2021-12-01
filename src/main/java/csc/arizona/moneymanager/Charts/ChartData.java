@@ -200,7 +200,6 @@ public class ChartData {
 
             if (otherDate.isEqual(start) || otherDate.isEqual(end) ||
                     (otherDate.isAfter(start) && otherDate.isBefore(end))) {
-                System.out.println(otherDate.toString());
                 inTimeframe.add(transaction);
             }
         }
@@ -296,11 +295,13 @@ public class ChartData {
      * @param endDate
      */
     public void updateTimeframe(LocalDate startDate, LocalDate endDate) {
-        System.out.println("updateTimeframe");
         timeframeTransactions = new ArrayList<>();
         timeframeCategoryTransactions = new HashMap<>();
 
-        if (startDate.isEqual(endDate) || startDate.isBefore(endDate)) {
+        // skip looping transactions if the start date comes after the end date.
+        // we know that no transactions will be between.
+        //if (startDate.isEqual(endDate) || startDate.isBefore(endDate)) {
+        if (!startDate.isAfter(endDate)) {
             for (String category : allCategoryTransactions.keySet()) {
                 List<Transaction> inTimeframe = getTransactionsBetween(category, startDate, endDate);
 
