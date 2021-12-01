@@ -2,6 +2,7 @@ package csc.arizona.moneymanager.Charts;
 
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -10,7 +11,7 @@ import java.util.*;
  *  for the purpose of displaying graphical information in a chart.
  *
  *  Named ChartData because it was meant to provide methods to act on a chart's data,
- *  but it can be used anywhere where you are acting on any list of transactions.
+ *  but it can be used anywhere where you are acting on a list of transactions.
  *
  */
 public class ChartData {
@@ -23,10 +24,9 @@ public class ChartData {
     *   2. Past week
     *   3. Past month
     *   4. This month
+    *   5. Custom start and end date
     *
-    * Could have user enter a start and an end date as well in the future
-    *
-     */
+    */
 
     private List<Transaction> allTransactions;
     private List<Transaction> timeframeTransactions;
@@ -150,11 +150,12 @@ public class ChartData {
         List<Transaction> transactions = allCategoryTransactions.get(category);
         List<Transaction> inTimeframe = new ArrayList<>();
 
-        LocalDate curDate = LocalDate.now();
+        Month curMonth = LocalDate.now().getMonth();
         for (Transaction transaction : transactions) {
-            LocalDate otherDate = transaction.getDate();
+            Month otherMonth = transaction.getDate().getMonth();
 
-            if (curDate.getMonth() == otherDate.getMonth() ) { // may need .equals()
+            // month comparison seems to work with ==, but I changed it to .equals to be safe.
+            if (curMonth.equals(otherMonth)) {
                 inTimeframe.add(transaction);
             }
         }
@@ -176,7 +177,8 @@ public class ChartData {
         for (Transaction transaction : transactions) {
             LocalDate otherDate = transaction.getDate();
 
-            if (ChronoUnit.DAYS.between(otherDate, curDate) <= days) {
+            long daysBetween = ChronoUnit.DAYS.between(otherDate, curDate);
+            if (daysBetween >= 0 && daysBetween <= days) {
                 inTimeframe.add(transaction);
             }
         }
@@ -300,7 +302,6 @@ public class ChartData {
 
         // skip looping transactions if the start date comes after the end date.
         // we know that no transactions will be between.
-        //if (startDate.isEqual(endDate) || startDate.isBefore(endDate)) {
         if (!startDate.isAfter(endDate)) {
             for (String category : allCategoryTransactions.keySet()) {
                 List<Transaction> inTimeframe = getTransactionsBetween(category, startDate, endDate);
@@ -339,7 +340,17 @@ public class ChartData {
         return sum;
     }
 
-
+    /**
+     * Returns the date of the earliest transaction within the timeframe.
+     *
+     * ex:
+     * timeframe between 11-20 and 11-30
+     * earliest transaction 11-23
+     *
+     * returns 11-23 date
+     *
+     * @return the date of the earliest transaction within the timeframe.
+     */
     public LocalDate getStartDate() {
         LocalDate start = null;
 
@@ -355,6 +366,17 @@ public class ChartData {
         return start;
     }
 
+    /**
+     * Returns the date of the latest transaction within the timeframe.
+     *
+     * ex:
+     * timeframe between 11-20 and 11-30
+     * latest transaction 11-27
+     *
+     * returns 11-27 date
+     *
+     * @return the date of the latest transaction within the timeframe.
+     */
     public LocalDate getEndDate() {
         LocalDate end = null;
 

@@ -67,12 +67,6 @@ public abstract class TransactionChart {
         timeframeTypeDropdown.setEditable(false);
         timeframeTypeDropdown.getSelectionModel().selectFirst(); // select a default ("All time")
 
-        dateSelect1.setEditable(false);
-        dateSelect2.setEditable(false);
-        // set dates to not show up immediately (default = "all time")
-        //dateSelect1.setVisible(false);
-        //dateSelect2.setVisible(false);
-
 
         GridPane timeframeSettings = new GridPane();
         timeframeSettings.setAlignment(Pos.CENTER);
@@ -81,7 +75,7 @@ public abstract class TransactionChart {
         timeframeSettings.add(new Label("Duration"), 1, 0);
         timeframeSettings.add(timeframeTypeDropdown, 1, 1);
 
-        // dates on bottom row, to the sides
+        // date selectors set to the sides of the timeframe dropdown.
         dateLabel1 = new Label("Start");
         dateLabel2 = new Label("End");
         timeframeSettings.add(dateLabel1, 0, 0);
@@ -95,6 +89,10 @@ public abstract class TransactionChart {
         dateLabel2.setVisible(false);
         dateSelect1.setVisible(false);
         dateSelect2.setVisible(false);
+
+        // disable editing datepickers
+        dateSelect1.setEditable(false);
+        dateSelect2.setEditable(false);
 
         // if user selects "custom", show date pickers. otherwise, hide them.
         timeframeTypeDropdown.setOnAction(e -> {
@@ -153,8 +151,21 @@ public abstract class TransactionChart {
         return viewPane;
     }
 
+    /**
+     * Implemented by subclasses.
+     *
+     * Do whatever you need to do to reflect the changes to the timeframe onto the chart.
+     */
     protected abstract void recreateChart();
 
+    /**
+     * Updates the pane as seen in the Service view.
+     *
+     * The pane will always display a timeframe selection at the bottom of the pane (set in constructor).
+     *
+     * If the timeframe has any transaction data within it, display the chart created from that data.
+     * Otherwise, display that there is no data available with the given settings.
+     */
     protected void updatePane() {
         if (data.hasData()) {
             viewPane.setCenter(mainChart);
@@ -163,6 +174,12 @@ public abstract class TransactionChart {
         }
     }
 
+    /**
+     * For the custom timeframe selection,
+     * returns whether the data timeframe should be updated and the chart recreated.
+     *
+     * @return true if both date selectors have been set, otherwise false.
+     */
     private boolean checkCustomUpdate() {
         LocalDate startDate = dateSelect1.getValue();
         LocalDate endDate = dateSelect2.getValue();
