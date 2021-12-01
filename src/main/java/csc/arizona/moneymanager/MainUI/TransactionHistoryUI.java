@@ -10,7 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-public class ReportUI extends ServicesView{
+public class TransactionHistoryUI extends ServicesView{
     /**
      * Constructor.
      *
@@ -19,13 +19,12 @@ public class ReportUI extends ServicesView{
      */
 
 
-    public ReportUI(String title, String buttonText) {
+    public TransactionHistoryUI(String title, String buttonText) {
         super(title, buttonText);
     }
 
     @Override
     void initContent() {
-        String[] reportTypes = new String[]{"Transaction History", "...", "..."};
 
         DatePicker start = new DatePicker();
         start.setEditable(false);
@@ -40,16 +39,11 @@ public class ReportUI extends ServicesView{
         datePickerBox.setAlignment(Pos.CENTER);
         datePickerBox.getChildren().addAll(new Label("From"),start,new Label("To"),end);
 
-        ComboBox reportType = new ComboBox(FXCollections.observableArrayList(reportTypes));
 
-        Button generateButton = new Button("Generate Report");
+        Button generateButton = new Button("Get Transaction History");
         generateButton.setOnAction( e -> {
-            if(reportType.getValue() != null) {
-                if (reportType.getValue().equals("Transaction History")) {
                     Controller.showReport("history", start.getValue(), end.getValue());
-                }
-            }
-        });
+            });
 
 
 
@@ -57,9 +51,9 @@ public class ReportUI extends ServicesView{
         content.addRow(1, new Label(""));
         content.addRow(2, new Label(""),datePickerBox,new Label(""));
         content.addRow(3, new Label(""));
-        content.addRow(4, new Label(""),new Label("Report Type"),new Label(""));
+        content.addRow(4, new Label(""),new Label(""));
         content.addRow(5, new Label(""));
-        content.addRow(6, new Label(""),reportType,new Label(""));
+        content.addRow(6, new Label(""));
         content.addRow(7, new Label(""));
         content.addRow(8, new Label(""));
         content.addRow(9, new Label(""));
