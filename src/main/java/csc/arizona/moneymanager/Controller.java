@@ -13,6 +13,8 @@ import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -134,7 +136,9 @@ public class Controller extends Application {
         } finally {
             if (type != null) {
                 if (type.equals("history")) {
-                    TableView reportTable = getHistoryTable(start, end);
+                    TextField searchBox = new TextField();
+                    TableView reportTable = getHistoryTable(start, end, searchBox);
+                    VBox topBox = new VBox();
 
                     HBox labelBox = new HBox();
                     labelBox.setAlignment(Pos.CENTER);
@@ -143,6 +147,13 @@ public class Controller extends Application {
                     label.setPadding(new Insets(0, 0, 10, 0));
                     labelBox.getChildren().add(label);
 
+                    HBox searchHBox = new HBox();
+                    searchHBox.setAlignment(Pos.CENTER_RIGHT);
+                    searchBox.setPrefSize(120,3);
+                    searchHBox.getChildren().addAll(new Label("Search: "), searchBox);
+
+                    topBox.getChildren().addAll(labelBox, searchHBox);
+
                     HBox removeTransactionBox = new HBox();
                     removeTransactionBox.setAlignment(Pos.CENTER);
                     Button removeTransactionButton = new Button("Remove Transaction");
@@ -150,12 +161,12 @@ public class Controller extends Application {
                         TableTransaction tableTransaction = (TableTransaction) reportTable.getSelectionModel().getSelectedItem();
                         if (tableTransaction != null) {
                             removeTransactionFromHistory(tableTransaction);
-                            bp.setCenter(getHistoryTable(start, end)); // updating table
+                            bp.setCenter(getHistoryTable(start, end, searchBox)); // updating table
                         }
                     });
                     removeTransactionBox.getChildren().add(removeTransactionButton);
 
-                    bp.setTop(labelBox);
+                    bp.setTop(topBox);
                     bp.setCenter(reportTable);
                     bp.setBottom(removeTransactionBox);
                     bp.setPadding(new Insets(10, 10, 10, 10));
@@ -174,7 +185,7 @@ public class Controller extends Application {
      * @param end the report end date
      * @return the TableView with the transaction between the given dates.
      */
-    private static TableView getHistoryTable(LocalDate start, LocalDate end){
+    private static TableView getHistoryTable(LocalDate start, LocalDate end, TextField searchBox){
         List<Transaction> transactions = new ArrayList<>(currentUser.getTransactions());
 
         for (Transaction t: currentUser.getTransactions()){
@@ -190,7 +201,7 @@ public class Controller extends Application {
             }
         }
 
-        return transactionTableView(transactions);
+        return transactionTableView(transactions, searchBox);
     }
 
     /**
@@ -202,7 +213,7 @@ public class Controller extends Application {
         database.removeTransaction(currentUser, transaction, false);
     }
 
-    private static TableView transactionTableView(List<Transaction> transactions){
+    private static TableView transactionTableView(List<Transaction> transactions,TextField searchBox){
         TableView tv = new TableView();
         tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tv.setPlaceholder(new Label("No report to display"));
@@ -241,7 +252,30 @@ public class Controller extends Application {
             temp.add(new TableTransaction(t.getDate().toString(), t.getCategory(), Double.toString(t.getAmount()), t.getMemo()));
         }
 
+
+
         observableList = FXCollections.observableList(temp);
+
+        FilteredList<TableTransaction> filtered = new FilteredList<>(observableList, b-> true);
+
+        searchBox.textProperty().addListener((obsv, old, newVal) -> {
+            filtered.setPredicate(tableTransaction ->{
+                if (!(newVal == null || newVal.isBlank() || newVal.isEmpty())) {
+                    String searchKeyword = newVal.toLowerCase();
+                    if (tableTransaction.getMemo().toLowerCase().indexOf(searchKeyword) > -1){
+                        return true;
+                    } else if (tableTransaction.getCategeroy().toLowerCase().indexOf(searchKeyword) > -1){
+                        return true;
+                    }
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+            SortedList<TableTransaction> sorted = new SortedList<>(filtered);
+            sorted.comparatorProperty().bind(tv.comparatorProperty());
+            tv.setItems(sorted);
+        });
 
         tv.setItems(observableList);
         tv.getColumns().addAll(dateColumn, categoryColumn,memoColumn, amountColumn);
