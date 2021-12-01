@@ -106,28 +106,32 @@ public abstract class TransactionChart {
                 dateLabel2.setVisible(true);
                 dateSelect1.setVisible(true);
                 dateSelect2.setVisible(true);
-                checkCustomUpdate();
+                if (checkCustomUpdate()) {
+                    recreateChart();
+                }
             } else {
                 dateLabel1.setVisible(false);
                 dateLabel2.setVisible(false);
                 dateSelect1.setVisible(false);
                 dateSelect2.setVisible(false);
                 data.updateTimeframe(selectedType);
+                recreateChart();
             }
-
-            recreateChart();
 
 
         });
 
+        // for both datepickers, recreate the chart after user selects a date - if both dates have been set.
         dateSelect1.setOnAction(e -> {
-            checkCustomUpdate();
-            recreateChart();
+            if (checkCustomUpdate()) {
+                recreateChart();
+            }
         });
 
         dateSelect2.setOnAction(e -> {
-            checkCustomUpdate();
-            recreateChart();
+            if (checkCustomUpdate()) {
+                recreateChart();
+            }
         });
 
 
@@ -159,14 +163,16 @@ public abstract class TransactionChart {
         }
     }
 
-    private void checkCustomUpdate() {
+    private boolean checkCustomUpdate() {
         LocalDate startDate = dateSelect1.getValue();
         LocalDate endDate = dateSelect2.getValue();
 
         if (startDate != null && endDate != null) {
             data.updateTimeframe(startDate, endDate);
+            return true;
         }
 
+        return false;
 
     }
 
