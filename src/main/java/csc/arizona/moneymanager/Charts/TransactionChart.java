@@ -28,8 +28,21 @@ public abstract class TransactionChart {
     protected Chart mainChart;
     protected BorderPane additionalInfo;
     protected ComboBox<String> timeframeTypeDropdown;
-    protected DatePicker dateSelect1;
-    protected DatePicker dateSelect2;
+
+
+    /*
+    * Custom date selection (from a start date to an end date).
+    *
+    * static = easy way to preserve custom date info across charts (user does not need to re-enter custom dates when picking new chart)
+    *
+    * easiest way of doing this since MainUI creates new TransactionCharts when the user wants to view them.
+    *
+    * an alternative way would be creating only one "ChartUI" in MainUI and having the chart select methods
+    * in MainUI make ChartUI change its charts.
+    *
+    */
+    protected static final DatePicker dateSelect1 = new DatePicker();
+    protected static final DatePicker dateSelect2 = new DatePicker();
     private Label dateLabel1;
     private Label dateLabel2;
 
@@ -47,8 +60,6 @@ public abstract class TransactionChart {
         timeframeTypeDropdown.setEditable(false);
         timeframeTypeDropdown.getSelectionModel().selectFirst(); // select a default ("All time")
 
-        dateSelect1 = new DatePicker();
-        dateSelect2 = new DatePicker();
         dateSelect1.setEditable(false);
         dateSelect2.setEditable(false);
         // set dates to not show up immediately (default = "all time")
