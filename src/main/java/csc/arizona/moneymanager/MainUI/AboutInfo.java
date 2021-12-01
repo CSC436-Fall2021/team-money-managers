@@ -34,7 +34,7 @@ public class AboutInfo extends ServicesView {
     void initContent() { //TODO add about info
         // "Who Is" header
         HBox whoIsBox = new HBox();
-        Label whoIsLabel = new Label("Money Managers is");
+        Label whoIsLabel = new Label("Created By");
         whoIsLabel.setScaleX(1.5);
         whoIsLabel.setScaleY(1.5);
         whoIsBox.getChildren().add(whoIsLabel);
