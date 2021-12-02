@@ -154,6 +154,13 @@ public class MainUI {
         HBox updateNicknameBox = createUserNicknameUpdateBox(userNickname);
         userLandingPage.addContent(updateNicknameBox);
 
+        // Adding Help access to landing page
+        HBox helpAccessBox = createHelpAccessBox();
+        userLandingPage.addContent(helpAccessBox);
+
+        // Adding Transaction History to landing page
+        HBox transactionHistoryAccessBox = createTransactionHistoryAccessBox();
+        userLandingPage.addContent(transactionHistoryAccessBox);
 
         //TODO add other content to landing page here
 
@@ -161,15 +168,50 @@ public class MainUI {
         setServicesPane(userLandingPage);
     }
 
+    /**
+     * Creates an HBox landing page UI element for quick-access to transaction history.
+     * @return the HBox object with the help access elements
+     */
+    private HBox createTransactionHistoryAccessBox(){
+        HBox transactionHistoryAccessBox = new HBox();
+        Label accessLabel = new Label("View Transaction history: ");
+        Button accessButton = new Button("View");
+        accessButton.setOnAction(e-> viewTransactions() );
+
+        transactionHistoryAccessBox.getChildren().addAll(accessLabel, accessButton);
+
+        return transactionHistoryAccessBox;
+    }
+
+    private void viewTransactions(){  //TODO add view transactions action
+        System.out.println("View Transactions Selected");
+    }
+
+    /**
+     * Creates an HBox landing page UI element for quick-access to the help menu.
+     * @return the HBox object with the help access elements
+     */
+    private HBox createHelpAccessBox(){
+        HBox helpAccessBox = new HBox();
+        Label helpLabel = new Label("Money Managers Help: ");
+        Button helpButton = new Button("Load Help");
+        helpButton.setOnAction(e-> showInfo(new UserHelp()) );
+        helpAccessBox.getChildren().addAll(helpLabel, helpButton);
+
+        return helpAccessBox;
+    }
+
+    /**
+     * Creates an HBox UI element to allow the user to update their nickname.
+     * @param currentNickname the current user nickname, empty string or null if none.
+     * @return the HBox object with components necessary to update the user nickname.
+     */
     private HBox createUserNicknameUpdateBox(String currentNickname){
         if(currentNickname == null || currentNickname.equals("")) { // user nickname not set
             currentNickname = "none";
         }
 
-        // Update user nickname row
         HBox updateNicknameBox = new HBox();
-        updateNicknameBox.setPadding(PADDING);
-        updateNicknameBox.setSpacing(PADDING.getLeft());
         Label currentLabel = new Label("Current Nickname :");
         Label nickname = new Label(currentNickname);
         TextField nicknameTF = new TextField();
@@ -436,7 +478,7 @@ public class MainUI {
     /**
      * Shows the ChartUI in the services pane.
      *
-     * @param chart
+     * @param chart the chart to display.
      */ //TODO maybe add a parameter to select which chart type?
     public void showChartUI(TransactionChart chart){
         showInfo(new ChartUI(chart));
