@@ -122,6 +122,13 @@ public class Controller extends Application {
         stage.setScene(LoginUI.createScene());
     }
 
+    /**
+     * Shows transaction history for all transactions.
+     */
+    public static void showHistory(){
+        showHistory(null, null); // non-specified dates
+    }
+
     public static void showHistory(LocalDate start, LocalDate end)  {
         Stage reportPopUp = new Stage();
         reportPopUp.setTitle("Report");
