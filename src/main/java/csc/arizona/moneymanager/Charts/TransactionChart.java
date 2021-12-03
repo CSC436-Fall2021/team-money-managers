@@ -34,7 +34,6 @@ public abstract class TransactionChart {
     protected ChartData data;
     protected Chart mainChart;
     protected BorderPane additionalInfo;
-    protected ComboBox<String> timeframeTypeDropdown;
 
 
     /*
@@ -48,6 +47,13 @@ public abstract class TransactionChart {
     * in MainUI make ChartUI change its charts.
     *
     */
+    protected static final ComboBox<String> timeframeTypeDropdown =
+            new ComboBox<String>(FXCollections.observableArrayList(Arrays.asList("All time",
+                    "Past week",
+                    "Past month",
+                    "This month",
+                    "Custom")));
+
     protected static final DatePicker dateSelect1 = new DatePicker();
     protected static final DatePicker dateSelect2 = new DatePicker();
     private Label dateLabel1;
@@ -56,16 +62,7 @@ public abstract class TransactionChart {
     public TransactionChart(List<Transaction> transactions) {
         viewPane = new BorderPane();
         data = new ChartData(transactions);
-        List<String> timeOptions = Arrays.asList("All time",
-                "Past week",
-                "Past month",
-                "This month",
-                "Custom");
         additionalInfo = new BorderPane();
-
-        timeframeTypeDropdown = new ComboBox<String>(FXCollections.observableArrayList(timeOptions));
-        timeframeTypeDropdown.setEditable(false);
-        timeframeTypeDropdown.getSelectionModel().selectFirst(); // select a default ("All time")
 
 
         GridPane timeframeSettings = new GridPane();
@@ -83,16 +80,50 @@ public abstract class TransactionChart {
         timeframeSettings.add(dateLabel2, 2, 0);
         timeframeSettings.add(dateSelect2, 2, 1);
 
-        // set all date items to be invisible on start (default = "All time")
+        /*
+        * On creation, restores the timeframe settings last set by the user during program runtime.
+        *
+        * When the user wants to view a different chart, or set a different budget, etc.
+        * their timeframe won't be reset back to "All time"
+        *
+         */
 
-        dateLabel1.setVisible(false);
-        dateLabel2.setVisible(false);
-        dateSelect1.setVisible(false);
-        dateSelect2.setVisible(false);
+        String prevTimeSelection = timeframeTypeDropdown.getValue();
+        if (prevTimeSelection == null) { // first chart to be created. setup all long-term static objects.
+            timeframeTypeDropdown.setEditable(false);
+            timeframeTypeDropdown.getSelectionModel().selectFirst(); // select a default ("All time")
 
-        // disable editing datepickers
-        dateSelect1.setEditable(false);
-        dateSelect2.setEditable(false);
+            // set all date items to be invisible on start (default = "All time")
+            dateLabel1.setVisible(false);
+            dateLabel2.setVisible(false);
+            dateSelect1.setVisible(false);
+            dateSelect2.setVisible(false);
+
+            // disable editing datepickers
+            dateSelect1.setEditable(false);
+            dateSelect2.setEditable(false);
+        } else if (prevTimeSelection.equals("Custom")) {
+            // if date selectors were set, then restore custom timeframe, else, defaults to "all time"
+            if (checkCustomUpdate()) {
+                LocalDate start = dateSelect1.getValue();
+                LocalDate end = dateSelect2.getValue();
+                data.updateTimeframe(start, end);
+            }
+        } else if (!prevTimeSelection.equals("All time")) { // any timeframe not all time, restore timeframe
+            data.updateTimeframe(prevTimeSelection);
+        } else { // prevTimeSelection == "All time"
+            // all time, this is the default, so do nothing.
+        }
+
+
+
+        /*
+        * Event handlers have to be set on every chart creation.
+        * They can't be set only on first chart creation.
+        *
+        * This is because the recreateChart(this) call needs to be updated to point to the new chart.
+        *
+         */
 
         // if user selects "custom", show date pickers. otherwise, hide them.
         timeframeTypeDropdown.setOnAction(e -> {
