@@ -1,6 +1,7 @@
 package csc.arizona.moneymanager.MainUI;
 
 import csc.arizona.moneymanager.Charts.TransactionChart;
+import csc.arizona.moneymanager.Controller;
 import csc.arizona.moneymanager.Style;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import javafx.collections.FXCollections;
@@ -176,15 +177,11 @@ public class MainUI {
         HBox transactionHistoryAccessBox = new HBox();
         Label accessLabel = new Label("View Transaction history: ");
         Button accessButton = new Button("View");
-        accessButton.setOnAction(e-> viewTransactions() );
+        accessButton.setOnAction(e-> Controller.showHistory() );
 
         transactionHistoryAccessBox.getChildren().addAll(accessLabel, accessButton);
 
         return transactionHistoryAccessBox;
-    }
-
-    private void viewTransactions(){  //TODO add view transactions action
-        System.out.println("View Transactions Selected");
     }
 
     /**
