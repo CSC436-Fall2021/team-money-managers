@@ -1,16 +1,14 @@
 package csc.arizona.moneymanager.MainUI;
 
 import csc.arizona.moneymanager.Controller;
-import csc.arizona.moneymanager.TransactionUI.Transaction;
+import csc.arizona.moneymanager.TransactionUI.CategoryList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CategoryBudget extends ServicesView {
 
@@ -39,10 +37,9 @@ public class CategoryBudget extends ServicesView {
      * @return a list of the transaction categories
      */
     private static List<String> getTransactionList() {
-        Set<String> set = new HashSet<>();
-        for (Transaction trans : Controller.getUser().getTransactions())
-            set.add(trans.getCategory());
-        return set.stream().toList();
+        CategoryList list = new CategoryList("src/main/java/csc/arizona/moneymanager/TransactionUI/default_categories.txt");
+        list.addCategories(Controller.getUser().getSettings().getCustomCategory());
+        return list.getCategories();
     }
 
     /**
@@ -89,7 +86,7 @@ public class CategoryBudget extends ServicesView {
     }
 
     private void displayRestOfUI() {
-        categoryLabel = new Label("Your current budget for " + category + " is:"); //TODO get the budget for this category
+        categoryLabel = new Label("Your current budget for " + category + " is: $" + Controller.getCategoryBudget(category));
         content.addRow(1, categoryLabel);
         categoryTotal = new Label("the total amount that has been spent in " + category + " is $" + Controller.getCategorySpent(category));
         content.addRow(2, categoryTotal);
@@ -103,7 +100,7 @@ public class CategoryBudget extends ServicesView {
     /**
      * if the rest of the UI has already been created then
      */
-    private void updateDisplay() {
+    public void updateDisplay() {
         categoryLabel.setText("Your current budget for " + category + " is:");
         categoryTotal.setText("the total amount that has been spent in " + category + " is $" + Controller.getCategorySpent(category));
     }

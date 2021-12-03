@@ -2,6 +2,7 @@ package csc.arizona.moneymanager.MainUI;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Carter Boyd
@@ -18,6 +19,7 @@ public class UserSetting implements Serializable {
 
     private double budget;
     private ArrayList<String> customCategory;
+	private HashMap<String, Double> categoryMap;
     private String budgetDuration;
     private String userNickname;
 
@@ -27,6 +29,7 @@ public class UserSetting implements Serializable {
      */
     public UserSetting() {
         customCategory = new ArrayList<>();
+		categoryMap = new HashMap<>();
     }
 
     /**
@@ -103,6 +106,7 @@ public class UserSetting implements Serializable {
      */
     public void removeCategoryName(String category) {
         customCategory.remove(category);
+		categoryMap.remove(category);
     }
 
     /**
@@ -110,6 +114,7 @@ public class UserSetting implements Serializable {
      */
     public void addCategoryName(String category) {
         customCategory.add(category);
+		categoryMap.put(category, 0.0);
     }
 
     /**
@@ -126,4 +131,12 @@ public class UserSetting implements Serializable {
     public String getUserNickname(){
         return userNickname;
     }
+
+	public void setCategoryBudget(String category, double newBudget) {
+		categoryMap.replace(category, newBudget);
+	}
+
+	public double getCategoryBudget(String category) {
+		return categoryMap.get(category);
+	}
 }
