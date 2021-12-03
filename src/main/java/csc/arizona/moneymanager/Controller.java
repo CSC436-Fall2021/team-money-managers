@@ -388,6 +388,7 @@ public class Controller extends Application {
      */
     public static void failureAlert(String issue) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        Style.addStyling(alert);
         alert.setTitle("Alert");
         alert.setContentText("please enter a valid " + issue);
         alert.setHeaderText(issue + " not valid");
@@ -399,6 +400,7 @@ public class Controller extends Application {
      */
     public static void passwordsNotSame() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        Style.addStyling(alert);
         alert.setTitle("Alert");
         alert.setContentText("please enter passwords again");
         alert.setHeaderText("passwords are not the same");

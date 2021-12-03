@@ -229,6 +229,7 @@ public class MainUI {
         // Checking for blank nickname from user and confirming update, if so.
         if(nickname == null || nickname.equals("")){
             Alert blankNicknameAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to have no nickname?");
+            Style.addStyling(blankNicknameAlert);
             blankNicknameAlert.showAndWait()
                     .filter   (response -> response == ButtonType.OK ) // if user pressed "OK"
                     .ifPresent(response -> userSettings.setUserNickname(nickname) ); // updating username to blank, if confirmed
@@ -340,6 +341,7 @@ public class MainUI {
         duration = duration.toLowerCase();
         String message = "You have set the new " + duration + " budget of $" + BudgetUI.budgetToString(budget) + ".";
         Alert budgetSetConfimation = new Alert(Alert.AlertType.INFORMATION, message);
+        Style.addStyling(budgetSetConfimation);
         budgetSetConfimation.showAndWait().filter(response -> response == ButtonType.OK);
 
         // Restoring content to previous content
