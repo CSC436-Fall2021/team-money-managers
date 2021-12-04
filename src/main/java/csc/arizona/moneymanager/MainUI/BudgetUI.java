@@ -2,11 +2,12 @@ package csc.arizona.moneymanager.MainUI;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
 
 
 /**
@@ -23,11 +24,14 @@ public class BudgetUI extends ServicesView {
 
     private double budget;
     private String duration;
+    private LocalDate startDate;
 
     // UI Elements
     private Label currentBudgetAmountLabel;
     private Label currentBudgetDurationLabel;
+    private Label currentBudgetDateLabel;
     private TextField newBudgetTF;
+    private DatePicker datePicker;
 
     // Possible duration values
     private final String DURATION_1 = "Monthly";
@@ -41,7 +45,7 @@ public class BudgetUI extends ServicesView {
      * @param budget the current budget amount
      * @param duration the current budget duration string
      */
-    public BudgetUI(double budget, String duration){
+    public BudgetUI(double budget, String duration, LocalDate startDate){
         super("Edit Budget", "Cancel");
 
         this.budget = budget;
@@ -52,6 +56,12 @@ public class BudgetUI extends ServicesView {
         // updating current budget labels
         currentBudgetAmountLabel.setText(budgetToString(budget));
         currentBudgetDurationLabel.setText(this.duration);
+        String formattedDate = "";
+        if(startDate != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM'/'dd'/'yyyy");
+            formattedDate = startDate.format(formatter);
+        }
+        currentBudgetDateLabel.setText(formattedDate);
 
     }
 
@@ -61,7 +71,7 @@ public class BudgetUI extends ServicesView {
     @Override
     void initContent() {
 
-        int contentRowGap = 5;
+        int contentRowGap = 4;
 
         // Current Budget Amount
         Label currentBudgetLabel = new Label ("Current Budget Amount:");
@@ -69,6 +79,8 @@ public class BudgetUI extends ServicesView {
         // Current Budget Duration
         Label currentDurationLabel = new Label ("Current Budget Duration: ");
         currentBudgetDurationLabel = new Label();
+        Label currentDateLabel = new Label ("Current start date: ");
+        currentBudgetDateLabel = new Label();
 
         // New Budget Amount
         Label newBudgetLabel = new Label("Enter New Budget:");
@@ -85,11 +97,19 @@ public class BudgetUI extends ServicesView {
         newBudgetTF.setOnKeyTyped(e-> duration = durationBox.getValue()); // if user enters value for default duration
         durationBox.setOnAction(e-> duration = durationBox.getValue()); // if user changes the duration, update value
 
+        Label startDateLabel = new Label("Start Date");
+        DatePicker datePicker = new DatePicker();
+        datePicker.setEditable(false);
+        datePicker.setPrefWidth(150);
+        datePicker.setOnAction(e-> startDate = datePicker.getValue());
+
         // Adding content to pane
         content.addRow(contentRowGap + 0, currentBudgetLabel, currentBudgetAmountLabel);
         content.addRow(contentRowGap + 1, currentDurationLabel, currentBudgetDurationLabel);
-        content.addRow(contentRowGap + 2, newBudgetLabel, newBudgetTF);
-        content.addRow(contentRowGap + 3, durationLabel, durationBox);
+        content.addRow(contentRowGap + 2, currentDateLabel, currentBudgetDateLabel);
+        content.addRow(contentRowGap + 3, newBudgetLabel, newBudgetTF);
+        content.addRow(contentRowGap + 4, durationLabel, durationBox);
+        content.addRow(contentRowGap + 5, startDateLabel, datePicker);
 
         // Setting Alignment
         content.setHgap(HGAP);
@@ -156,8 +176,14 @@ public class BudgetUI extends ServicesView {
      * @return the budget duration string.
      */
     public String getDuration(){
-        System.out.printf("here %s\n", duration);
         return duration;
+    }
+
+    /**
+     * @return the budget start date
+     */
+    public LocalDate getStartDate(){
+        return startDate;
     }
 
     /**
