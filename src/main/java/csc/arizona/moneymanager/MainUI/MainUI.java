@@ -298,7 +298,7 @@ public class MainUI {
     }
 
     /**
-     * Displays the set bugdet UI and updates the user-entered budget amount in the
+     * Displays the set budget UI and updates the user-entered budget amount in the
      * account settings class.
      */
     public void displayBudgetUI(){
@@ -492,6 +492,27 @@ public class MainUI {
         PieChart testPieChart = new PieChart(testData);
         testPieChart.setTitle("Test Pie Chart");
         //showInfo(new ChartUI(testPieChart));
+    }
+
+    /**
+     * Displays the what-if UI.
+     */
+    public void displayWhatifUI(){
+
+        double currentBudget = userSettings.getBudget();
+        String currentBudgetDuration = userSettings.getBudgetDuration();
+
+        // Service pane Elements
+        WhatifUI whatifUI = new WhatifUI(currentBudget, currentBudgetDuration);
+
+        // Options pane elements
+        HBox whatifOptions = createExitContentButtonOptionBox(whatifUI.getButtonText());
+
+        // Displaying budget UI in services pane
+        servicesPane.setCenter( whatifUI );
+        // Displaying option buttons in options pane
+        optionsPane.setCenter(whatifOptions);
+
     }
 
 }

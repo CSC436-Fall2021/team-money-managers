@@ -73,17 +73,14 @@ public class MainMenuBar extends MenuBar {
 
         //******* Report menu setup *******/
         Menu reports = new Menu("_Reports");
-        // --> Show Report option //TODO maybe make showReport a submenu with types of reports as menu items
-        MenuItem showReport = new MenuItem("Transaction History");
-        showReport.setOnAction(e-> {
-                    showReportsMenuAction();
-                    System.out.println("reports clicked");
-        });
-        // --> Save... (report) option
-//        MenuItem saveReport = new MenuItem("_Save...");
-//        saveReport.setOnAction(e-> saveReportMenuAction() );
+        // --> Transaction History option //TODO maybe make showReport a submenu with types of reports as menu items
+        MenuItem transactionHistory = new MenuItem("Transaction _History");
+        transactionHistory.setOnAction(e-> transactionHistoryMenuAction() );
+        // --> What-if? option
+        MenuItem whatif = new MenuItem("_What-if?");
+        whatif.setOnAction(e-> whatifMenuAction() );
         // Adding items to Reports menu
-        reports.getItems().addAll(showReport);
+        reports.getItems().addAll(transactionHistory, whatif);
 
         //******* Help menu setup *******/
         Menu help = new Menu("_Help");
@@ -178,7 +175,7 @@ public class MainMenuBar extends MenuBar {
     /**
      * Contains the actions performed when the Menu option "Show Report" is selected.
      */
-    private void showReportsMenuAction(){
+    private void transactionHistoryMenuAction(){
         mainUI.showInfo(new TransactionHistoryUI("Transaction History", "Exit Transaction History"));
 
     }
@@ -186,8 +183,8 @@ public class MainMenuBar extends MenuBar {
     /**
      * Contains the actions performed when the Menu option "Save..."(Report)  is selected.
      */
-    private void saveReportMenuAction(){
-        System.out.println("Save Report selected"); //TODO remove when action implemented
+    private void whatifMenuAction(){
+        mainUI.displayWhatifUI();
     }
 
     /**
