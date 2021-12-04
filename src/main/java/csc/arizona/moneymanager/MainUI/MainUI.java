@@ -3,6 +3,7 @@ package csc.arizona.moneymanager.MainUI;
 import csc.arizona.moneymanager.Charts.TransactionChart;
 import csc.arizona.moneymanager.Controller;
 import csc.arizona.moneymanager.Style;
+import csc.arizona.moneymanager.TransactionUI.CategoryList;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -501,12 +502,19 @@ public class MainUI {
 
         double currentBudget = userSettings.getBudget();
         String currentBudgetDuration = userSettings.getBudgetDuration();
+        CategoryList categoryList = new CategoryList("src/main/java/csc/arizona/moneymanager/TransactionUI/default_categories.txt");
+        categoryList.addCategories(userSettings.getCustomCategory());
 
         // Service pane Elements
-        WhatifUI whatifUI = new WhatifUI(currentBudget, currentBudgetDuration);
+        WhatifUI whatifUI = new WhatifUI(currentBudget, currentBudgetDuration, categoryList);
 
         // Options pane elements
         HBox whatifOptions = createExitContentButtonOptionBox(whatifUI.getButtonText());
+
+        Button addExpense = new Button("Add Expense");
+        addExpense.setOnAction(e-> whatifUI.addCategory() );
+
+        whatifOptions.getChildren().add(0, addExpense);
 
         // Displaying budget UI in services pane
         servicesPane.setCenter( whatifUI );

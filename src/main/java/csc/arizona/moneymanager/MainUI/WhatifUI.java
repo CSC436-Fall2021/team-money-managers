@@ -1,39 +1,40 @@
 package csc.arizona.moneymanager.MainUI;
 
 import csc.arizona.moneymanager.TransactionUI.CategoryList;
+import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
 
 public class WhatifUI extends ServicesView {
 
     private final int MAX_WHATIF_CONTENT = 5;
+    private int contentCount;
     private double currentBudget;
+    private Label currentBudgetAmount;
     private String currentBudgetDuration;
+    private CategoryList categoryList;
     private double whatifBudget;
     private Label whatifBudgetLabel;
-    private final int CATEGORY_ROW_START = 5;
-    private int currentCategoryRow;
+    private VBox categoryVBox;
 
     /**
      * Constructor.
      * @param currentBudget current (non-whatif) budget.
      */
-    public WhatifUI(Double currentBudget, String currentBudgetDuration) {
+    public WhatifUI(Double currentBudget, String currentBudgetDuration, CategoryList categoryList) {
         super("What-if?", "Return");
-        this.currentBudget = whatifBudget;
+        this.currentBudget = currentBudget;
+        this.currentBudgetAmount.setText(String.format("$%01.2f", currentBudget));
+        updateWhatifBudget(currentBudget);
         this.currentBudgetDuration = currentBudgetDuration;
-        this.currentCategoryRow = CATEGORY_ROW_START;
+        this.categoryList = categoryList;
+        this.contentCount = 0;
 
-        addCategory("Food", "Weekly", 10.0);
-        addCategory("Food", "Weekly", 10.0);
-        addCategory("Food", "Weekly", 10.0);
-        addCategory("Food", "Weekly", 10.0);
-        addCategory("Food", "Weekly", 10.0);
+        addCategory();
 
     }
 
@@ -47,7 +48,7 @@ public class WhatifUI extends ServicesView {
         VBox currentBudgetBox = new VBox();
         currentBudgetBox.setAlignment(Pos.CENTER);
         Label currentBudgetHeader = new Label("Current Budget");
-        Label currentBudgetAmount = new Label(String.format("$%01.2f", currentBudget));
+        currentBudgetAmount = new Label(String.format("$%01.2f", currentBudget));
         currentBudgetBox.getChildren().addAll(currentBudgetHeader, currentBudgetAmount);
 
         VBox whatifBudgetBox = new VBox();
@@ -61,9 +62,22 @@ public class WhatifUI extends ServicesView {
 
         content.addRow(1, budgetsBox);
 
-        // TODO get number of categories
-        // TODO for loop for # of categories to create label for each
-        // TODO check mark to disable/enable each category
+        // Header row
+        HBox headerBox = new HBox();
+        //headerBox.setPadding(MainUI.PADDING);
+        headerBox.setSpacing(MainUI.PADDING.getLeft() * 2);
+
+        Label headerSpacing = new Label ("");
+        Label checkBoxHeader = new Label ("Enabled");
+        Label categoryHeader = new Label ("Category");
+        Label durationHeader = new Label ("     Duration");
+        Label amountHeader = new Label ("      Amount");
+
+        headerBox.getChildren().addAll(headerSpacing, checkBoxHeader, categoryHeader, durationHeader, amountHeader);
+        content.addRow(2, headerBox);
+
+        categoryVBox = new VBox();
+        content.addRow(3, categoryVBox);
     }
 
     private void updateWhatifBudget(double budget){
@@ -72,38 +86,66 @@ public class WhatifUI extends ServicesView {
         whatifBudgetLabel.setText(budgetStr);
     }
 
-    private void addCategory(String category, String duration, Double amount){
+    public void addCategory(){
+        if(contentCount >= MAX_WHATIF_CONTENT){
+            //TODO show alert (cannot add more categories)
+            return;
+        }
+
         HBox catBox = new HBox();
-        //catBox.setPadding(MainUI.PADDING);
-        catBox.setSpacing(MainUI.PADDING.getLeft());
+        catBox.setSpacing(MainUI.PADDING.getLeft() * 2);
         catBox.setAlignment(Pos.BOTTOM_CENTER);
+
+        Label leftSpacing = new Label("   ");
 
         // Checkbox to enable or disable use in calculating what-if budget
         CheckBox enabled = new CheckBox();
         enabled.setIndeterminate(false);
-        enabled.setOnAction(e-> checkBoxUpdate(enabled.isSelected(), duration, amount) );
 
-        ComboBox<String> categoryComboBox = new ComboBox<>();
+        // Combo box for user to select category (sole function is to allow user to organize what-if expenses)
+        ComboBox<String> categoryComboBox = new ComboBox<>(FXCollections.observableArrayList(categoryList.getCategories()));
 
-        Label categoryLabel = new Label(category);
-        Label durationLabel = new Label("(" + duration + ")");
-        Label amountLabel = new Label(String.format("$%01.2f", amount));
+        String subDuration = getSubDuration();
+        String[] durationList = {"Once", subDuration};
+
+        // ComboBox for user to select duration of expense (one-time expense or each sub-duration period)
+        ComboBox<String> durationComboBox = new ComboBox<>(FXCollections.observableArrayList(durationList));
+
+        TextField amountTF = new TextField();
+        //Label amountLabel = new Label(String.format("$%01.2f", amount));
 
         // Button for user to remove category
         Button removeCategory = new Button("Remove");
-        removeCategory.setOnAction(e-> content.getChildren().remove(catBox));
+        removeCategory.setOnAction(e-> {
+            if(contentCount > 1) {
+                categoryVBox.getChildren().remove(catBox);
+                contentCount--;
+            }
+        });
 
-        catBox.getChildren().addAll(enabled, categoryLabel, durationLabel, amountLabel, removeCategory);
-        content.addRow(currentCategoryRow++, catBox);
+        catBox.getChildren().addAll(leftSpacing, enabled, categoryComboBox, durationComboBox, amountTF, removeCategory);
+        categoryVBox.getChildren().add(catBox);
+        contentCount++;
+
+        enabled.setOnAction(e-> checkBoxUpdate(enabled.isSelected(), durationComboBox.getValue(), amountTF.getText() ) );
     }
 
     /**
      * Updates what-if budget base on whether or not checkbox is selected.
      * @param selected the checkbox state
      * @param duration the duration of the category
-     * @param amount the amount of the category
+     * @param amountStr the amount of the category in String format
      */
-    private void checkBoxUpdate(boolean selected, String duration, Double amount) {
+    private void checkBoxUpdate(boolean selected, String duration, String amountStr) {
+        double amount;
+        String posDoubleRegex = "\\d+(\\.\\d+)?";
+        if (!amountStr.matches(posDoubleRegex)){
+            //TODO have alert
+            return;
+        }else{
+            amount = Double.parseDouble(amountStr);
+        }
+
         double overDurationAmount = getOverDurationAmount(duration, amount);
         if(selected){
             whatifBudget += overDurationAmount;
@@ -141,5 +183,15 @@ public class WhatifUI extends ServicesView {
         //TODO calculate sub-durations remaining
 
         return subDurationsRemaining;
+    }
+
+    private String getSubDuration(){
+        String subDuration;
+        if(currentBudgetDuration.equals("Monthly")){
+            subDuration = "Weekly";
+        }else{
+            subDuration = "Daily";
+        }
+        return subDuration;
     }
 }
