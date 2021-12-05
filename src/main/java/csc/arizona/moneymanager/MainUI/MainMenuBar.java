@@ -76,13 +76,10 @@ public class MainMenuBar extends MenuBar {
 
         //******* Report menu setup *******/
         Menu reports = new Menu("_Reports");
-        // --> Show Report option
-        MenuItem showReport = new MenuItem("Transaction History");
-        showReport.setOnAction(e-> {
-                    showReportsMenuAction();
-                    System.out.println("reports clicked");
-        });
-        reports.getItems().addAll(showReport);
+        // --> Transaction History option
+        MenuItem transactionHistory = new MenuItem("Transaction _History");
+        transactionHistory.setOnAction(e-> transactionHistoryMenuAction() );
+        reports.getItems().addAll(transactionHistory);
 
         //******* Help menu setup *******/
         Menu help = new Menu("_Help");
@@ -182,18 +179,11 @@ public class MainMenuBar extends MenuBar {
     }
 
     /**
-     * Contains the actions performed when the Menu option "Show Report" is selected.
+     * Contains the actions performed when the Menu option "Transaction History" is selected.
      */
-    private void showReportsMenuAction(){
+    private void transactionHistoryMenuAction(){
         mainUI.showInfo(new TransactionHistoryUI("Transaction History", "Exit Transaction History"));
 
-    }
-
-    /**
-     * Contains the actions performed when the Menu option "Save..."(Report)  is selected.
-     */
-    private void saveReportMenuAction(){
-        System.out.println("Save Report selected"); //TODO remove when action implemented
     }
 
     /**
