@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.Style;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -105,6 +106,7 @@ public class BudgetUI extends ServicesView {
      */
     private static void showAlert(String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        Style.addStyling(alert);
         alert.setTitle("Error");
         alert.setHeaderText("Entered budget information is invalid");
         alert.setContentText(content);
