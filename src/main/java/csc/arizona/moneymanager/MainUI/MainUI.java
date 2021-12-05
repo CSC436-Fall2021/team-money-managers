@@ -505,17 +505,18 @@ public class MainUI {
 
         double currentBudget = userSettings.getBudget();
         String currentBudgetDuration = userSettings.getBudgetDuration();
+        LocalDate currentBudgetStartDate = userSettings.getBudgetStartDate();
         CategoryList categoryList = new CategoryList("src/main/java/csc/arizona/moneymanager/TransactionUI/default_categories.txt");
         categoryList.addCategories(userSettings.getCustomCategory());
 
         // Service pane Elements
-        WhatifUI whatifUI = new WhatifUI(currentBudget, currentBudgetDuration, categoryList);
+        WhatifUI whatifUI = new WhatifUI(currentBudget, currentBudgetDuration, currentBudgetStartDate, Controller.getTotalSpent(), categoryList);
 
         // Options pane elements
         HBox whatifOptions = createExitContentButtonOptionBox(whatifUI.getButtonText());
 
         Button addExpense = new Button("Add Expense");
-        addExpense.setOnAction(e-> whatifUI.addCategory() );
+        addExpense.setOnAction(e-> whatifUI.addExpenseRow() );
 
         whatifOptions.getChildren().add(0, addExpense);
 
