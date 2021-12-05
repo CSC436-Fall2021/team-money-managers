@@ -4,8 +4,10 @@ import csc.arizona.moneymanager.TransactionUI.Transaction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.util.*;
 
@@ -14,11 +16,21 @@ import java.util.*;
  */
 public class PieView extends TransactionChart {
 
-    PieChart transactionsByCategoryChart;
-
     public PieView(List<Transaction> transactions) {
+        super(transactions);
+
         title = "Transactions by Category: PieChart";
-        data = new ChartData(transactions);
+        recreateChart();
+    }
+
+
+    @Override
+    protected void recreateChart() {
+        if (!data.hasData()) {
+            mainChart = null;
+            updatePane();
+            return;
+        }
 
         Set<String> categoryNames = data.getCategorySet();
 
@@ -39,22 +51,8 @@ public class PieView extends TransactionChart {
         // set up actual PieChart using the PieChart.Data objects we created
         ObservableList<PieChart.Data> pieDataObservable = FXCollections.observableArrayList(pieCategoryTotals);
 
-        transactionsByCategoryChart = new PieChart(pieDataObservable);
+        mainChart = new PieChart(pieDataObservable);
 
-        // display
-    }
-
-    @Override
-    public Pane getView() {
-        BorderPane pane = new BorderPane();
-
-
-        if (data.hasData()) {
-            pane.setCenter(transactionsByCategoryChart);
-        } else {
-            pane.setCenter(MISSING_DATA_LABEL);
-        }
-
-        return pane;
+        updatePane();
     }
 }
