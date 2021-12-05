@@ -25,7 +25,10 @@ public class UserHelp extends ServicesView {
     void initContent() { //TODO add help info
         // User help
         Label preHelpSpace = new Label(" ");
-        Label tempLabel = new Label("Insert Help Content Here");
+        Label tempLabel = new Label("""
+                The top of the page will contain everything you need to store the amount of money you want
+                you start by selecting what day you spent the money on.
+                then you select what you spent the money on (if there is no item for what you spent money on then you can make it """);
 
         // Adding user help to content GridPane
         content.addRow(0, preHelpSpace);
