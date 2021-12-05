@@ -4,7 +4,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 /**
- * This class represents user help displayed.
+ * This class represents the main landing page displayed when a user
+ * first logs on.
  *
  * @author Kris Rangel
  */

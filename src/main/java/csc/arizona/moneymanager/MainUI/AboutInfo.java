@@ -31,7 +31,7 @@ public class AboutInfo extends ServicesView {
      * Implements the content to for the "About" info.
      */
     @Override
-    void initContent() { //TODO add about info
+    void initContent() {
         // "Who Is" header
         HBox whoIsBox = new HBox();
         Label whoIsLabel = new Label("Created By");

@@ -20,6 +20,12 @@ abstract public class Style {
         scene.getStylesheets().add(styleSheet);
     }
 
+    /**
+     * Applies uniform styling to Alert dialog boxes within the program.
+     * Alert creation should be followed by a call to this method to ensure
+     * application of .css styling.
+     * @param alert the alert dialog to apply styling to.
+     */
     public static void addStyling(Alert alert){
         alert.getDialogPane().getStylesheets().add(styleSheet);
     }

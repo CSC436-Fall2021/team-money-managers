@@ -34,7 +34,6 @@ public class MainMenuBar extends MenuBar {
      * @author Kris Rangel
      */
     public MainMenuBar(MainUI mainUI){
-        // Do not change OnActions in this function.
         super();
 
         //******* File menu setup *******/
@@ -77,16 +76,12 @@ public class MainMenuBar extends MenuBar {
 
         //******* Report menu setup *******/
         Menu reports = new Menu("_Reports");
-        // --> Show Report option //TODO maybe make showReport a submenu with types of reports as menu items
+        // --> Show Report option
         MenuItem showReport = new MenuItem("Transaction History");
         showReport.setOnAction(e-> {
                     showReportsMenuAction();
                     System.out.println("reports clicked");
         });
-        // --> Save... (report) option
-//        MenuItem saveReport = new MenuItem("_Save...");
-//        saveReport.setOnAction(e-> saveReportMenuAction() );
-        // Adding items to Reports menu
         reports.getItems().addAll(showReport);
 
         //******* Help menu setup *******/
@@ -203,8 +198,6 @@ public class MainMenuBar extends MenuBar {
 
     /**
      * Contains the actions performed when the Menu option "Help" is selected.
-     *
-     * @author Kris Rangel
      */
     private void showHelpMenuAction(){
         mainUI.showInfo(new UserHelp());
@@ -212,8 +205,6 @@ public class MainMenuBar extends MenuBar {
 
     /**
      * Contains the actions performed when the Menu option "About" is selected.
-     *
-     * @author Kris Rangel
      */
     private void aboutMenuAction(){
         mainUI.showInfo(new AboutInfo());
