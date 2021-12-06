@@ -295,8 +295,10 @@ public class MainUI {
             double budget = categoryBudget.getSelectedBudget();
             if (budget <= 0)
                 Controller.failureAlert("budget");
-            else
+            else {
                 Controller.setCategoryBudget(categoryBudget.getCategory(), budget);
+                categoryBudget.updateDisplay();
+            }
         });
         HBox budgetOptions = createExitContentButtonOptionBox(categoryBudget.getButtonText());
         budgetOptions.getChildren().add(0, setCatBudBut);

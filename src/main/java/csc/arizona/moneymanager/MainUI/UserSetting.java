@@ -139,4 +139,20 @@ public class UserSetting implements Serializable {
 	public double getCategoryBudget(String category) {
 		return categoryMap.get(category);
 	}
+
+    /**
+     * useless method because mongo
+     * @return nothing
+     */
+    public HashMap<String, Double> getCategoryMap() {
+        return categoryMap;
+    }
+
+    /**
+     * also usless, thanks mongo
+     * @param categoryMap categorize 
+     */
+    public void setCategoryMap(HashMap<String, Double> categoryMap) {
+        this.categoryMap = categoryMap;
+    }
 }

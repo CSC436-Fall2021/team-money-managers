@@ -410,6 +410,7 @@ public class Controller extends Application {
      */
     public static void setCategoryBudget(String category, double newBudget) {
 		currentUser.getSettings().setCategoryBudget(category, newBudget);
+        updateUserData(currentUser, false);
     }
 
 	public static double getCategoryBudget(String category) {
