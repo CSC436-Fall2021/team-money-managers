@@ -48,8 +48,8 @@ public class LoginUI {
         passwordField.setMaxWidth(150);
 
         Button loginButton = createLoginButton(loginField, passwordField, loginStatus);
-        loginField.setOnAction(e-> loginButton.fire());   // if user presses ENTER, will fire the login button
-        passwordField.setOnAction(e->loginButton.fire()); // if user presses ENTER, will fire the login button
+        loginField.setOnAction(e -> loginButton.fire());   // if user presses ENTER, will fire the login button
+        passwordField.setOnAction(e -> loginButton.fire()); // if user presses ENTER, will fire the login button
 
         HBox hBox = new HBox(loginButton, createAddUserButton());
 
@@ -66,16 +66,16 @@ public class LoginUI {
         return loginTextFields;
     }
 
-    private static VBox getWelcomeBanner(){
+    private static VBox getWelcomeBanner() {
         VBox welcomeBanner = new VBox();
         welcomeBanner.setAlignment(Pos.CENTER);
         welcomeBanner.setPadding(new Insets(10));
         welcomeBanner.setId("welcome-banner");
         welcomeBanner.getChildren().addAll(
-            new Text("Welcome"),
-            new Text("to"),
-            new Text("Money Managers!"),
-            new Text(" ") // spacing
+                new Text("Welcome"),
+                new Text("to"),
+                new Text("Money Managers!"),
+                new Text(" ") // spacing
         );
 
         return welcomeBanner;
