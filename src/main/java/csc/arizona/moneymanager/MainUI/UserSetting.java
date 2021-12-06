@@ -3,6 +3,7 @@ package csc.arizona.moneymanager.MainUI;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Carter Boyd
@@ -19,6 +20,7 @@ public class UserSetting implements Serializable {
 
     private double budget;
     private ArrayList<String> customCategory;
+	private HashMap<String, Double> categoryMap;
     private String budgetDuration;
     private String userNickname;
     private LocalDate budgetStartDate;
@@ -29,6 +31,7 @@ public class UserSetting implements Serializable {
      */
     public UserSetting() {
         customCategory = new ArrayList<>();
+		    categoryMap = new HashMap<>();
         budgetStartDate = LocalDate.now();
     }
 
@@ -106,6 +109,7 @@ public class UserSetting implements Serializable {
      */
     public void removeCategoryName(String category) {
         customCategory.remove(category);
+		    categoryMap.remove(category);
     }
 
     /**
@@ -113,6 +117,7 @@ public class UserSetting implements Serializable {
      */
     public void addCategoryName(String category) {
         customCategory.add(category);
+		    categoryMap.put(category, 0.0);
     }
 
     /**
@@ -130,6 +135,29 @@ public class UserSetting implements Serializable {
         return userNickname;
     }
 
+	public void setCategoryBudget(String category, double newBudget) {
+		categoryMap.replace(category, newBudget);
+	}
+
+	public double getCategoryBudget(String category) {
+		return categoryMap.get(category);
+	}
+
+    /**
+     * useless method because mongo
+     * @return nothing
+     */
+    public HashMap<String, Double> getCategoryMap() {
+        return categoryMap;
+    }
+
+    /**
+     * also usless, thanks mongo
+     * @param categoryMap categorize 
+     */
+    public void setCategoryMap(HashMap<String, Double> categoryMap) {
+        this.categoryMap = categoryMap;
+    }
     public LocalDate getBudgetStartDate() {
         return budgetStartDate;
     }

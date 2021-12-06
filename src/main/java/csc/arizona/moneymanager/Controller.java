@@ -459,6 +459,20 @@ public class Controller extends Application {
     }
 
     /**
+     * designed to take the budget category and place the new budget in it
+     * @param category the category
+     * @param newBudget the budget
+     */
+    public static void setCategoryBudget(String category, double newBudget) {
+		currentUser.getSettings().setCategoryBudget(category, newBudget);
+        updateUserData(currentUser, false);
+    }
+
+	public static double getCategoryBudget(String category) {
+		return currentUser.getSettings().getCategoryBudget(category);
+	}
+
+	/**
      * The main entry point for all JavaFX applications.
      * The start method is called after the init method has returned,
      * and after the system is ready for the application to begin running.

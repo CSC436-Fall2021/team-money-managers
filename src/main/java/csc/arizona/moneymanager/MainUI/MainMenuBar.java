@@ -42,6 +42,9 @@ public class MainMenuBar extends MenuBar {
         // --> Set Budget option
         MenuItem setBudget = new MenuItem("Set _Budget");
         setBudget.setOnAction( e-> budgetMenuAction() );
+        // --> Set Custom Category option
+        MenuItem setCategoryBudget = new MenuItem("Set Category Budget");
+        setCategoryBudget.setOnAction(e -> categoryBudgetAction() );
         // --> Add Custom Categories option
         MenuItem addCategories = new MenuItem("Add Custom _Categories");
         addCategories.setOnAction( e -> addCategoriesAction() );
@@ -58,7 +61,7 @@ public class MainMenuBar extends MenuBar {
         MenuItem exit = new MenuItem("E_xit");
         exit.setOnAction(e-> exitMenuAction() );
         // Adding items to File menu
-        file.getItems().addAll(setBudget, addCategories, saveData, fileMenuSeparator, logout,
+        file.getItems().addAll(setBudget, setCategoryBudget, addCategories, saveData, fileMenuSeparator, logout,
          removeAccount, exit);
 
         //******* Chart menu setup *******/
@@ -209,5 +212,14 @@ public class MainMenuBar extends MenuBar {
      */
     private void aboutMenuAction(){
         mainUI.showInfo(new AboutInfo());
+    }
+
+    /**
+     * Contains the action performed when the Menu option "Set Category Budget" is selected
+     *
+     * @author Carter Boyd
+     */
+    private void categoryBudgetAction() {
+        mainUI.displayCategoryBudgetUI();
     }
 }
