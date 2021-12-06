@@ -1,6 +1,7 @@
 package csc.arizona.moneymanager.MainUI;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,6 +23,7 @@ public class UserSetting implements Serializable {
 	private HashMap<String, Double> categoryMap;
     private String budgetDuration;
     private String userNickname;
+    private LocalDate budgetStartDate;
 
     /**
      * default constructor for if this is the first time an account has been created and will
@@ -29,7 +31,8 @@ public class UserSetting implements Serializable {
      */
     public UserSetting() {
         customCategory = new ArrayList<>();
-		categoryMap = new HashMap<>();
+		    categoryMap = new HashMap<>();
+        budgetStartDate = LocalDate.now();
     }
 
     /**
@@ -106,7 +109,7 @@ public class UserSetting implements Serializable {
      */
     public void removeCategoryName(String category) {
         customCategory.remove(category);
-		categoryMap.remove(category);
+		    categoryMap.remove(category);
     }
 
     /**
@@ -114,7 +117,7 @@ public class UserSetting implements Serializable {
      */
     public void addCategoryName(String category) {
         customCategory.add(category);
-		categoryMap.put(category, 0.0);
+		    categoryMap.put(category, 0.0);
     }
 
     /**
@@ -155,4 +158,12 @@ public class UserSetting implements Serializable {
     public void setCategoryMap(HashMap<String, Double> categoryMap) {
         this.categoryMap = categoryMap;
     }
+    public LocalDate getBudgetStartDate() {
+        return budgetStartDate;
+    }
+
+    public void setBudgetStartDate(LocalDate budgetStartDate) {
+        this.budgetStartDate = budgetStartDate;
+    }
+
 }

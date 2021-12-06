@@ -194,6 +194,7 @@ public class LoginUI {
      */
     private static void existingUsername() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        Style.addStyling(alert);
         alert.setTitle("Alert");
         alert.setContentText("please pick a different username");
         alert.setHeaderText("username already exists");

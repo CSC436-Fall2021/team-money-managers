@@ -2,12 +2,12 @@ package csc.arizona.moneymanager.Charts;
 
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.chart.*;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
-import java.net.ProxySelector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -18,14 +18,19 @@ import java.util.Set;
  */
 public class Histogram extends TransactionChart {
 
-    private BarChart<String, Double> chart;
-
     public Histogram(List<Transaction> transactions) {
+        super(transactions);
         title = "Transactions by Category: Histogram";
-        data = new ChartData(transactions);
 
+        recreateChart();
+
+    }
+
+    @Override
+    protected void recreateChart() {
         if (!data.hasData()) {
-            chart = null;
+            mainChart = null;
+            updatePane();
             return;
         }
 
@@ -58,26 +63,18 @@ public class Histogram extends TransactionChart {
         max *= 1.2;
 
         // Construct needed objects for Java's BarChart.
-        ObservableList<XYChart.Series<String, Double>> barObservable = FXCollections.observableArrayList(allSeries);
+        //ObservableList<XYChart.Series<String, Double>> barObservable = FXCollections.observableArrayList(allSeries);
 
         Axis xAxis = new CategoryAxis(FXCollections.observableArrayList(categoryNames));
         Axis yAxis = new NumberAxis(min, max, 10);
 
-        chart = new BarChart<String, Double>(xAxis, yAxis, barObservable);
+        mainChart = new StackedBarChart<String, Double>(xAxis, yAxis);
+        mainChart.setAnimated(false);
+        ((StackedBarChart)mainChart).getData().addAll(allSeries);
 
-        //display
+        updatePane();
+
     }
 
-    @Override
-    public Pane getView() {
-        BorderPane pane = new BorderPane();
 
-        if (data.hasData()) {
-            pane.setCenter(chart);
-        } else {
-            pane.setCenter(MISSING_DATA_LABEL);
-        }
-
-        return pane;
-    }
 }

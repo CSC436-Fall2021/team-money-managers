@@ -246,11 +246,15 @@ public class TransactionUI extends GridPane {
                 errorMsg += "Missing category.\n";
             }
 
-            String amountText = amountInput.getText();
+            String amountText = amountInput.getText().strip();
+            String posDoubleRegex = "\\d+(\\.\\d+)?";
+
             if (amountText.isEmpty()) {
                 errorMsg += "Missing amount.\n";
-            } else if (Double.parseDouble(amountText) < 0.0) { // this is bad info, not missing.
+            } else if (amountText.matches("-" + posDoubleRegex)) { // input is a negative number
                 errorMsg += "Amount can not be negative.\n";
+            } else if (!amountText.matches(posDoubleRegex)) { // input is not a number
+                errorMsg += "Amount must be a non-negative number.\n";
             }
 
             // show all errors in one alert (good for transactionUI with small # possible errors)

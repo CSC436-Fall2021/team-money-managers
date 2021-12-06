@@ -4,10 +4,14 @@ import csc.arizona.moneymanager.Charts.Histogram;
 import csc.arizona.moneymanager.Charts.PieView;
 import csc.arizona.moneymanager.Charts.ScatterView;
 import csc.arizona.moneymanager.Controller;
+import csc.arizona.moneymanager.TransactionUI.Transaction;
+import csc.arizona.moneymanager.database.User;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+
+import java.util.List;
 
 /**
  * This class represents the MenuBar and associated menu items
@@ -30,7 +34,6 @@ public class MainMenuBar extends MenuBar {
      * @author Kris Rangel
      */
     public MainMenuBar(MainUI mainUI){
-        // Do not change OnActions in this function.
         super();
 
         //******* File menu setup *******/
@@ -76,17 +79,14 @@ public class MainMenuBar extends MenuBar {
 
         //******* Report menu setup *******/
         Menu reports = new Menu("_Reports");
-        // --> Show Report option //TODO maybe make showReport a submenu with types of reports as menu items
-        MenuItem showReport = new MenuItem("Show _Report Menu");
-        showReport.setOnAction(e-> {
-                    showReportsMenuAction();
-                    System.out.println("reports clicked");
-        });
-        // --> Save... (report) option
-//        MenuItem saveReport = new MenuItem("_Save...");
-//        saveReport.setOnAction(e-> saveReportMenuAction() );
+        // --> Transaction History option //TODO maybe make showReport a submenu with types of reports as menu items
+        MenuItem transactionHistory = new MenuItem("Transaction _History");
+        transactionHistory.setOnAction(e-> transactionHistoryMenuAction() );
+        // --> What-if? option
+        MenuItem whatif = new MenuItem("_What-if?");
+        whatif.setOnAction(e-> whatifMenuAction() );
         // Adding items to Reports menu
-        reports.getItems().addAll(showReport);
+        reports.getItems().addAll(transactionHistory, whatif);
 
         //******* Help menu setup *******/
         Menu help = new Menu("_Help");
@@ -167,8 +167,15 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Scatterplot" is selected.
      */
     private void scatterPlotMenuAction(){
-        mainUI.showChartUI(new ScatterView(Controller.getUser().getTransactions(),
-                Controller.getBudget()));
+        User user = Controller.getUser();
+        UserSetting settings = user.getSettings();
+
+        List<Transaction> transactions = user.getTransactions();
+
+        double budget = settings.getBudget();
+        String budgetDuration = settings.getBudgetDuration();
+
+        mainUI.showChartUI(new ScatterView(transactions, budget, budgetDuration));
     }
 
     /**
@@ -179,24 +186,22 @@ public class MainMenuBar extends MenuBar {
     }
 
     /**
-     * Contains the actions performed when the Menu option "Show Report" is selected.
+     * Contains the actions performed when the Menu option "Transaction History" is selected.
      */
-    private void showReportsMenuAction(){
-        mainUI.showInfo(new ReportUI("Reports", "Exit Reports"));
+    private void transactionHistoryMenuAction(){
+        mainUI.showInfo(new TransactionHistoryUI("Transaction History", "Exit Transaction History"));
 
     }
 
     /**
      * Contains the actions performed when the Menu option "Save..."(Report)  is selected.
      */
-    private void saveReportMenuAction(){
-        System.out.println("Save Report selected"); //TODO remove when action implemented
+    private void whatifMenuAction(){
+        mainUI.displayWhatifUI();
     }
 
     /**
      * Contains the actions performed when the Menu option "Help" is selected.
-     *
-     * @author Kris Rangel
      */
     private void showHelpMenuAction(){
         mainUI.showInfo(new UserHelp());
@@ -204,8 +209,6 @@ public class MainMenuBar extends MenuBar {
 
     /**
      * Contains the actions performed when the Menu option "About" is selected.
-     *
-     * @author Kris Rangel
      */
     private void aboutMenuAction(){
         mainUI.showInfo(new AboutInfo());

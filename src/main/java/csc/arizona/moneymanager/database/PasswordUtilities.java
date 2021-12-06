@@ -94,23 +94,4 @@ public class PasswordUtilities {
 
         return areSame;
     }
-
-    //TODO pull this test method out to junit
-    public void testPasswordMethods() {
-
-        String pass = "abcdefg";
-        System.out.printf("\nPassword: %s\n", pass);
-
-        String salt = getSalt(SALT_LENGTH);
-        System.out.printf("\nSalt : %s\n", salt);
-
-        String securePass = generateSecurePassword(pass, salt);
-        System.out.printf("Hash : %s\n", securePass);
-
-        System.out.println("\nTesting password verification: ");
-        System.out.printf("\tInvalid pass (should be false) : ");
-        System.out.println(verifyUserPassword("invalid password", securePass, salt));
-        System.out.printf("\tValid pass   (should be true)  : ");
-        System.out.println(verifyUserPassword(pass, securePass, salt));
-    }
 }
