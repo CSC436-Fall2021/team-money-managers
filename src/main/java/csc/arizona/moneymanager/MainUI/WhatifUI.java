@@ -1,5 +1,6 @@
 package csc.arizona.moneymanager.MainUI;
 
+import csc.arizona.moneymanager.Style;
 import csc.arizona.moneymanager.TransactionUI.CategoryList;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
@@ -103,7 +104,7 @@ public class WhatifUI extends ServicesView {
      */
     public void showAlert(Alert.AlertType type, String title, String header, String content){
         Alert alert = new Alert(type);
-        //Style.addStyling(alert);
+        Style.addStyling(alert);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
