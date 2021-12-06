@@ -41,7 +41,9 @@ public class MainUI {
 
     public static final Insets PADDING = new Insets(20);
     final private int WIDTH = 850;
-    final private int HEIGHT = 725;
+
+    final private int HEIGHT = 775;
+    public static final Insets PADDING = new Insets(20);
     private Scene scene;
     private BorderPane mainPane;
     private BorderPane transactionPane;
