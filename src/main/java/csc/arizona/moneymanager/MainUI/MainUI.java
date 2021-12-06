@@ -3,6 +3,7 @@ package csc.arizona.moneymanager.MainUI;
 import csc.arizona.moneymanager.Charts.TransactionChart;
 import csc.arizona.moneymanager.Controller;
 import csc.arizona.moneymanager.Style;
+import csc.arizona.moneymanager.TransactionUI.CategoryList;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -296,23 +298,24 @@ public class MainUI {
     }
 
     /**
-     * Displays the set bugdet UI and updates the user-entered budget amount in the
+     * Displays the set budget UI and updates the user-entered budget amount in the
      * account settings class.
      */
     public void displayBudgetUI(){
 
         double currentBudget = userSettings.getBudget();
         String currentBudgetDuration = userSettings.getBudgetDuration();
+        LocalDate currentBudgetStartDate = userSettings.getBudgetStartDate();
 
         // Service pane Elements
-        BudgetUI budgetUI = new BudgetUI(currentBudget, currentBudgetDuration);
+        BudgetUI budgetUI = new BudgetUI(currentBudget, currentBudgetDuration, currentBudgetStartDate);
 
         // Options pane elements
         HBox budgetOptions = createExitContentButtonOptionBox(budgetUI.getButtonText());
         Button okay = new Button("Set Budget");
         okay.setOnAction(e-> {
             if (budgetUI.validateBudget()) {
-                saveBudget(budgetUI.getBudget(), budgetUI.getDuration());
+                saveBudget(budgetUI.getBudget(), budgetUI.getDuration(), budgetUI.getStartDate());
             }
         }); // if budget changed, saving new budget
         budgetOptions.getChildren().add(0, okay); // Adding confirmation button to leftmost position
@@ -328,11 +331,12 @@ public class MainUI {
      * Saves the given budget in Account Settings.
      * @param budget the budget amount to save in account settings.
      */
-    private void saveBudget(double budget, String duration){
+    private void saveBudget(double budget, String duration, LocalDate startDate){
 
         // Saving budget into user settings
         userSettings.setBudget(budget);
         userSettings.setBudgetDuration(duration);
+        userSettings.setBudgetStartDate(startDate);
 
         // Showing alert for budget change confirmation
         duration = duration.toLowerCase();
@@ -480,5 +484,34 @@ public class MainUI {
         showInfo(new ChartUI(chart));
     }
 
+
+    /**
+     * Displays the what-if UI.
+     */
+    public void displayWhatifUI(){
+
+        double currentBudget = userSettings.getBudget();
+        String currentBudgetDuration = userSettings.getBudgetDuration();
+        LocalDate currentBudgetStartDate = userSettings.getBudgetStartDate();
+        CategoryList categoryList = new CategoryList("src/main/java/csc/arizona/moneymanager/TransactionUI/default_categories.txt");
+        categoryList.addCategories(userSettings.getCustomCategory());
+
+        // Service pane Elements
+        WhatifUI whatifUI = new WhatifUI(currentBudget, currentBudgetDuration, currentBudgetStartDate, Controller.getTotalSpent(), categoryList);
+
+        // Options pane elements
+        HBox whatifOptions = createExitContentButtonOptionBox(whatifUI.getButtonText());
+
+        Button addExpense = new Button("Add Expense");
+        addExpense.setOnAction(e-> whatifUI.addExpenseRow() );
+
+        whatifOptions.getChildren().add(0, addExpense);
+
+        // Displaying whatif UI in services pane
+        servicesPane.setCenter( whatifUI );
+        // Displaying option buttons in options pane
+        optionsPane.setCenter(whatifOptions);
+
+    }
 
 }

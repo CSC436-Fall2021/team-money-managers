@@ -1,6 +1,7 @@
 package csc.arizona.moneymanager.MainUI;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -20,6 +21,7 @@ public class UserSetting implements Serializable {
     private ArrayList<String> customCategory;
     private String budgetDuration;
     private String userNickname;
+    private LocalDate budgetStartDate;
 
     /**
      * default constructor for if this is the first time an account has been created and will
@@ -27,6 +29,7 @@ public class UserSetting implements Serializable {
      */
     public UserSetting() {
         customCategory = new ArrayList<>();
+        budgetStartDate = LocalDate.now();
     }
 
     /**
@@ -126,4 +129,13 @@ public class UserSetting implements Serializable {
     public String getUserNickname(){
         return userNickname;
     }
+
+    public LocalDate getBudgetStartDate() {
+        return budgetStartDate;
+    }
+
+    public void setBudgetStartDate(LocalDate budgetStartDate) {
+        this.budgetStartDate = budgetStartDate;
+    }
+
 }

@@ -76,10 +76,14 @@ public class MainMenuBar extends MenuBar {
 
         //******* Report menu setup *******/
         Menu reports = new Menu("_Reports");
-        // --> Transaction History option
+        // --> Transaction History option //TODO maybe make showReport a submenu with types of reports as menu items
         MenuItem transactionHistory = new MenuItem("Transaction _History");
         transactionHistory.setOnAction(e-> transactionHistoryMenuAction() );
-        reports.getItems().addAll(transactionHistory);
+        // --> What-if? option
+        MenuItem whatif = new MenuItem("_What-if?");
+        whatif.setOnAction(e-> whatifMenuAction() );
+        // Adding items to Reports menu
+        reports.getItems().addAll(transactionHistory, whatif);
 
         //******* Help menu setup *******/
         Menu help = new Menu("_Help");
@@ -184,6 +188,13 @@ public class MainMenuBar extends MenuBar {
     private void transactionHistoryMenuAction(){
         mainUI.showInfo(new TransactionHistoryUI("Transaction History", "Exit Transaction History"));
 
+    }
+
+    /**
+     * Contains the actions performed when the Menu option "Save..."(Report)  is selected.
+     */
+    private void whatifMenuAction(){
+        mainUI.displayWhatifUI();
     }
 
     /**
