@@ -6,10 +6,14 @@
  * the value of -fx-background. Individual elements are colored by
  * separate values that will overwrite the -fx-background setting.
  *
- * Main content panes are identified as follows:
- *      1. Transaction Pane : #transaction-pane
- *      2. Services Pane    : #services-pane
- *      3. Options Pane     : #options-pane
+ * Styling IDs usages are as follows:
+ *      #welocme-banner     : Main welcome banner (at login screen)
+ *      #transaction-pane   : Transaction pane (top section)
+ *      #services-pane      : Services Pane (middle section for main content)
+ *      #options-pane       : Options Pane (bottom section for option buttons)
+ *      #over-budget        : TransactionUI Over-budget text specific styling
+ *      #under-budget       : TransactionUI Under-budget text specific styling
+ *      #title              : "Title" level text (used in transaction pane, services pane, etc.)
  *
  * @author Kris Rangel
  */

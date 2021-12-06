@@ -2,6 +2,7 @@ package csc.arizona.moneymanager.Charts;
 
 import csc.arizona.moneymanager.TransactionUI.Transaction;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -10,7 +11,7 @@ import java.util.*;
  *  for the purpose of displaying graphical information in a chart.
  *
  *  Named ChartData because it was meant to provide methods to act on a chart's data,
- *  but it can be used anywhere where you are acting on any list of transactions.
+ *  but it can be used anywhere where you are acting on a list of transactions.
  *
  */
 public class ChartData {
@@ -23,10 +24,9 @@ public class ChartData {
     *   2. Past week
     *   3. Past month
     *   4. This month
+    *   5. Custom start and end date
     *
-    * Could have user enter a start and an end date as well in the future
-    *
-     */
+    */
 
     private List<Transaction> allTransactions;
     private List<Transaction> timeframeTransactions;
@@ -150,11 +150,12 @@ public class ChartData {
         List<Transaction> transactions = allCategoryTransactions.get(category);
         List<Transaction> inTimeframe = new ArrayList<>();
 
-        LocalDate curDate = LocalDate.now();
+        Month curMonth = LocalDate.now().getMonth();
         for (Transaction transaction : transactions) {
-            LocalDate otherDate = transaction.getDate();
+            Month otherMonth = transaction.getDate().getMonth();
 
-            if (curDate.getMonth() == otherDate.getMonth() ) { // may need .equals()
+            // month comparison seems to work with ==, but I changed it to .equals to be safe.
+            if (curMonth.equals(otherMonth)) {
                 inTimeframe.add(transaction);
             }
         }
@@ -176,7 +177,31 @@ public class ChartData {
         for (Transaction transaction : transactions) {
             LocalDate otherDate = transaction.getDate();
 
-            if (ChronoUnit.DAYS.between(otherDate, curDate) <= days) {
+            long daysBetween = ChronoUnit.DAYS.between(otherDate, curDate);
+            if (daysBetween >= 0 && daysBetween <= days) {
+                inTimeframe.add(transaction);
+            }
+        }
+
+        return inTimeframe;
+    }
+
+    /**
+     * Returns the list of all transactions by category type made between a start and an end date
+     * @param category
+     * @param start
+     * @param end
+     * @return list of all transactions by category type made between two dates.
+     */
+    private List<Transaction> getTransactionsBetween(String category, LocalDate start, LocalDate end) {
+        List<Transaction> transactions = allCategoryTransactions.get(category);
+        List<Transaction> inTimeframe = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            LocalDate otherDate = transaction.getDate();
+
+            if (otherDate.isEqual(start) || otherDate.isEqual(end) ||
+                    (otherDate.isAfter(start) && otherDate.isBefore(end))) {
                 inTimeframe.add(transaction);
             }
         }
@@ -210,7 +235,7 @@ public class ChartData {
      @return set of categories.
      */
     public Set<String> getCategorySet() {
-        return timeframeSums.keySet();
+        return timeframeCategoryTransactions.keySet();
     }
 
     /**
@@ -219,7 +244,7 @@ public class ChartData {
      * @return true if at least one transaction data is in the set timeframe, false otherwise.
      */
     public boolean hasData() {
-        return !timeframeCategoryTransactions.isEmpty();
+        return !timeframeTransactions.isEmpty();
     }
 
     /**
@@ -235,8 +260,8 @@ public class ChartData {
      *
      * @param timeframe
      */
-    public void updateTimeframe(ChartTimeframe timeframe) {
-        if (timeframe == ChartTimeframe.ALL) {
+    public void updateTimeframe(String timeframe) {
+        if (timeframe.equals("All time")) {
             timeframeTransactions = allTransactions;
             timeframeCategoryTransactions = allCategoryTransactions;
             updateSums();
@@ -249,16 +274,41 @@ public class ChartData {
         for (String category : allCategoryTransactions.keySet()) {
             List<Transaction> inTimeframe = null;
 
-            if (timeframe == ChartTimeframe.PAST_MONTH) {
+            if (timeframe.equals("Past month")) {
                 inTimeframe = getTransactionsPastDays(category, 30);
-            } else if (timeframe == ChartTimeframe.PAST_WEEK) {
+            } else if (timeframe.equals("Past week")) {
                 inTimeframe = getTransactionsPastDays(category, 7);
-            } else if (timeframe == ChartTimeframe.THIS_MONTH) {
+            } else if (timeframe.equals("This month")) {
                 inTimeframe = getTransactionsCategoryThisMonth(category);
             }
 
             timeframeTransactions.addAll(inTimeframe);
             timeframeCategoryTransactions.put(category, inTimeframe); // inTimeframe will never be null.
+        }
+
+        timeframeSums = new HashMap<>();
+        updateSums();
+    }
+
+    /**
+     * Sets a restriction on transactions to be within a custom start and end date.
+     *
+     * @param startDate
+     * @param endDate
+     */
+    public void updateTimeframe(LocalDate startDate, LocalDate endDate) {
+        timeframeTransactions = new ArrayList<>();
+        timeframeCategoryTransactions = new HashMap<>();
+
+        // skip looping transactions if the start date comes after the end date.
+        // we know that no transactions will be between.
+        if (!startDate.isAfter(endDate)) {
+            for (String category : allCategoryTransactions.keySet()) {
+                List<Transaction> inTimeframe = getTransactionsBetween(category, startDate, endDate);
+
+                timeframeTransactions.addAll(inTimeframe);
+                timeframeCategoryTransactions.put(category, inTimeframe);
+            }
         }
 
         timeframeSums = new HashMap<>();
@@ -290,7 +340,17 @@ public class ChartData {
         return sum;
     }
 
-
+    /**
+     * Returns the date of the earliest transaction within the timeframe.
+     *
+     * ex:
+     * timeframe between 11-20 and 11-30
+     * earliest transaction 11-23
+     *
+     * returns 11-23 date
+     *
+     * @return the date of the earliest transaction within the timeframe.
+     */
     public LocalDate getStartDate() {
         LocalDate start = null;
 
@@ -306,6 +366,17 @@ public class ChartData {
         return start;
     }
 
+    /**
+     * Returns the date of the latest transaction within the timeframe.
+     *
+     * ex:
+     * timeframe between 11-20 and 11-30
+     * latest transaction 11-27
+     *
+     * returns 11-27 date
+     *
+     * @return the date of the latest transaction within the timeframe.
+     */
     public LocalDate getEndDate() {
         LocalDate end = null;
 

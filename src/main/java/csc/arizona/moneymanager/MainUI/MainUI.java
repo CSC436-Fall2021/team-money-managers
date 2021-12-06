@@ -5,12 +5,9 @@ import csc.arizona.moneymanager.Controller;
 import csc.arizona.moneymanager.Style;
 import csc.arizona.moneymanager.TransactionUI.CategoryList;
 import csc.arizona.moneymanager.TransactionUI.TransactionUI;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -72,7 +69,7 @@ public class MainUI {
      * @param width the scene width.
      * @param height the scene height.
      */
-    public MainUI(int width, int height){ // TODO remove method once UserSettings implemented within Controller
+    public MainUI(int width, int height){
         this.userSettings = new UserSetting(); // initializing UserSetting object
         initializeScene(width, height);
     }
@@ -231,6 +228,7 @@ public class MainUI {
         // Checking for blank nickname from user and confirming update, if so.
         if(nickname == null || nickname.equals("")){
             Alert blankNicknameAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to have no nickname?");
+            Style.addStyling(blankNicknameAlert);
             blankNicknameAlert.showAndWait()
                     .filter   (response -> response == ButtonType.OK ) // if user pressed "OK"
                     .ifPresent(response -> userSettings.setUserNickname(nickname) ); // updating username to blank, if confirmed
@@ -344,6 +342,7 @@ public class MainUI {
         duration = duration.toLowerCase();
         String message = "You have set the new " + duration + " budget of $" + BudgetUI.budgetToString(budget) + ".";
         Alert budgetSetConfimation = new Alert(Alert.AlertType.INFORMATION, message);
+        Style.addStyling(budgetSetConfimation);
         budgetSetConfimation.showAndWait().filter(response -> response == ButtonType.OK);
 
         // Restoring content to previous content
@@ -480,23 +479,11 @@ public class MainUI {
      * Shows the ChartUI in the services pane.
      *
      * @param chart the chart to display.
-     */ //TODO maybe add a parameter to select which chart type?
+     */
     public void showChartUI(TransactionChart chart){
         showInfo(new ChartUI(chart));
     }
 
-    /**
-     * Test method to create and show a dummy pie chart
-     */
-    public void testShowPieChart(){ //TODO remove test method when not needed
-        ObservableList<PieChart.Data> testData =
-                FXCollections.observableArrayList(
-                        new PieChart.Data("Food", 20),
-                        new PieChart.Data("Other", 10));
-        PieChart testPieChart = new PieChart(testData);
-        testPieChart.setTitle("Test Pie Chart");
-        //showInfo(new ChartUI(testPieChart));
-    }
 
     /**
      * Displays the what-if UI.

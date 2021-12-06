@@ -4,10 +4,14 @@ import csc.arizona.moneymanager.Charts.Histogram;
 import csc.arizona.moneymanager.Charts.PieView;
 import csc.arizona.moneymanager.Charts.ScatterView;
 import csc.arizona.moneymanager.Controller;
+import csc.arizona.moneymanager.TransactionUI.Transaction;
+import csc.arizona.moneymanager.database.User;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+
+import java.util.List;
 
 /**
  * This class represents the MenuBar and associated menu items
@@ -30,7 +34,6 @@ public class MainMenuBar extends MenuBar {
      * @author Kris Rangel
      */
     public MainMenuBar(MainUI mainUI){
-        // Do not change OnActions in this function.
         super();
 
         //******* File menu setup *******/
@@ -161,8 +164,15 @@ public class MainMenuBar extends MenuBar {
      * Contains the actions performed when the Menu option "Scatterplot" is selected.
      */
     private void scatterPlotMenuAction(){
-        mainUI.showChartUI(new ScatterView(Controller.getUser().getTransactions(),
-                Controller.getBudget()));
+        User user = Controller.getUser();
+        UserSetting settings = user.getSettings();
+
+        List<Transaction> transactions = user.getTransactions();
+
+        double budget = settings.getBudget();
+        String budgetDuration = settings.getBudgetDuration();
+
+        mainUI.showChartUI(new ScatterView(transactions, budget, budgetDuration));
     }
 
     /**
@@ -173,7 +183,7 @@ public class MainMenuBar extends MenuBar {
     }
 
     /**
-     * Contains the actions performed when the Menu option "Show Report" is selected.
+     * Contains the actions performed when the Menu option "Transaction History" is selected.
      */
     private void transactionHistoryMenuAction(){
         mainUI.showInfo(new TransactionHistoryUI("Transaction History", "Exit Transaction History"));
@@ -189,8 +199,6 @@ public class MainMenuBar extends MenuBar {
 
     /**
      * Contains the actions performed when the Menu option "Help" is selected.
-     *
-     * @author Kris Rangel
      */
     private void showHelpMenuAction(){
         mainUI.showInfo(new UserHelp());
@@ -198,8 +206,6 @@ public class MainMenuBar extends MenuBar {
 
     /**
      * Contains the actions performed when the Menu option "About" is selected.
-     *
-     * @author Kris Rangel
      */
     private void aboutMenuAction(){
         mainUI.showInfo(new AboutInfo());

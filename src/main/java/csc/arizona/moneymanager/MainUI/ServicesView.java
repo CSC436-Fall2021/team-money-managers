@@ -15,7 +15,6 @@ import javafx.scene.layout.GridPane;
  */
 abstract public class ServicesView extends BorderPane {
 
-    //private final double titleScale = 1.5;
     protected GridPane content;
     private String buttonText;
 
@@ -30,8 +29,6 @@ abstract public class ServicesView extends BorderPane {
 
         Label titleLabel = new Label(title);
         titleLabel.setId("title");
-        //titleLabel.setScaleX(titleScale);
-        //titleLabel.setScaleY(titleScale);
 
         BorderPane.setAlignment(titleLabel, Pos.TOP_CENTER);
         setTop(titleLabel);
