@@ -128,7 +128,7 @@ public class LoginUI {
         passwordCheck.setMinWidth(200);
         TextField userField = new TextField();
         TextField passField = new TextField();
-        TextField rePassField = new TextField();
+        PasswordField rePassField = new PasswordField();
         userField.setMinWidth(200);
         passField.setMinWidth(200);
         rePassField.setMinWidth(200);
