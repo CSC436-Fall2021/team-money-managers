@@ -20,7 +20,7 @@ public class AboutInfo extends ServicesView {
 
     /**
      * Constructor.
-     *
+     * <p>
      * Supplies the title to the super constructor.
      */
     public AboutInfo() {
@@ -73,10 +73,11 @@ public class AboutInfo extends ServicesView {
 
     /**
      * Gets a formatted HBox containing the specified member in a label.
+     *
      * @param member the member to create the label for.
      * @return the HBox object containing the formatted label.
      */
-    private HBox getMemberBox(String member){
+    private HBox getMemberBox(String member) {
         HBox memberBox = new HBox();
         Label memberLabel = new Label(member);
         memberLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -87,11 +88,11 @@ public class AboutInfo extends ServicesView {
 
     /**
      * Loads the Logo from file.
-     * @return the ImageView object representing the logo.
      *
+     * @return the ImageView object representing the logo.
      * @author Carter Boyd
      */
-    private ImageView getLogo(){
+    private ImageView getLogo() {
         File img = new File("src/main/java/csc/arizona/moneymanager/IMG/Icon.png");
         Image image = new Image(img.toURI().toString());
         ImageView imageView = new ImageView(image);

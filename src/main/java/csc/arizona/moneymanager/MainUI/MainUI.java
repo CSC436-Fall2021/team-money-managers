@@ -18,30 +18,30 @@ import java.util.List;
 
 /**
  * This class represents the main UI of the Money Management Application.
- *
+ * <p>
  * The main UI consists of scene with a menu bar and 3 main sections of content:
- *     1. Transaction Pane
- *     2. Services Pane
- *     3. Options Pane
+ * 1. Transaction Pane
+ * 2. Services Pane
+ * 3. Options Pane
  * The content of these sections can be set via an individual method. These methods
  * accept any subclass of the javafx Pane class (GridPane, BorderPane, HBox, etc.)
  * as the container of content to display. It was set up this way in the interest
  * of modularity.
- *
+ * <p>
  * The menu bar is represented by an instance of the separate MainMenuBar class.
  * This was done to separate menu OnActionEvents from the core UI code. The code in this
  * class need not be changed in the event menu options are added or updated due to
  * external code revision.
- *
+ * <p>
  * Dependencies: MainMenuBar
  *
  * @author Kris Rangel
  */
 public class MainUI {
 
+    public static final Insets PADDING = new Insets(20);
     final private int WIDTH = 850;
     final private int HEIGHT = 725;
-    public static final Insets PADDING = new Insets(20);
     private Scene scene;
     private BorderPane mainPane;
     private BorderPane transactionPane;
@@ -54,7 +54,7 @@ public class MainUI {
 
     /**
      * Default Constructor.
-     *
+     * <p>
      * Sets width and height of the scene to default values.
      * And initializes UserSettings object.
      */
@@ -66,10 +66,11 @@ public class MainUI {
     /**
      * Constructor. Allows the scene to initialize to
      * specified width and height values.
-     * @param width the scene width.
+     *
+     * @param width  the scene width.
      * @param height the scene height.
      */
-    public MainUI(int width, int height){
+    public MainUI(int width, int height) {
         this.userSettings = new UserSetting(); // initializing UserSetting object
         initializeScene(width, height);
     }
@@ -77,10 +78,11 @@ public class MainUI {
     /**
      * Constructor. Accepts the UserSetting object for the
      * currently logged in user.
+     *
      * @param userSettings the UserSetting object that contains
      *                     the currently logged-in user's settings.
      */
-    public MainUI(UserSetting userSettings){
+    public MainUI(UserSetting userSettings) {
         this.userSettings = userSettings;
         initializeScene(WIDTH, HEIGHT);
     }
@@ -89,22 +91,24 @@ public class MainUI {
      * Constructor. Allows the scene to initialize to
      * specified width and height values and accepts
      * the UserSetting object for the currently logged in user.
-     * @param width the scene width.
-     * @param height the scene height.
+     *
+     * @param width        the scene width.
+     * @param height       the scene height.
      * @param userSettings the UserSetting object that contains
      *                     the currently logged-in user's settings.
      */
-    public MainUI(int width, int height, UserSetting userSettings){
+    public MainUI(int width, int height, UserSetting userSettings) {
         this.userSettings = userSettings;
         initializeScene(width, height);
     }
 
     /**
      * Initializes the scene with the specified width and height.
-     * @param width the width of the scene.
+     *
+     * @param width  the width of the scene.
      * @param height the height of the scene.
      */
-    private void initializeScene(int width, int height){
+    private void initializeScene(int width, int height) {
 
         // Initializing elements
         MainMenuBar menuBar = new MainMenuBar(this);
@@ -141,12 +145,12 @@ public class MainUI {
     /**
      * Initializes the user landing page.
      */
-    private void initLandingPage(){
+    private void initLandingPage() {
         UserLandingPage userLandingPage = new UserLandingPage();
         String userNickname = userSettings.getUserNickname();
 
         // If user nickname already set, updating welcome message
-        if(userNickname != null && !userNickname.equals("")){
+        if (userNickname != null && !userNickname.equals("")) {
             userLandingPage.setWelcomeMessage("Welcome, " + userNickname + ".");
         }
 
@@ -170,13 +174,14 @@ public class MainUI {
 
     /**
      * Creates an HBox landing page UI element for quick-access to transaction history.
+     *
      * @return the HBox object with the help access elements
      */
-    private HBox createTransactionHistoryAccessBox(){
+    private HBox createTransactionHistoryAccessBox() {
         HBox transactionHistoryAccessBox = new HBox();
         Label accessLabel = new Label("View Transaction history: ");
         Button accessButton = new Button("View");
-        accessButton.setOnAction(e-> Controller.showHistory() );
+        accessButton.setOnAction(e -> Controller.showHistory());
 
         transactionHistoryAccessBox.getChildren().addAll(accessLabel, accessButton);
 
@@ -185,13 +190,14 @@ public class MainUI {
 
     /**
      * Creates an HBox landing page UI element for quick-access to the help menu.
+     *
      * @return the HBox object with the help access elements
      */
-    private HBox createHelpAccessBox(){
+    private HBox createHelpAccessBox() {
         HBox helpAccessBox = new HBox();
         Label helpLabel = new Label("Money Managers Help: ");
         Button helpButton = new Button("Load Help");
-        helpButton.setOnAction(e-> showInfo(new UserHelp()) );
+        helpButton.setOnAction(e -> showInfo(new UserHelp()));
         helpAccessBox.getChildren().addAll(helpLabel, helpButton);
 
         return helpAccessBox;
@@ -199,11 +205,12 @@ public class MainUI {
 
     /**
      * Creates an HBox UI element to allow the user to update their nickname.
+     *
      * @param currentNickname the current user nickname, empty string or null if none.
      * @return the HBox object with components necessary to update the user nickname.
      */
-    private HBox createUserNicknameUpdateBox(String currentNickname){
-        if(currentNickname == null || currentNickname.equals("")) { // user nickname not set
+    private HBox createUserNicknameUpdateBox(String currentNickname) {
+        if (currentNickname == null || currentNickname.equals("")) { // user nickname not set
             currentNickname = "none";
         }
 
@@ -212,8 +219,8 @@ public class MainUI {
         Label nickname = new Label(currentNickname);
         TextField nicknameTF = new TextField();
         Button updateNickname = new Button("Update");
-        updateNickname.setOnAction( e-> saveNickname(nicknameTF.getText()) ); // update button saves nickname
-        nicknameTF.setOnAction(e-> updateNickname.fire());
+        updateNickname.setOnAction(e -> saveNickname(nicknameTF.getText())); // update button saves nickname
+        nicknameTF.setOnAction(e -> updateNickname.fire());
         updateNicknameBox.getChildren().addAll(currentLabel, nickname, nicknameTF, updateNickname);
 
         return updateNicknameBox;
@@ -221,18 +228,19 @@ public class MainUI {
 
     /**
      * Updates the user nickname stored in settings and reloads landing page.
+     *
      * @param nickname the user nickname string to store.
      */
-    public void saveNickname(String nickname){
+    public void saveNickname(String nickname) {
 
         // Checking for blank nickname from user and confirming update, if so.
-        if(nickname == null || nickname.equals("")){
+        if (nickname == null || nickname.equals("")) {
             Alert blankNicknameAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to have no nickname?");
             Style.addStyling(blankNicknameAlert);
             blankNicknameAlert.showAndWait()
-                    .filter   (response -> response == ButtonType.OK ) // if user pressed "OK"
-                    .ifPresent(response -> userSettings.setUserNickname(nickname) ); // updating username to blank, if confirmed
-        }else {
+                    .filter(response -> response == ButtonType.OK) // if user pressed "OK"
+                    .ifPresent(response -> userSettings.setUserNickname(nickname)); // updating username to blank, if confirmed
+        } else {
             userSettings.setUserNickname(nickname);
         }
         initLandingPage();
@@ -241,7 +249,7 @@ public class MainUI {
     /**
      * Initializes the transaction pane.
      */
-    private void initTransactionPane(){
+    private void initTransactionPane() {
         transactionPane = new BorderPane();
         transactionPane.setPadding(PADDING);
         transactionPane.setPrefWidth(WIDTH);
@@ -252,25 +260,27 @@ public class MainUI {
 
     /**
      * Sets the transaction pane content.
+     *
      * @param transaction the content to show in the transaction pane.
      */
-    public void setTransactionPane(Pane transaction){
+    public void setTransactionPane(Pane transaction) {
         transactionPane.setCenter(transaction);
     }
 
     /**
      * Initializes the services pane.
      */
-    private void initServicesPane(){
+    private void initServicesPane() {
         servicesPane = new BorderPane();
         servicesPane.setStyle("-fx-border-color: black");
     }
 
     /**
      * Sets the services pane content.
+     *
      * @param services the content to show in the services pane.
      */
-    public void setServicesPane(Pane services){
+    public void setServicesPane(Pane services) {
         // Saving current service pane content
         currentServicesPane = services;
         // Setting content
@@ -280,7 +290,7 @@ public class MainUI {
     /**
      * Initializes the Options pane.
      */
-    private void initOptionsPane(){
+    private void initOptionsPane() {
         optionsPane = new BorderPane();
         optionsPane.setStyle("-fx-border-color: black");
 
@@ -288,9 +298,10 @@ public class MainUI {
 
     /**
      * Sets the options pane content.
+     *
      * @param options the content to show in the options pane.
      */
-    public void setOptionsPane(Pane options){
+    public void setOptionsPane(Pane options) {
         // Saving current options pane content
         currentOptionsPane = options;
         // Setting content
@@ -301,7 +312,7 @@ public class MainUI {
      * Displays the set budget UI and updates the user-entered budget amount in the
      * account settings class.
      */
-    public void displayBudgetUI(){
+    public void displayBudgetUI() {
 
         double currentBudget = userSettings.getBudget();
         String currentBudgetDuration = userSettings.getBudgetDuration();
@@ -313,7 +324,7 @@ public class MainUI {
         // Options pane elements
         HBox budgetOptions = createExitContentButtonOptionBox(budgetUI.getButtonText());
         Button okay = new Button("Set Budget");
-        okay.setOnAction(e-> {
+        okay.setOnAction(e -> {
             if (budgetUI.validateBudget()) {
                 saveBudget(budgetUI.getBudget(), budgetUI.getDuration(), budgetUI.getStartDate());
             }
@@ -321,7 +332,7 @@ public class MainUI {
         budgetOptions.getChildren().add(0, okay); // Adding confirmation button to leftmost position
 
         // Displaying budget UI in services pane
-        servicesPane.setCenter( budgetUI );
+        servicesPane.setCenter(budgetUI);
         // Displaying option buttons in options pane
         optionsPane.setCenter(budgetOptions);
 
@@ -350,9 +361,10 @@ public class MainUI {
 
     /**
      * Saves the given budget in Account Settings.
+     *
      * @param budget the budget amount to save in account settings.
      */
-    private void saveBudget(double budget, String duration, LocalDate startDate){
+    private void saveBudget(double budget, String duration, LocalDate startDate) {
 
         // Saving budget into user settings
         userSettings.setBudget(budget);
@@ -373,7 +385,7 @@ public class MainUI {
     /**
      * Displays an add custom categories UI and updates the account settings custom category list.
      */
-    public void addCustomCategories(){
+    public void addCustomCategories() {
 
         CustomCategoryUI categoryUI = new CustomCategoryUI();
 
@@ -387,7 +399,7 @@ public class MainUI {
 
             // if there is something to add.
             if (!newCategory.isEmpty()) {
-                TransactionUI target = (TransactionUI)transactionPane.getCenter();
+                TransactionUI target = (TransactionUI) transactionPane.getCenter();
 
                 List<String> userCategories = userSettings.getCustomCategory();
                 List<String> defaultCategories = target.getDefaultCategories();
@@ -415,9 +427,10 @@ public class MainUI {
      * Updates the Services pane to the given ServicesView content and
      * updates the Options pane with a return button to return to previously
      * displayed content.
+     *
      * @param servicesView the ServicesView object to display.
      */
-    public void showInfo(ServicesView servicesView){
+    public void showInfo(ServicesView servicesView) {
         // Setting services pane to About info
         servicesPane.setCenter(servicesView);
         // Getting options pane
@@ -428,10 +441,11 @@ public class MainUI {
 
     /**
      * Creates a simple, one-button-return options pane for to return to previous content display.
+     *
      * @param buttonText the text to display on the return button.
      * @return the HBox object for display in the options pane.
      */
-    private HBox createExitContentButtonOptionBox(String buttonText){
+    private HBox createExitContentButtonOptionBox(String buttonText) {
         // Initializing options
         HBox infoOptions = new HBox();
         Button exitInfo = new Button(buttonText);
@@ -448,11 +462,11 @@ public class MainUI {
 
     /**
      * Sets Services Pane and Options Pane to current content.
-     *
+     * <p>
      * Used to restore previous content when temporarily showing
      * different in the services and/or options pane.
      */
-    private void showCurrentContent(){
+    private void showCurrentContent() {
         // Setting services pane to previous view
         servicesPane.setCenter(currentServicesPane);
         // Setting options pane to previous view
@@ -462,16 +476,8 @@ public class MainUI {
     /**
      * @return the MainUI scene.
      */
-    public Scene getScene(){
+    public Scene getScene() {
         return this.scene;
-    }
-
-
-    /**
-     * @return the UserSetting object associated with the currently logged-in user.
-     */
-    public UserSetting getUserSettings() {
-      return this.userSettings;
     }
 
 
@@ -483,7 +489,7 @@ public class MainUI {
     /**
      * Sets the options pane to display no content.
      */
-    private void clearOptionsPane(){
+    private void clearOptionsPane() {
         String transparentStyle = "-fx-background-color: rgba(0,0,0,0); ";
         HBox emptyOptions = createExitContentButtonOptionBox("");
 
@@ -501,7 +507,7 @@ public class MainUI {
      *
      * @param chart the chart to display.
      */
-    public void showChartUI(TransactionChart chart){
+    public void showChartUI(TransactionChart chart) {
         showInfo(new ChartUI(chart));
     }
 
@@ -509,7 +515,7 @@ public class MainUI {
     /**
      * Displays the what-if UI.
      */
-    public void displayWhatifUI(){
+    public void displayWhatifUI() {
 
         double currentBudget = userSettings.getBudget();
         String currentBudgetDuration = userSettings.getBudgetDuration();
@@ -524,12 +530,12 @@ public class MainUI {
         HBox whatifOptions = createExitContentButtonOptionBox(whatifUI.getButtonText());
 
         Button addExpense = new Button("Add Expense");
-        addExpense.setOnAction(e-> whatifUI.addExpenseRow() );
+        addExpense.setOnAction(e -> whatifUI.addExpenseRow());
 
         whatifOptions.getChildren().add(0, addExpense);
 
         // Displaying whatif UI in services pane
-        servicesPane.setCenter( whatifUI );
+        servicesPane.setCenter(whatifUI);
         // Displaying option buttons in options pane
         optionsPane.setCenter(whatifOptions);
 
