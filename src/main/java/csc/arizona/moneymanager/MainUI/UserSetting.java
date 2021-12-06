@@ -29,6 +29,7 @@ public class UserSetting implements Serializable {
      */
     public UserSetting() {
         customCategory = new ArrayList<>();
+        budgetStartDate = LocalDate.now();
     }
 
     /**
