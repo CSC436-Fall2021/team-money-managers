@@ -158,6 +158,7 @@ public class UserSetting implements Serializable {
     public void setCategoryMap(HashMap<String, Double> categoryMap) {
         this.categoryMap = categoryMap;
     }
+
     public LocalDate getBudgetStartDate() {
         return budgetStartDate;
     }
