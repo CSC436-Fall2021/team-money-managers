@@ -43,7 +43,7 @@ public class UserHelp extends ServicesView {
 
     /**
      * Constructor.
-     *
+     * <p>
      * Supplies the title to the super constructor.
      */
     public UserHelp() {

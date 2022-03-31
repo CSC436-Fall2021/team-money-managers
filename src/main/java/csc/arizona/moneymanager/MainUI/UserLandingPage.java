@@ -11,12 +11,12 @@ import javafx.scene.layout.HBox;
  */
 public class UserLandingPage extends ServicesView {
 
-    Label welcomeLabel;
     static int contentCount = 0;
+    Label welcomeLabel;
 
     /**
      * Constructor.
-     *
+     * <p>
      * Supplies the title to the super constructor.
      */
     public UserLandingPage() {
@@ -42,17 +42,19 @@ public class UserLandingPage extends ServicesView {
 
     /**
      * Adds a label to the landing page. The label added with have 'heading' indention.
+     *
      * @param label the label to add.
      */
-    private void addLabel(Label label){
+    private void addLabel(Label label) {
         content.addRow(contentCount++, label);
     }
 
     /**
      * Adds an HBox as the new bottom row of the landing page. Guarantees uniform padding.
+     *
      * @param contentRow The HBox object containing the content to add.
      */
-    public void addContent(HBox contentRow){
+    public void addContent(HBox contentRow) {
         // Adding padding to content
         contentRow.setPadding(MainUI.PADDING);
         contentRow.setSpacing(MainUI.PADDING.getLeft());
@@ -62,6 +64,7 @@ public class UserLandingPage extends ServicesView {
 
     /**
      * Sets the welcome message on the landing page.
+     *
      * @param msg the message to display.
      */
     public void setWelcomeMessage(String msg) {

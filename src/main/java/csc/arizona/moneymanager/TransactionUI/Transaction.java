@@ -83,13 +83,10 @@ public class Transaction implements Serializable {
     }
 
     public long getDateAsLong() {
-        //long val = date.getLong(ChronoField.EPOCH_DAY);
         long val = date.toEpochDay();
         return val;
     }
 
     public String getMemo() { return memo; }
 
-
-    //public static int getMemoMaxLength() { return MEMO_MAX_LENGTH; }
 }

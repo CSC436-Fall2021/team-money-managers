@@ -41,11 +41,13 @@ public class CategoryList implements Serializable {
         categories.add(category);
     }
 
-    public List<String> getDefaultCategories() { return defaultCategories; }
+    public List<String> getDefaultCategories() {
+        return defaultCategories;
+    }
+
     public List<String> getCategories() {
         return categories;
     }
-
 
 
 }

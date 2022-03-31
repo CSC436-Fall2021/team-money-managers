@@ -4,12 +4,10 @@ import csc.arizona.moneymanager.Charts.TransactionChart;
 
 /**
  * This class represents the chart UI display for the services pane.
- *
- *
  */
-public class ChartUI extends ServicesView{
+public class ChartUI extends ServicesView {
 
-    private TransactionChart chartView;
+    private final TransactionChart chartView;
 
     /**
      * Constructor.
@@ -17,11 +15,8 @@ public class ChartUI extends ServicesView{
      * @param chart the Chart object to display.
      */
     public ChartUI(TransactionChart chart) {
-        super(chart.getTitle(), "Return" );
+        super(chart.getTitle(), "Return");
         this.chartView = chart;
-
-        //setupChart();
-
         this.setCenter(chartView.getView());
 
     }

@@ -16,14 +16,15 @@ import javafx.scene.layout.GridPane;
 abstract public class ServicesView extends BorderPane {
 
     protected GridPane content;
-    private String buttonText;
+    private final String buttonText;
 
     /**
      * Constructor.
-     * @param title the title to set in the services content pane.
+     *
+     * @param title      the title to set in the services content pane.
      * @param buttonText the text on the "Return" button
      */
-    public ServicesView(String title, String buttonText){
+    public ServicesView(String title, String buttonText) {
         this.buttonText = buttonText;
         setPadding(MainUI.PADDING);
 
@@ -39,7 +40,7 @@ abstract public class ServicesView extends BorderPane {
         setCenter(content);
     }
 
-    public String getButtonText(){
+    public String getButtonText() {
         return this.buttonText;
     }
 

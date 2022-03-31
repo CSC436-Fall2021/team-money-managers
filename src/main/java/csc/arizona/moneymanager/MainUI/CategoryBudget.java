@@ -88,7 +88,7 @@ public class CategoryBudget extends ServicesView {
     private void displayRestOfUI() {
         categoryLabel = new Label("Your current budget for " + category + " is: " + String.format("$%01.2f", Controller.getCategoryBudget(category)));
         content.addRow(1, categoryLabel);
-        categoryTotal = new Label("the total amount that has been spent in " + category + " is " + String.format("$%01.2f", + Controller.getCategorySpent(category)));
+        categoryTotal = new Label("the total amount that has been spent in " + category + " is " + String.format("$%01.2f", +Controller.getCategorySpent(category)));
         content.addRow(2, categoryTotal);
         Label setCatBudLabel = new Label("What would you like the budget for this category to be?");
         setCatBud = new TextField();
@@ -102,6 +102,6 @@ public class CategoryBudget extends ServicesView {
      */
     public void updateDisplay() {
         categoryLabel.setText("Your current budget for " + category + " is:" + String.format("$%01.2f", Controller.getCategoryBudget(category)));
-        categoryTotal.setText("the total amount that has been spent in " + category + " is " + String.format("$%01.2f", + Controller.getCategorySpent(category)));
+        categoryTotal.setText("the total amount that has been spent in " + category + " is " + String.format("$%01.2f", +Controller.getCategorySpent(category)));
     }
 }

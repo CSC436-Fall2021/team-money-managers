@@ -15,17 +15,18 @@ public class WhatifUI extends ServicesView {
 
     private final int MAX_WHATIF_CONTENT = 5;// maximum number of concurrent expense rows displayed
     private int expenseRowCount;             // count of current rows of expenses displayed
-    private double currentBudget;            // current budget
+    private final double currentBudget;            // current budget
     private Label currentBudgetAmount;       // label that displays current budget amount
-    private String currentBudgetDuration;    // current budget duration
-    private LocalDate currentBudgetStartDate;// budget start date for calculating remaining time for expenses
-    private CategoryList categoryList;       // list of expense categories
+    private final String currentBudgetDuration;    // current budget duration
+    private final LocalDate currentBudgetStartDate;// budget start date for calculating remaining time for expenses
+    private final CategoryList categoryList;       // list of expense categories
     private double whatifspending;           // current what-if spending amount
     private Label whatifSpendingLabel;       // label that displays current what-if spending amount
     private VBox expenseVBox;                // outer container for expense rows
 
     /**
      * Constructor.
+     *
      * @param currentBudget current (non-whatif) budget.
      */
     public WhatifUI(double currentBudget, String currentBudgetDuration, LocalDate currentBudgetStartDate, double currentSpending, CategoryList categoryList) {
@@ -73,11 +74,11 @@ public class WhatifUI extends ServicesView {
         HBox headerBox = new HBox();
         headerBox.setSpacing(MainUI.PADDING.getLeft() * 2);
 
-        Label headerSpacing = new Label ("");
-        Label checkBoxHeader = new Label ("Enabled");
-        Label categoryHeader = new Label ("Category");
-        Label durationHeader = new Label ("     Duration");
-        Label amountHeader = new Label ("      Amount");
+        Label headerSpacing = new Label("");
+        Label checkBoxHeader = new Label("Enabled");
+        Label categoryHeader = new Label("Category");
+        Label durationHeader = new Label("     Duration");
+        Label amountHeader = new Label("      Amount");
 
         headerBox.getChildren().addAll(headerSpacing, checkBoxHeader, categoryHeader, durationHeader, amountHeader);
         content.addRow(2, headerBox);
@@ -87,9 +88,10 @@ public class WhatifUI extends ServicesView {
 
     /**
      * Updates the what-if spending label.
+     *
      * @param spending the amount to update the label to.
      */
-    private void updateWhatifSpending(double spending){
+    private void updateWhatifSpending(double spending) {
         whatifspending = spending;
         String spendingStr = "$" + BudgetUI.budgetToString(whatifspending);
         whatifSpendingLabel.setText(spendingStr);
@@ -97,12 +99,13 @@ public class WhatifUI extends ServicesView {
 
     /**
      * Shows an alert dialog.
-     * @param type the Alert.AlertType
-     * @param title the title of the dialog
-     * @param header the main header text
+     *
+     * @param type    the Alert.AlertType
+     * @param title   the title of the dialog
+     * @param header  the main header text
      * @param content the content text
      */
-    public void showAlert(Alert.AlertType type, String title, String header, String content){
+    public void showAlert(Alert.AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
         Style.addStyling(alert);
         alert.setTitle(title);
@@ -114,13 +117,13 @@ public class WhatifUI extends ServicesView {
     /**
      * Adds an expense row to the what-if UI for use by user.
      */
-    public void addExpenseRow(){
-        if(expenseRowCount >= MAX_WHATIF_CONTENT){
+    public void addExpenseRow() {
+        if (expenseRowCount >= MAX_WHATIF_CONTENT) {
             showAlert(
                     Alert.AlertType.INFORMATION,
                     "Help",
                     "Cannot add more expenses.",
-                    "A maximum of "+ MAX_WHATIF_CONTENT +" expenses may be added a time."
+                    "A maximum of " + MAX_WHATIF_CONTENT + " expenses may be added a time."
             );
             return;
         }
@@ -149,9 +152,9 @@ public class WhatifUI extends ServicesView {
 
         // Button for user to remove expense category row
         Button removeExpenseRow = new Button("Remove");
-        removeExpenseRow.setOnAction(e-> {
-            if(expenseRowCount > 1) { // cannot remove last expense
-                if(enabled.isSelected()) { // if expense to be removed is checked, then uncheck to remove from spending
+        removeExpenseRow.setOnAction(e -> {
+            if (expenseRowCount > 1) { // cannot remove last expense
+                if (enabled.isSelected()) { // if expense to be removed is checked, then uncheck to remove from spending
                     checkBoxUpdate(false, durationComboBox.getValue(), amountTF.getText());
                 }
                 expenseVBox.getChildren().remove(catBox); // remove from UI
@@ -165,20 +168,21 @@ public class WhatifUI extends ServicesView {
         expenseRowCount++; // increase row count
 
         // Setting action for checkbox to enable expense calculation (if invalid amount, will deselect box)
-        enabled.setOnAction(e-> enabled.setSelected(checkBoxUpdate(enabled.isSelected(), durationComboBox.getValue(), amountTF.getText() )));
+        enabled.setOnAction(e -> enabled.setSelected(checkBoxUpdate(enabled.isSelected(), durationComboBox.getValue(), amountTF.getText())));
     }
 
     /**
      * Updates what-if budget for an expense based on enabled checkbox state.
-     * @param selected the checkbox state
-     * @param duration the duration of the expense (Once, Daily, or Weekly)
+     *
+     * @param selected  the checkbox state
+     * @param duration  the duration of the expense (Once, Daily, or Weekly)
      * @param amountStr the expense amount. This should be a String representation of a double.
      * @return the selected state if amountStr format is valid, false otherwise.
      */
     private boolean checkBoxUpdate(boolean selected, String duration, String amountStr) {
         double amount;
         String posDoubleRegex = "\\d+(\\.\\d+)?";
-        if (!amountStr.matches(posDoubleRegex)){
+        if (!amountStr.matches(posDoubleRegex)) {
             showAlert(
                     Alert.AlertType.ERROR,
                     "Error",
@@ -186,15 +190,15 @@ public class WhatifUI extends ServicesView {
                     "Amount must be in currency format (i.e. 1.34 )"
             );
             return false;
-        }else{
+        } else {
             amount = Double.parseDouble(amountStr);
         }
 
         double overDurationAmount = getOverDurationAmount(duration, amount);
         double newWhatifBudget = whatifspending;
-        if(selected){
+        if (selected) {
             newWhatifBudget += overDurationAmount;
-        }else{
+        } else {
             newWhatifBudget -= overDurationAmount;
         }
         updateWhatifSpending(newWhatifBudget);
@@ -204,11 +208,12 @@ public class WhatifUI extends ServicesView {
     /**
      * Calculates the total amount over the given duration left in the current budget period
      * based on a specified amount per duration.
+     *
      * @param duration duration of expense
-     * @param amount amount of expense
+     * @param amount   amount of expense
      * @return the total amount of the expense over remaining expense duration periods remaining in the budget.
      */
-    private double getOverDurationAmount(String duration, Double amount){
+    private double getOverDurationAmount(String duration, Double amount) {
         double totalOverDuration = 0.0;
         LocalDate today = LocalDate.now();
         long daysPassed = ChronoUnit.DAYS.between(currentBudgetStartDate, today); // number of days into current budget
@@ -234,13 +239,14 @@ public class WhatifUI extends ServicesView {
 
     /**
      * Returns the sub-duration period of the current budget duration.
+     *
      * @return "Weekly" if the budget is "Monthly", otherwise "Daily".
      */
-    private String getSubDuration(){
+    private String getSubDuration() {
         String subDuration;
-        if(currentBudgetDuration.equals("Monthly")){
+        if (currentBudgetDuration.equals("Monthly")) {
             subDuration = "Weekly";
-        }else{
+        } else {
             subDuration = "Daily";
         }
         return subDuration;

@@ -10,7 +10,6 @@ import csc.arizona.moneymanager.database.DatabaseHandler;
 import csc.arizona.moneymanager.database.User;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -41,12 +40,11 @@ public class Controller extends Application {
 
     private static final DatabaseHandler database = new DatabaseHandler();
     private static Stage stage;
-    private static MainUI test;
+    private static MainUI mainUI;
     private static User currentUser;
 
     public static void connectToDatabase() {
         database.connectToDatabase();
-//        DatabaseHandler.turnLoggerOff();
     }
 
     /**
@@ -102,16 +100,10 @@ public class Controller extends Application {
      * convert into the users main view account
      */
     public static void loginToMainUI() {
-        // read from database: budget, category.
-
         UserSetting userSettings = currentUser.getSettings();
-
-
-        test.setUserSettings(userSettings);
-        test.setTransactionPane(new TransactionUI(userSettings.getCustomCategory()));
-        //test.setServicesPane(new AboutInfo());
-
-        stage.setScene(test.getScene());
+        mainUI.setUserSettings(userSettings);
+        mainUI.setTransactionPane(new TransactionUI(userSettings.getCustomCategory()));
+        stage.setScene(mainUI.getScene());
     }
 
     /**
@@ -126,20 +118,20 @@ public class Controller extends Application {
     /**
      * Shows transaction history for all transactions.
      */
-    public static void showHistory(){
+    public static void showHistory() {
         showHistory(null, null); // non-specified dates
     }
 
-    public static void showHistory(LocalDate start, LocalDate end)  {
+    public static void showHistory(LocalDate start, LocalDate end) {
         Stage reportPopUp = new Stage();
         reportPopUp.setTitle("Report");
         BorderPane bp = new BorderPane();
-        Scene reportScene = new Scene(bp, 600,600);
+        Scene reportScene = new Scene(bp, 600, 600);
         Style.addStyling(reportScene);
 
-        try{
+        try {
             currentUser = database.getUserData(currentUser.getUsername(), false);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Getting user data failed.");
         } finally {
             TextField searchBox = new TextField();
@@ -155,7 +147,7 @@ public class Controller extends Application {
 
             HBox searchHBox = new HBox();
             searchHBox.setAlignment(Pos.CENTER_RIGHT);
-            searchBox.setPrefSize(120,3);
+            searchBox.setPrefSize(120, 3);
             searchHBox.getChildren().addAll(new Label("Search: "), searchBox);
 
             topBox.getChildren().addAll(labelBox, searchHBox);
@@ -200,14 +192,15 @@ public class Controller extends Application {
 
     /**
      * Gets a table containing transaction history between the specified start and end dates.
+     *
      * @param start the report start date
-     * @param end the report end date
+     * @param end   the report end date
      * @return the TableView with the transaction between the given dates.
      */
-    private static TableView getHistoryTable(LocalDate start, LocalDate end, TextField searchBox){
+    private static TableView getHistoryTable(LocalDate start, LocalDate end, TextField searchBox) {
         List<Transaction> transactions = new ArrayList<>(currentUser.getTransactions());
 
-        for (Transaction t: currentUser.getTransactions()){
+        for (Transaction t : currentUser.getTransactions()) {
             if (start != null) {
                 if (!(t.getDate().isAfter(start))) {
                     transactions.remove(t);
@@ -225,14 +218,15 @@ public class Controller extends Application {
 
     /**
      * Removes the given transaction from the database.
+     *
      * @param transaction the transaction to remove.
      */
-    private static void removeTransactionFromHistory(TableTransaction transaction){
+    private static void removeTransactionFromHistory(TableTransaction transaction) {
         System.out.printf("Removing transaction with date: %s category: %s amount: %s\n", transaction.getDate(), transaction.getCategeroy(), transaction.getAmount());
         database.removeTransaction(currentUser, transaction, false);
     }
 
-    private static TableView transactionTableView(List<Transaction> transactions,TextField searchBox){
+    private static TableView transactionTableView(List<Transaction> transactions, TextField searchBox) {
         TableView tv = new TableView();
         tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tv.setPlaceholder(new Label("No report to display"));
@@ -253,7 +247,7 @@ public class Controller extends Application {
         amountColumn.setCellFactory(tc -> new TableCell<TableTransaction, Number>() {
             @Override
             protected void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty) ;
+                super.updateItem(value, empty);
                 if (empty) {
                     setText(null);
                 } else {
@@ -261,32 +255,28 @@ public class Controller extends Application {
                 }
             }
         });
-        amountColumn.setStyle( "-fx-alignment: CENTER-RIGHT;");
+        amountColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
 
         ObservableList<TableTransaction> observableList;
 
         ArrayList<TableTransaction> temp = new ArrayList<>();
 
-        for (Transaction t: transactions){
+        for (Transaction t : transactions) {
             temp.add(new TableTransaction(t.getDate().toString(), t.getCategory(), Double.toString(t.getAmount()), t.getMemo()));
         }
 
 
-
         observableList = FXCollections.observableList(temp);
 
-        FilteredList<TableTransaction> filtered = new FilteredList<>(observableList, b-> true);
+        FilteredList<TableTransaction> filtered = new FilteredList<>(observableList, b -> true);
 
         searchBox.textProperty().addListener((obsv, old, newVal) -> {
-            filtered.setPredicate(tableTransaction ->{
+            filtered.setPredicate(tableTransaction -> {
                 if (!(newVal == null || newVal.isBlank() || newVal.isEmpty())) {
                     String searchKeyword = newVal.toLowerCase();
-                    if (tableTransaction.getMemo().toLowerCase().indexOf(searchKeyword) > -1){
+                    if (tableTransaction.getMemo().toLowerCase().indexOf(searchKeyword) > -1) {
                         return true;
-                    } else if (tableTransaction.getCategeroy().toLowerCase().indexOf(searchKeyword) > -1){
-                        return true;
-                    }
-                    return false;
+                    } else return tableTransaction.getCategeroy().toLowerCase().indexOf(searchKeyword) > -1;
                 } else {
                     return true;
                 }
@@ -297,7 +287,7 @@ public class Controller extends Application {
         });
 
         tv.setItems(observableList);
-        tv.getColumns().addAll(dateColumn, categoryColumn,memoColumn, amountColumn);
+        tv.getColumns().addAll(dateColumn, categoryColumn, memoColumn, amountColumn);
 
         return tv;
     }
@@ -346,6 +336,7 @@ public class Controller extends Application {
 
     /**
      * iterates through transactions to add up the total amount of the user
+     *
      * @return the total spending of the user
      */
     public static double getTotalSpent() {
@@ -357,6 +348,7 @@ public class Controller extends Application {
 
     /**
      * iterates through transactions to add up the total amount of the user
+     *
      * @return the total spending of the user
      */
     public static double getBudget() {
@@ -426,18 +418,12 @@ public class Controller extends Application {
 
     /**
      * adds a transaction from the transaction.java to be added to the current user
+     *
      * @param transaction the transaction being added to the user
      */
     public static void addTransaction(Transaction transaction) {
         currentUser.addTransactions(transaction);
         database.updateUserData(currentUser, false);
-    }
-
-    /**
-     * @return the percentage that has been spent to the user
-     */
-    public static double getBudgetPercent() {
-        return getTotalSpent() / currentUser.getSettings().getBudget();
     }
 
     /**
@@ -454,25 +440,26 @@ public class Controller extends Application {
         return totalAmount;
     }
 
-    public static boolean updateUserData(User user, boolean testing) {
-        return database.updateUserData(user, testing);
+    public static void updateUserData(User user, boolean testing) {
+        database.updateUserData(user, testing);
     }
 
     /**
      * designed to take the budget category and place the new budget in it
-     * @param category the category
+     *
+     * @param category  the category
      * @param newBudget the budget
      */
     public static void setCategoryBudget(String category, double newBudget) {
-		currentUser.getSettings().setCategoryBudget(category, newBudget);
+        currentUser.getSettings().setCategoryBudget(category, newBudget);
         updateUserData(currentUser, false);
     }
 
-	public static double getCategoryBudget(String category) {
-		return currentUser.getSettings().getCategoryBudget(category);
-	}
+    public static double getCategoryBudget(String category) {
+        return currentUser.getSettings().getCategoryBudget(category);
+    }
 
-	/**
+    /**
      * The main entry point for all JavaFX applications.
      * The start method is called after the init method has returned,
      * and after the system is ready for the application to begin running.
@@ -488,9 +475,7 @@ public class Controller extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        test = new MainUI(); // because currently the MainUI is not static in any way, an instance
-        // of it must be created, this will probably have to change //pass it through with the
-        // user settings as the parameter
+        mainUI = new MainUI();
         connectToDatabase();
         stage = primaryStage;
         primaryStage.setScene(LoginUI.createScene());
